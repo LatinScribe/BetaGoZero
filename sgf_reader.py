@@ -21,9 +21,8 @@ containing the SGF files.
 to delete files without a valid result.
 
 Note:
-- requires the os, csv, and board modules to be imported
+- requires the os and board modules to be imported
 """
-import csv
 import os
 import board as b
 
@@ -39,8 +38,7 @@ def read_sgf(file_name: str, file_directory: str, do_deletion: bool):
         do_deletion (bool): If True and the SGF file does not have a valid result, the file will be deleted.
     """
     with open(file_directory + file_name) as sgf_file:
-        reader = csv.reader(sgf_file)
-        header = next(reader)[0]
+        header = sgf_file.readline()
         if header.find('RE') == -1:
             print("Game does not have a valid result, unusable.")
             if do_deletion:
@@ -53,9 +51,9 @@ def read_sgf(file_name: str, file_directory: str, do_deletion: bool):
                     print("Success. File deleted.")
         else:
             print(f"Game has a valid result of {header[header.index('RE') + 2:header.index('KM')]} aka is usable.")
-            next(reader)
-            next(reader)
-            game = next(reader)[0].split(';')
+            sgf_file.readline()
+            sgf_file.readline()
+            game = sgf_file.readline().split(';')
             game = game[1:-2]
             board = b.Board(9)
             for stone in game:
