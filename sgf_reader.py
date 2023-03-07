@@ -21,10 +21,11 @@ containing the SGF files.
 to delete files without a valid result.
 
 Note:
-- requires the os and csv modules to be imported
+- requires the os, csv, and board modules to be imported
 """
 import csv
 import os
+import board as b
 
 
 def read_sgf(file_name: str, file_directory: str, do_deletion: bool):
@@ -54,7 +55,17 @@ def read_sgf(file_name: str, file_directory: str, do_deletion: bool):
             print(f"Game has a valid result of {header[header.index('RE') + 2:header.index('KM')]} aka is usable.")
             next(reader)
             next(reader)
-            print(f"The game: {next(reader)[0]}")
+            game = next(reader)[0].split(';')
+            game = game[1:-2]
+            board = b.Board(9)
+            for stone in game:
+                x = ord(stone[2]) - 97
+                y = ord(stone[3]) - 97
+                if stone[0] == "B":
+                    board.add_stone(x, y, "Black")
+                elif stone[0] == "W":
+                    board.add_stone(x, y, "White")
+            print(board)
 
 
 def read_all_sgf_in_folder(folder_directory: str, do_deletion: bool = False):
@@ -72,4 +83,4 @@ def read_all_sgf_in_folder(folder_directory: str, do_deletion: bool = False):
 if __name__ == '__main__':
     games_folder_path_absolute = '/Users/dmitriivlasov/Downloads/go9/'
     games_folder_path_relative = 'games/'
-    read_all_sgf_in_folder(games_folder_path_relative, True)
+    read_all_sgf_in_folder(games_folder_path_relative, False)
