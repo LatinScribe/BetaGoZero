@@ -24,7 +24,10 @@ Note:
 - requires the os and board modules to be imported
 """
 import os
+from typing import Optional
+
 import board as b
+from go_gui import draw_board
 
 
 def read_sgf(file_name: str, file_directory: str, do_deletion: bool):
@@ -65,6 +68,10 @@ def read_sgf(file_name: str, file_directory: str, do_deletion: bool):
                     board.add_stone(x, y, "White")
             print(board)
 
+            draw_board(board, f"Game_result/{sgf_file}", open_in_browser=True)
+            return board
+
+
 
 def read_all_sgf_in_folder(folder_directory: str, do_deletion: bool = False):
     """
@@ -80,5 +87,5 @@ def read_all_sgf_in_folder(folder_directory: str, do_deletion: bool = False):
 
 if __name__ == '__main__':
     games_folder_path_absolute = '/Users/dmitriivlasov/Downloads/go9/'
-    games_folder_path_relative = 'games/'
+    games_folder_path_relative = 'DataSet/2015-Go9/'
     read_all_sgf_in_folder(games_folder_path_relative, False)
