@@ -60,17 +60,18 @@ def read_sgf(file_name: str, file_directory: str, do_deletion: bool):
             game = game[1:-2]
             board = b.Board(9)
             for stone in game:
+                if stone[-2:] == "[]":  # if the stone is a pass TODO: Need to handle this case
+                    break
                 x = ord(stone[2]) - 97
                 y = ord(stone[3]) - 97
                 if stone[0] == "B":
                     board.add_stone(x, y, "Black")
                 elif stone[0] == "W":
                     board.add_stone(x, y, "White")
-            print(board)
+            # print(board)
 
-            draw_board(board, f"Game_result/{sgf_file}", open_in_browser=True)
+            draw_board(board, "\games_2015/" + f"{file_name[:15]}.jpg")
             return board
-
 
 
 def read_all_sgf_in_folder(folder_directory: str, do_deletion: bool = False):
