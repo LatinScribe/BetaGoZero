@@ -94,12 +94,16 @@ def sgf_to_game_sequence(file_name: str, file_directory: str) -> list[tuple[int,
             sgf_file.readline()
             sgf_file.readline()
             game = sgf_file.readline().split(';')
-            game = game[1:-2]  # for now does not include the final two moves (passes)
+            game = game[1:]
+            print(game[-2:])
             move_seq = []
             i = 1  # index of turn, starts at 1 (0 is the default, placeholder move)
             for stone in game:
-                x = ord(stone[2]) - 97
-                y = ord(stone[3]) - 97
+                if stone[-2:] == "[]":  # is a pass
+                    move_seq.append((i, -1, -1))
+                else:
+                    x = ord(stone[2]) - 97
+                    y = ord(stone[3]) - 97
                 move_seq.append((i, x, y))
                 i += 1
             return move_seq
@@ -107,19 +111,23 @@ def sgf_to_game_sequence(file_name: str, file_directory: str) -> list[tuple[int,
             raise ValueError
 
 
+def sgf_folder_to_tree(folder_directory: str) -> gt.GameTree:
+    """Returns a game tree by exctracting move sequences out of all sgf files in a given folder
+
+    Preciditions:
+    - all files have to be sgf
+    """
+    tree = gt.GameTree()
+    for file in os.listdir(folder_directory):
+        tree.insert_move_sequence(sgf_to_game_sequence(file, folder_directory))
+    return tree
+
+
 if __name__ == '__main__':
     # All of this is for debugging
     # TODO: prints multiple times, fix when it should and should not print
-    # TODO: instead of using the final state of the board, add the moves in the order they are in the files (change gt.tree.insert_move_sequence())
-    # games_folder_path_absolute = '/Users/dmitriivlasov/Downloads/go9/'
-    # games_folder_path_relative = 'games/'
-    # read_all_sgf_in_folder(games_folder_path_relative, False)
-    # board = read_sgf("2015-10-31T13:03:14.292Z_gm2ia3rklqft.sgf", "games/", False)
-    # move_sequence = board.board_to_move_sequence()
-    # tree = gt.GameTree()
-    # tree.insert_move_sequence(move_sequence)
-    move_sequence = sgf_to_game_sequence("2015-10-31T13:03:14.292Z_gm2ia3rklqft.sgf", "games/")
-    tree = gt.GameTree()
-    tree.insert_move_sequence(move_sequence)
-    # seems to be printing correctly
-    print(tree)
+    games_folder_path_absolute = '/Users/dmitriivlasov/Downloads/go9/'
+    games_folder_path_relative = 'games/'
+    go9folder_game_tree = sgf_folder_to_tree(games_folder_path_absolute)
+    # print(go9folder_game_tree)
+    print(f"length of the go9 tree: {len(go9folder_game_tree)}")
