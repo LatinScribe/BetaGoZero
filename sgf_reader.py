@@ -23,15 +23,19 @@ to delete files without a valid result.
 Note:
 - requires the os and board modules to be imported
 """
+from __future__ import annotations
 import os
+import shutil
 import board as b
 import GameTree as gt
 
 
-def read_sgf(file_name: str, file_directory: str, do_deletion: bool) -> b:
+def read_sgf(file_name: str, file_directory: str, do_deletion: bool) -> None | b.Board:
     """
     Reads a single SGF file and checks if it has a valid result. If it does not have a valid result and
     do_deletion is True, the file will be deleted.
+
+    Return None if the file is being deleted
 
     Args:
         file_name (str): The name of the SGF file to read.
@@ -43,13 +47,14 @@ def read_sgf(file_name: str, file_directory: str, do_deletion: bool) -> b:
         if header.find('RE') == -1:
             print("Game does not have a valid result, unusable.")
             if do_deletion:
-                print("Proceeding with deletion:")
+                print("Proceeding with deletion to /Unusable:")
                 try:
-                    os.remove(file_directory + file_name)
+                    shutil.move(file_directory + file_name, "/DataSet/Unusable//" + file_name)
                 except FileNotFoundError:
                     print("Fail. File was not found.")
                 else:
                     print("Success. File deleted.")
+                    return
         else:
             print(f"Game has a valid result of {header[header.index('RE') + 2:header.index('KM')]} aka is usable.")
             sgf_file.readline()
@@ -58,13 +63,14 @@ def read_sgf(file_name: str, file_directory: str, do_deletion: bool) -> b:
             game = game[1:-2]
             board = b.Board(9)
             for stone in game:
-                x = ord(stone[2]) - 97
-                y = ord(stone[3]) - 97
-                if stone[0] == "B":
-                    board.add_stone(x, y, "Black")
-                elif stone[0] == "W":
-                    board.add_stone(x, y, "White")
-            print(board)
+                if stone[-2:] != "[]":  # is not a pass
+                    x = ord(stone[2]) - 97
+                    y = ord(stone[3]) - 97
+                    if stone[0] == "B":
+                        board.add_stone(x, y, "Black")
+                    elif stone[0] == "W":
+                        board.add_stone(x, y, "White")
+            # print(board)
     return board
 
 
@@ -136,7 +142,8 @@ if __name__ == '__main__':
     # All of this is for debugging
     # TODO: prints multiple times, fix when it should and should not print
     games_folder_path_absolute = '/Users/dmitriivlasov/Downloads/go9/'
-    games_folder_path_relative = 'games/'
-    go9folder_game_tree = sgf_folder_to_tree(games_folder_path_absolute)
+    games_folder_path_relative = 'DataSet/2015-Go9/'
+    read_all_sgf_in_folder(games_folder_path_relative, True)
+    # go9folder_game_tree = sgf_folder_to_tree(games_folder_path_relative)
     # print(go9folder_game_tree)
-    print(f"length of the go9 tree: {len(go9folder_game_tree)}")
+    # print(f"length of the go9 tree: {len(go9folder_game_tree)}")
