@@ -122,6 +122,15 @@ def sgf_folder_to_tree(folder_directory: str) -> gt.GameTree:
         tree.insert_move_sequence(sgf_to_game_sequence(file, folder_directory))
     return tree
 
+def rotate_move_seq_by_90(moves: list[tuple[int, int, int]], board_size=9) -> list[tuple[int, int, int]]:
+    """rotates a sequence of moves clockwise by 90 degrees"""
+    rotated_sequence = []
+    id_added = 1000  # TODO: modify this (possibly with reference to total number of moves in data set)
+    for move in moves:  # TODO: check if this works
+        new_move = (id_added + move[0], move[2], board_size - move[1])
+        rotated_sequence.append(new_move)
+    return rotated_sequence
+
 
 if __name__ == '__main__':
     # All of this is for debugging
