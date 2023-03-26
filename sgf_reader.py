@@ -146,4 +146,4 @@ if __name__ == '__main__':
     # read_all_sgf_in_folder(games_folder_path_relative, True)
     go9folder_game_tree = sgf_folder_to_tree(games_folder_path_relative)
     print(go9folder_game_tree)
-    # print(f"length of the go9 tree: {len(go9folder_game_tree)}")
+    print(f"length of the 2015-Go9 tree: {len(go9folder_game_tree)}")
