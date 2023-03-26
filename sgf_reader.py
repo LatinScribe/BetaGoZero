@@ -47,9 +47,10 @@ def read_sgf(file_name: str, file_directory: str, do_deletion: bool) -> None | b
         if header.find('RE') == -1:
             print("Game does not have a valid result, unusable.")
             if do_deletion:
-                print("Proceeding with deletion to /Unusable:")
+                print("Proceeding with deletion.")
                 try:
-                    shutil.move(file_directory + file_name, "/DataSet/Unusable//" + file_name)
+                    # shutil.move(file_directory + file_name, "/DataSet/Unusable//" + file_name) does not work
+                    os.remove(file_directory + file_name)
                 except FileNotFoundError:
                     print("Fail. File was not found.")
                 else:
@@ -101,7 +102,6 @@ def sgf_to_game_sequence(file_name: str, file_directory: str) -> list[tuple[int,
             sgf_file.readline()
             game = sgf_file.readline().split(';')
             game = game[1:]
-            print(game[-2:])
             move_seq = []
             i = 1  # index of turn, starts at 1 (0 is the default, placeholder move)
             for stone in game:
@@ -143,7 +143,7 @@ if __name__ == '__main__':
     # TODO: prints multiple times, fix when it should and should not print
     games_folder_path_absolute = '/Users/dmitriivlasov/Downloads/go9/'
     games_folder_path_relative = 'DataSet/2015-Go9/'
-    read_all_sgf_in_folder(games_folder_path_relative, True)
-    # go9folder_game_tree = sgf_folder_to_tree(games_folder_path_relative)
-    # print(go9folder_game_tree)
+    # read_all_sgf_in_folder(games_folder_path_relative, True)
+    go9folder_game_tree = sgf_folder_to_tree(games_folder_path_relative)
+    print(go9folder_game_tree)
     # print(f"length of the go9 tree: {len(go9folder_game_tree)}")
