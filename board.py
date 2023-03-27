@@ -135,7 +135,7 @@ class Board:
             return 'tie'
         else:
             return 'white wins'
-        #TODO: may need a game end state for board class
+        #TODO: may need a game end state for board class.
 
 
 class Stone:
