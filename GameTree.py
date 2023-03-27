@@ -20,7 +20,7 @@ class GameTree:
         - _parent: the parent of the game tree, None if it is the root
         - move: the current move (spot on the board), or (0, -1, -1) if this tree represents the start of a game
         - _subtrees: the dictionary of the subtrees of the game trees, with keys corresponding to the moves
-        - win_probability: probability of going down this branch (backpropagation)
+        - win_probability: probability of going down this branch  (backpropagation)  #TODO: assume win probability for black
     TODO: finish the docstring
     """
     _parent: None | GameTree
@@ -120,7 +120,7 @@ class GameTree:
         self._subtrees[moves[current_index]]._insert_move_sequence_helper(moves, current_index + 1)
 
     # TODO: the backpropagation_step
-    def _update_win_probability(self) -> None:
+    def update_win_probability_one(self) -> None:
         """Recalculate the guesser win probability of this tree.
 
         Note: like the "_length" Tree attribute from tutorial, you should only need
@@ -135,7 +135,19 @@ class GameTree:
             - if self is not a leaf and self.is_guesser_move is False, the guesser win probability
               is equal to the AVERAGE of the guesser win probabilities of its subtrees
         """
-        ...
+        
+        probabilities=[]
+        for subtree in self._subtrees:
+            prob = self._subtrees[subtree].win_probability
+            probabilities.append(prob)
+        if self.is_black_turn():
+            self._subtrees.win_probability=max(probabilities)
+        else:
+            self._subtrees.win_probability=min(probabilities)
+        
+
+    def update_win_probability_all(self) -> None:
+        
 
 
 if __name__ == '__main__':
