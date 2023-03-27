@@ -1,5 +1,6 @@
 # TODO: rewrite so that the board starts with the complete graph (maybe not, coz running time)
 from __future__ import annotations
+from typing import Optional
 
 
 class Board:
@@ -114,6 +115,27 @@ class Board:
                 sequence.append((i, move.x, move.y))
                 i += 1
         return sequence
+    
+     def get_winner(self) -> Optional[str]:
+        """return winner of game, assuming the game reached an end state."""
+        num_stones = {'black': 0, 'white': 0}
+        for stone_row in self.grid:
+            for stone in stone_row:
+                if stone.color == 'black':
+                    num_stones['black'] += 1
+                elif stone.color == 'white':
+                    num_stones['white'] += 1
+                else:
+                    print('A stone has invalid color')
+                    return None
+        print(num_stones)
+        if num_stones['black'] > num_stones['white']:
+            return 'black wins'
+        elif num_stones['black'] == num_stones['white']:
+            return 'tie'
+        else:
+            return 'white wins'
+        #TODO: may need a game end state for board class
 
 
 class Stone:
