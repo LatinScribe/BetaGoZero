@@ -120,33 +120,51 @@ class GameTree:
         self._subtrees[moves[current_index]]._insert_move_sequence_helper(moves, current_index + 1)
 
     # TODO: the backpropagation_step
-    def update_win_probability_one(self) -> None:
-        """Recalculate the guesser win probability of this tree.
-
-        Note: like the "_length" Tree attribute from tutorial, you should only need
-        to update self here, not any of its subtrees. (You should *assume* that each
-        subtree has the correct guesser win probability already.)
-
-        Use the following definition for the guesser win probability of self:
-            - if self is a leaf, don't change the guesser win probability
-              (leave the current value alone)
-            - if self is not a leaf and self.is_guesser_turn() is True, the guesser win probability
-              is equal to the MAXIMUM of the guesser win probabilities of its subtrees
-            - if self is not a leaf and self.is_guesser_move is False, the guesser win probability
-              is equal to the AVERAGE of the guesser win probabilities of its subtrees
-        """
-
-        probabilities = []
-        for subtree in self._subtrees:
-            prob = self._subtrees[subtree].win_probability
-            probabilities.append(prob)
-        if self.is_black_turn():
-            self._subtrees.win_probability = max(probabilities)
-        else:
-            self._subtrees.win_probability = min(probabilities)
+    # def update_win_probability_one(self) -> None:
+    #     """Recalculate the guesser win probability of this tree.
+    #
+    #     Note: like the "_length" Tree attribute from tutorial, you should only need
+    #     to update self here, not any of its subtrees. (You should *assume* that each
+    #     subtree has the correct guesser win probability already.)
+    #
+    #     Use the following definition for the guesser win probability of self:
+    #         - if self is a leaf, don't change the guesser win probability
+    #           (leave the current value alone)
+    #         - if self is not a leaf and self.is_black_turn() is True, the guesser win probability
+    #           is equal to the MAXIMUM of the black win probabilities of its subtrees
+    #         - if self is not a leaf and self.is_black_turn is False, the guesser win probability
+    #           is equal to the minimum (or average) of the guesser win probabilities of its subtrees
+    #     """
+    #
+    #     probabilities = []
+    #     for subtree in self._subtrees:
+    #         prob = self._subtrees[subtree].win_probability
+    #         probabilities.append(prob)
+    #     if self.is_black_turn():
+    #         self._subtrees.win_probability = max(probabilities)
+    #     else:
+    #         self._subtrees.win_probability = min(probabilities)
 
     def update_win_probability_all(self) -> None:
-        return ...
+        """updates the probability of 1 branch use this method after it creates after 1 complete game is added.
+        if self is a leaf, don't change the guesser win probability
+               (leave the current value alone)
+            - if self is not a leaf and self.is_black_turn() is True, the guesser win probability
+              is equal to the MAXIMUM of the black win probabilities of its subtrees
+            - if self is not a leaf and self.is_black_turn is False, the guesser win probability
+              is equal to the minimum (or average) of the black win probabilities of its subtrees"""
+        probabilities = [self._subtrees[subtree].win_probability for subtree in self._subtrees]
+        if self._subtrees == []:  # if the tree is a leaf
+            self._parent.update_win_probability_all()
+        elif self._parent is None:
+            self.win_probability = max(probabilities)  # black always starts first
+        else:
+            if self.is_black_turn():
+                self.win_probability = max(probabilities)
+            else:
+                self.win_probability = min(probabilities)
+                # self.win_probability = sum(probabilities)/len(probabilities)
+            self._parent.update_win_probability_all()
 
 
 if __name__ == '__main__':
