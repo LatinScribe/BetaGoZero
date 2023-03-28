@@ -115,8 +115,8 @@ class Board:
                 sequence.append((i, move.x, move.y))
                 i += 1
         return sequence
-    
-     def get_winner(self) -> Optional[str]:
+
+    def get_winner(self) -> Optional[str]:
         """return winner of game, assuming the game reached an end state."""
         num_stones = {'black': 0, 'white': 0}
         for stone_row in self.grid:

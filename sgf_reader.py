@@ -25,6 +25,7 @@ Note:
 """
 from __future__ import annotations
 import os
+import pickle
 import shutil
 import board as b
 import GameTree as gt
@@ -128,6 +129,7 @@ def sgf_folder_to_tree(folder_directory: str) -> gt.GameTree:
         tree.insert_move_sequence(sgf_to_game_sequence(file, folder_directory))
     return tree
 
+
 def rotate_move_seq_by_90(moves: list[tuple[int, int, int]], board_size=9) -> list[tuple[int, int, int]]:
     """rotates a sequence of moves clockwise by 90 degrees"""
     rotated_sequence = []
@@ -138,12 +140,24 @@ def rotate_move_seq_by_90(moves: list[tuple[int, int, int]], board_size=9) -> li
     return rotated_sequence
 
 
+def save_tree_to_file(tree: gt.GameTree, file_name: str, folder_directory: str) -> None:
+    with open(folder_directory + file_name, 'wb') as file:
+        pickle.dump(tree, file)
+
+
+def load_tree_from_file(file_name: str, folder_directory: str) -> gt.GameTree:
+    with open(folder_directory + file_name, 'rb') as file:
+        return pickle.load(file)
+
+
 if __name__ == '__main__':
     # All of this is for debugging
     # TODO: prints multiple times, fix when it should and should not print
     games_folder_path_absolute = '/Users/dmitriivlasov/Downloads/go9/'
     games_folder_path_relative = 'DataSet/2015-Go9/'
     # read_all_sgf_in_folder(games_folder_path_relative, True)
-    go9folder_game_tree = sgf_folder_to_tree(games_folder_path_relative)
+    # go9folder_game_tree = sgf_folder_to_tree(games_folder_path_relative)
+    go9folder_game_tree = load_tree_from_file("treeSave.txt", "")
     print(go9folder_game_tree)
     print(f"length of the 2015-Go9 tree: {len(go9folder_game_tree)}")
+    # save_tree_to_file(go9folder_game_tree, "treeSave.txt", "")

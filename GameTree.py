@@ -6,7 +6,6 @@ This Python module contains the GameTree class that will represent each game
 from __future__ import annotations
 from typing import Optional
 
-
 GAME_START_MOVE = (0, -1, -1)
 PASS_MOVE = (-1, -1, -1)
 
@@ -28,7 +27,8 @@ class GameTree:
     _subtrees: dict[tuple[int, int, int], GameTree]
     win_probability: float
 
-    def __init__(self, parent: None | GameTree = None, move: tuple[int, int, int] = GAME_START_MOVE, win_probability: float = 0.0) -> None:
+    def __init__(self, parent: None | GameTree = None, move: tuple[int, int, int] = GAME_START_MOVE,
+                 win_probability: float = 0.0) -> None:
         """Initialize a new game tree.
 
         Note that this initializer uses optional arguments.
@@ -135,21 +135,21 @@ class GameTree:
             - if self is not a leaf and self.is_guesser_move is False, the guesser win probability
               is equal to the AVERAGE of the guesser win probabilities of its subtrees
         """
-        
-        probabilities=[]
+
+        probabilities = []
         for subtree in self._subtrees:
             prob = self._subtrees[subtree].win_probability
             probabilities.append(prob)
         if self.is_black_turn():
-            self._subtrees.win_probability=max(probabilities)
+            self._subtrees.win_probability = max(probabilities)
         else:
-            self._subtrees.win_probability=min(probabilities)
-        
+            self._subtrees.win_probability = min(probabilities)
 
     def update_win_probability_all(self) -> None:
-        
+        return ...
 
 
 if __name__ == '__main__':
     import doctest
+
     doctest.testmod(verbose=True)
