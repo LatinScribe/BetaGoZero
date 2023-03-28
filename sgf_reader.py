@@ -24,11 +24,14 @@ Note:
 - requires the os and board modules to be imported
 """
 from __future__ import annotations
-import os
+
+from typing import Optional
+from go_gui import draw_board
 import pickle
 import shutil
 import board as b
 import GameTree as gt
+
 
 
 def read_sgf(file_name: str, file_directory: str, do_deletion: bool) -> None | b.Board:
@@ -161,3 +164,4 @@ if __name__ == '__main__':
     print(go9folder_game_tree)
     print(f"length of the 2015-Go9 tree: {len(go9folder_game_tree)}")
     # save_tree_to_file(go9folder_game_tree, "treeSave.txt", "")
+
