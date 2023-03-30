@@ -59,24 +59,19 @@ class Game:
 ################################################################################
 
 def run_game() -> Game:
-    """Run an Adversarial Wordle game between the two given players.
+    """Run a basic Go game
 
-    Use the words in word_set_file, and use max_guesses as the maximum number of guesses.
-
-    Return the AdversarialWordle instance after the game is complete.
-
-    Preconditions:
-    - word_set_file is a non-empty with one word per line
-    - all words in word_set_file have the same length
-    - max_guesses >= 1
+    prompts user to input the moves
+    returns the newly created game
     """
     new_game = Game()
     next_move = ''
 
     while next_move != 'STOP':
+        n1 = '\n'
         next_move = input(
-            f'Tt is currently {new_game.current_player}\"s turn. Please enter your next move as a coordinate'
-            f'in the form: x,y. If you would like to end the game, enter \"STOP\" without qoutations')
+            f'It is currently {new_game.current_player}\'s turn. Please enter your next move as a coordinate'
+            f'in the form: x,y.{n1}If you would like to end the game, enter \"STOP\" without qoutation marks!')
 
         next_move.upper()
         if not next_move == 'STOP':
@@ -86,10 +81,13 @@ def run_game() -> Game:
 
             new_game.play_move(x, y)
 
-    return game
+    return new_game
 
 
 if __name__ == "__main__":
-    game = Game()
-    moves = [(0, 0), (1, 1), (0, 1), (1, 0), (0, 2), (2, 2)]
-    game.run_example(moves)
+    # game = Game()
+    # moves = [(0, 0), (1, 1), (0, 1), (1, 0), (0, 2), (2, 2)]
+    # game.run_example(moves)
+    game = run_game()
+    print(game)
+    draw_board(game.board, "go2.jpg", True)
