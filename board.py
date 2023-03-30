@@ -1,4 +1,28 @@
-"""The essential classes for representing a game of Go"""
+"""Beta-Go: Course project for CSC111 Winter 2023
+
+Authors:
+Henry "TJ" Chen
+Dmitrii Vlasov
+Ming Yau (Oscar) Lam
+Duain Chhabra
+
+Date: April 3, 2023
+
+Version: pre-Alpha
+
+Module Description
+==================
+
+This module contains python classes which represent the actual components to
+a game of Go - the board and the stones.
+
+Copyright and Usage Information
+===============================
+
+This file was developed as part of the course project for CSC111 Winter 2023.
+Feel free to test it out, but please contact us to obtain permission if you
+intend to redistribute it or use it for your own work.
+"""
 
 # TODO: rewrite so that the board starts with the complete graph (maybe not, coz running time)
 from __future__ import annotations

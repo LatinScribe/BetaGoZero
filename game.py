@@ -1,5 +1,29 @@
-"""Game class for Go."""
+"""Beta-Go: Course project for CSC111 Winter 2023
 
+Authors:
+Henry "TJ" Chen
+Dmitrii Vlasov
+Ming Yau (Oscar) Lam
+Duain Chhabra
+
+Date: April 3, 2023
+
+Version: pre-Alpha
+
+Module Description
+==================
+
+This module contains a python class that represents an entire game of go.
+It also contains additional runners which can be used to easily test our
+work.
+
+Copyright and Usage Information
+===============================
+
+This file was developed as part of the course project for CSC111 Winter 2023.
+Feel free to test it out, but please contact us to obtain permission if you
+intend to redistribute it or use it for your own work.
+"""
 from board import Board
 from go_gui import draw_board
 from typing import Optional

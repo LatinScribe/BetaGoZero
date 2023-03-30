@@ -1,4 +1,28 @@
-"""A simple GUI for the Go game."""
+"""Beta-Go: Course project for CSC111 Winter 2023
+
+Authors:
+Henry "TJ" Chen
+Dmitrii Vlasov
+Ming Yau (Oscar) Lam
+Duain Chhabra
+
+Date: April 3, 2023
+
+Version: pre-Alpha
+
+Module Description
+==================
+
+This module contains the functions nesscary for outputting visual representations
+of a game of Go.
+
+Copyright and Usage Information
+===============================
+
+This file was developed as part of the course project for CSC111 Winter 2023.
+Feel free to test it out, but please contact us to obtain permission if you
+intend to redistribute it or use it for your own work.
+"""
 
 from PIL import Image, ImageDraw
 from board import Board
