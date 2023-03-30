@@ -44,14 +44,21 @@ class Game:
     moves: list[tuple[int, int, int]]
     board_size = int
 
-    def __init__(self, size: Optional[int] = 9):
+    def __init__(self, active_board: Optional[Board] = None, player_turn: Optional[str] = "Black",
+                 move_sequence: Optional[list[tuple[int, int, int]]] = None, size: Optional[int] = 9):
         """
         Initialise a new Go Game with the given board size - defaults to a 9x9 board
 
         """
-        self.board = Board(size=size)  # initialise a new board with the give size
-        self.current_player = "Black"
-        self.moves = []
+        if active_board is None:
+            self.board = Board(size=size)  # initialise a new board with the give size
+        else:
+            self.board = active_board
+        self.current_player = player_turn
+        if move_sequence is None:
+            self.moves = []
+        else:
+            self.moves = move_sequence
         self.board_size = size
 
     def play_move(self, x, y) -> bool:

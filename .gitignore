@@ -6,3 +6,6 @@ __pycache__/go_gui.cpython-311.pyc
 .idea/vcs.xml
 .idea/inspectionProfiles/Project_Default.xml
 .idea/inspectionProfiles/profiles_settings.xml
+sgf_reader(copy).py
+__pycache__/game.cpython-311.pyc
+__pycache__/GameTree.cpython-311.pyc

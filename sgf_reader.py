@@ -48,12 +48,13 @@ intend to redistribute it or use it for your own work.
 from __future__ import annotations
 
 import os
-from typing import Optional
-from go_gui import draw_board
+# from typing import Optional
+# from go_gui import draw_board
 import pickle
-import shutil
+# import shutil
 import board as b
 import GameTree as gt
+from game import Game
 
 
 def read_sgf(file_name: str, file_directory: str, do_deletion: bool) -> None | b.Board:
@@ -83,12 +84,19 @@ def read_sgf(file_name: str, file_directory: str, do_deletion: bool) -> None | b
                     print("Success. File deleted.")
                     return
         else:
+            # Print some basic information about the game, helps with testing
             print(f"Game has a valid result of {header[header.index('RE') + 2:header.index('KM')]} aka is usable.")
+            board_size = header[header.index('SZ') + 2:header.index('RE')]
+            board_size = board_size.translate({ord(i): None for i in '[]'})
+            num_size = int(board_size)
+            print("Boardsize:", num_size)
             sgf_file.readline()
             sgf_file.readline()
             game = sgf_file.readline().split(';')
             game = game[1:-2]
-            board = b.Board(9)
+
+            # generate the board class
+            board = b.Board(size=num_size)
             for stone in game:
                 if stone[-2:] != "[]":  # is not a pass
                     x = ord(stone[2]) - 97
@@ -126,11 +134,11 @@ def sgf_to_game_sequence(file_name: str, file_directory: str) -> list[tuple[int,
         if header.find('RE') != -1:
             sgf_file.readline()
             sgf_file.readline()
-            game = sgf_file.readline().split(';')
-            game = game[1:]
+            current_game = sgf_file.readline().split(';')
+            current_game = current_game[1:]
             move_seq = []
             i = 1  # index of turn, starts at 1 (0 is the default, placeholder move)
-            for stone in game:
+            for stone in current_game:
                 if stone[-2:] == "[]":  # is a pass
                     move_seq.append((i, -1, -1))
                 else:
@@ -141,6 +149,66 @@ def sgf_to_game_sequence(file_name: str, file_directory: str) -> list[tuple[int,
             return move_seq
         else:
             raise ValueError
+
+
+def sgf_to_game(file_name: str, file_directory: str) -> Game:
+    """
+    Reads an SGF file and converts it into a Game class
+    """
+    with open(file_directory + file_name) as sgf_file:
+
+        # procress the given file
+        header = sgf_file.readline()
+        if header.find('RE') != -1:
+            print(f"Game has a valid result of {header[header.index('RE') + 2:header.index('KM')]} aka is usable.")
+            board_size = header[header.index('SZ') + 2:header.index('RE')]
+            board_size = board_size.translate({ord(i): None for i in '[]'})
+            num_size = int(board_size)
+            print("Boardsize:", num_size)
+            sgf_file.readline()
+            sgf_file.readline()
+            current_game = sgf_file.readline().split(';')
+            current_game = current_game[1:]
+
+            # generating move sequence
+            move_seq = []
+            i = 1  # index of turn, starts at 1 (0 is the default, placeholder move)
+            for stone in current_game:
+                if stone[-2:] == "[]":  # is a pass
+                    move_seq.append((i, -1, -1))
+                else:
+                    x = ord(stone[2]) - 97
+                    y = ord(stone[3]) - 97
+                move_seq.append((i, x, y))
+                i += 1
+
+            current_game = current_game[:-2]
+            # generate the board class
+            board = b.Board(size=num_size)
+            for stone in current_game:
+                if stone[-2:] != "[]":  # is not a pass
+                    x = ord(stone[2]) - 97
+                    y = ord(stone[3]) - 97
+                    if stone[0] == "B":
+                        board.add_stone(x, y, "Black")
+                    elif stone[0] == "W":
+                        board.add_stone(x, y, "White")
+
+        else:
+            raise ValueError
+
+        if (len(move_seq)) % 2 == 0:
+            turn = "Black"
+        else:
+            turn = "White"
+        # create the new Game class
+        current_game = Game(
+            active_board=board,
+            player_turn=turn,
+            move_sequence=move_seq,
+            size=num_size,
+        )
+        return current_game
 
 
 def sgf_folder_to_tree(folder_directory: str) -> gt.GameTree:
@@ -181,11 +249,14 @@ def load_tree_from_file(file_name: str, folder_directory: str) -> gt.GameTree:
 if __name__ == '__main__':
     # All of this is for debugging
     # TODO: prints multiple times, fix when it should and should not print
-    games_folder_path_absolute = '/Users/dmitriivlasov/Downloads/go9/'
-    games_folder_path_relative = 'DataSet/2015-Go9/'
+    # games_folder_path_absolute = '/Users/dmitriivlasov/Downloads/go9/'
+    # games_folder_path_relative = 'DataSet/2015-Go9/'
     # read_all_sgf_in_folder(games_folder_path_relative, True)
     # go9folder_game_tree = sgf_folder_to_tree(games_folder_path_relative)
-    go9folder_game_tree = load_tree_from_file("treeSave.txt", "")
-    print(go9folder_game_tree)
-    print(f"length of the 2015-Go9 tree: {len(go9folder_game_tree)}")
+    # go9folder_game_tree = load_tree_from_file("treeSave.txt", "")
+    # print(go9folder_game_tree)
+    # print(f"length of the 2015-Go9 tree: {len(go9folder_game_tree)}")
     # save_tree_to_file(go9folder_game_tree, "treeSave.txt", "")
+    # read_sgf("2015-07-27T12_22_10.954Z_m4y9p9qafyed.sgf", "DataSet/2015-Go9/", False)
+    game = sgf_to_game("2015-07-27T12_22_10.954Z_m4y9p9qafyed.sgf", "DataSet/2015-Go9/")
+    seq = sgf_to_game_sequence("2015-07-27T12_22_10.954Z_m4y9p9qafyed.sgf", "DataSet/2015-Go9/")
