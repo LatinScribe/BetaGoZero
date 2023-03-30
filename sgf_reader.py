@@ -25,6 +25,7 @@ Note:
 """
 from __future__ import annotations
 
+import os
 from typing import Optional
 from go_gui import draw_board
 import pickle
