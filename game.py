@@ -2,6 +2,7 @@
 
 from board import Board
 from go_gui import draw_board
+from typing import Optional
 
 
 class Game:
@@ -11,16 +12,23 @@ class Game:
         - board: representation of the current state of the board
         - current_player: who's turn is it, either "Black" or "White
         - moves: a list that represents the sequence of moves played so far in the game
+        - board_size: the size of the board. Note that the board is always a square
 
     """
     board: Board
     current_player: str
     moves: list[tuple[int, int, int]]
+    board_size = int
 
-    def __init__(self):
-        self.board = Board()
+    def __init__(self, size: Optional[int] = 9):
+        """
+        Initialise a new Go Game with the given board size - defaults to a 9x9 board
+
+        """
+        self.board = Board(size=size)  # initialise a new board with the give size
         self.current_player = "Black"
         self.moves = []
+        self.board_size = size
 
     def play_move(self, x, y) -> bool:
         """
@@ -59,7 +67,7 @@ class Game:
 ################################################################################
 
 def run_game() -> Game:
-    """Run a basic Go game
+    """Run a basic Go game on a 9x9 board game
 
     prompts user to input the moves they would like to make
     returns the newly created game
@@ -95,4 +103,4 @@ if __name__ == "__main__":
     # game.run_example(moves)
     game = run_game()
     print(game)
-    draw_board(game.board, "go2.jpg", True)
+    draw_board(game.board, "Game_result/runner_example.jpg", True)
