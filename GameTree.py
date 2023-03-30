@@ -94,7 +94,7 @@ class GameTree:
             turn_desc = "Black's move:"
         else:
             turn_desc = "White's move:"
-        move_desc = f'{turn_desc} {self.move}\n'
+        move_desc = f'{turn_desc} {self.move} ({self.win_probability})\n'
         str_so_far = '  ' * depth + move_desc
         for subtree in self._subtrees.values():
             str_so_far += subtree._str_indented(depth + 1)
@@ -154,7 +154,7 @@ class GameTree:
             - if self is not a leaf and self.is_black_turn is False, the guesser win probability
               is equal to the minimum (or average) of the black win probabilities of its subtrees"""
         probabilities = [self._subtrees[subtree].win_probability for subtree in self._subtrees]
-        if self._subtrees == []:  # if the tree is a leaf
+        if not self._subtrees:  # if the tree is a leaf
             self._parent.update_win_probability_all()
         elif self._parent is None:
             self.win_probability = max(probabilities)  # black always starts first
