@@ -144,11 +144,13 @@ def rotate_move_seq_by_90(moves: list[tuple[int, int, int]], board_size=9) -> li
 
 
 def save_tree_to_file(tree: gt.GameTree, file_name: str, folder_directory: str) -> None:
+    """Saves the given GameTree as a txt file"""
     with open(folder_directory + file_name, 'wb') as file:
         pickle.dump(tree, file)
 
 
 def load_tree_from_file(file_name: str, folder_directory: str) -> gt.GameTree:
+    """Load the tree from the txt file"""
     with open(folder_directory + file_name, 'rb') as file:
         return pickle.load(file)
 
@@ -164,4 +166,3 @@ if __name__ == '__main__':
     print(go9folder_game_tree)
     print(f"length of the 2015-Go9 tree: {len(go9folder_game_tree)}")
     # save_tree_to_file(go9folder_game_tree, "treeSave.txt", "")
-
