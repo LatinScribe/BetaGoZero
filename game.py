@@ -74,7 +74,17 @@ def run_game() -> Game:
     next_move = ''
 
     while next_move != 'STOP':
-        next_move = input("it is currently")
+        next_move = input(
+            f'Tt is currently {new_game.current_player}\"s turn. Please enter your next move as a coordinate'
+            f'in the form: x,y. If you would like to end the game, enter \"STOP\" without qoutations')
+
+        next_move.upper()
+        if not next_move == 'STOP':
+            coords = next_move.split(",")
+            x = int(coords[0])
+            y = int(coords[1])
+
+            new_game.play_move(x, y)
 
     return game
 
