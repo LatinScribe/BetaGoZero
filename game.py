@@ -61,19 +61,24 @@ class Game:
 def run_game() -> Game:
     """Run a basic Go game
 
-    prompts user to input the moves
+    prompts user to input the moves they would like to make
     returns the newly created game
     """
     new_game = Game()
     next_move = ''
 
     while next_move != 'STOP':
+        # used for creating a new line in f-string
         n1 = '\n'
+
+        # get input from user
         next_move = input(
             f'It is currently {new_game.current_player}\'s turn. Please enter your next move as a coordinate'
             f'in the form: x,y.{n1}If you would like to end the game, enter \"STOP\" without qoutation marks!')
 
+        # convert to upper case to avoid case sensitivity
         next_move.upper()
+
         if not next_move == 'STOP':
             coords = next_move.split(",")
             x = int(coords[0])
