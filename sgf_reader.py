@@ -33,7 +33,6 @@ import board as b
 import GameTree as gt
 
 
-
 def read_sgf(file_name: str, file_directory: str, do_deletion: bool) -> None | b.Board:
     """
     Reads a single SGF file and checks if it has a valid result. If it does not have a valid result and
@@ -129,6 +128,7 @@ def sgf_folder_to_tree(folder_directory: str) -> gt.GameTree:
     """
     tree = gt.GameTree()
     for file in os.listdir(folder_directory):
+        # TODO: add final state
         tree.insert_move_sequence(sgf_to_game_sequence(file, folder_directory))
     return tree
 
