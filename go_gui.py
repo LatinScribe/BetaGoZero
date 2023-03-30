@@ -5,7 +5,11 @@ from board import Board
 import webbrowser
 import os
 
+
 def draw_board(board: Board, save_path: str = "Game_result/go.jpg", open_in_browser: bool = False):
+    """
+    Generates a visualisation of the board and saves it as a jpg file
+    """
     cell_size = 50
     board_size = board.size * cell_size
     padding = 20
