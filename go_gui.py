@@ -36,7 +36,6 @@ def draw_board(board: Board, save_path: str = "Game_result/go.jpg", open_in_brow
     save_path = "Game_result" + save_path
     image.save(save_path)
 
-
     if open_in_browser:
         webbrowser.open("file://" + os.path.realpath(save_path))
 

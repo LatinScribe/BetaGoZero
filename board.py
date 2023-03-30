@@ -1,3 +1,5 @@
+"""The essential classes for representing a game of Go"""
+
 # TODO: rewrite so that the board starts with the complete graph (maybe not, coz running time)
 from __future__ import annotations
 from typing import Optional
@@ -48,6 +50,7 @@ class Board:
         # TODO: add neighbours implementation
 
     def get_stone(self, x, y):
+        """Return the stone situated at the given coordinates"""
         return self.grid[x][y]
 
     # pretty useless methods
@@ -108,6 +111,9 @@ class Board:
         return ans
 
     def board_to_move_sequence(self) -> list[tuple[int, int, int]]:
+        """Convert a board state into a sequence of moves, store as a list of tuples
+        NOTE: This does not store the sequence that the moves were actually played in
+        """
         sequence = []
         i = 0
         for row in self.grid:
@@ -135,7 +141,7 @@ class Board:
             return 'tie'
         else:
             return 'white wins'
-        #TODO: may need a game end state for board class.
+        # TODO: may need a game end state for board class.
 
 
 class Stone:
