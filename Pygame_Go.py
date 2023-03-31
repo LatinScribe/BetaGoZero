@@ -34,10 +34,16 @@ board = Board(9)
 game = Game()
 
 def retnr_row_col(x, y):
+    """Return row and column of a chosen cell"""
     row = (x - MARGIN) // CELL_SIZE
     col = (y - MARGIN) // CELL_SIZE
     return row, col
 def update_display(game: Game):
+    """ Generate and Update the display
+        We can use this function to update the display after each move
+        Also Change the display to show the number of stones captured by each player
+        Attributes can be changed later for better representation"""
+
     screen.fill(BACKGROUND)
 
     # Draw grid lines
