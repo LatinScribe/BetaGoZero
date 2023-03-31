@@ -1,4 +1,28 @@
-"""A simple GUI for the Go game."""
+"""Beta-Go: Course project for CSC111 Winter 2023
+
+Authors:
+Henry "TJ" Chen
+Dmitrii Vlasov
+Ming Yau (Oscar) Lam
+Duain Chhabra
+
+Date: April 3, 2023
+
+Version: pre-Alpha
+
+Module Description
+==================
+
+This module contains the functions nesscary for outputting visual representations
+of a game of Go.
+
+Copyright and Usage Information
+===============================
+
+This file was developed as part of the course project for CSC111 Winter 2023.
+Feel free to test it out, but please contact us to obtain permission if you
+intend to redistribute it or use it for your own work.
+"""
 
 from PIL import Image, ImageDraw
 from board import Board
@@ -6,25 +30,29 @@ import webbrowser
 import os
 
 
-def draw_board(board: Board, save_path: str = "Game_result/go.jpg", open_in_browser: bool = False):
+def draw_board(given_board: Board, save_path: str = "Game_result/example.jpg", open_in_browser: bool = False):
     """
-    Generates a visualisation of the board and saves it as a jpg file
+    Generates a visualisation of the given board and saves it as a jpg file to the designated location.
+
+    Defaults to saving in the Game_results folder as example.jpg
+
+    The user can specify whether to open the image in their browser, default to not open it
     """
     cell_size = 50
-    board_size = board.size * cell_size
+    board_size = given_board.size * cell_size
     padding = 20
 
     image = Image.new("RGB", (board_size + 2 * padding, board_size + 2 * padding), "#EEDC82")
     draw = ImageDraw.Draw(image)
 
-    for i in range(board.size):
+    for i in range(given_board.size):
         x = padding + i * cell_size
         draw.line([(x, padding), (x, board_size + padding)], "black")
         draw.line([(padding, x), (board_size + padding, x)], "black")
 
-    for x in range(board.size):
-        for y in range(board.size):
-            stone = board.get_stone(x, y)
+    for x in range(given_board.size):
+        for y in range(given_board.size):
+            stone = given_board.get_stone(x, y)
             if stone.color != "Neither":
                 radius = (cell_size // 2) - 4
                 stone_x = padding + x * cell_size
@@ -33,7 +61,7 @@ def draw_board(board: Board, save_path: str = "Game_result/go.jpg", open_in_brow
                               (stone_x + radius, stone_y + radius)],
                              fill=stone.color.lower())
 
-    save_path = "Game_result" + save_path
+    # save_path = "Game_result" + save_path
     image.save(save_path)
 
     if open_in_browser:
@@ -45,4 +73,4 @@ if __name__ == "__main__":
     board.add_stone(2, 2, "Black")
     board.add_stone(3, 3, "White")
     board.add_stone(4, 2, "Black")
-    draw_board(board)
+    draw_board(board, open_in_browser=True)

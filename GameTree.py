@@ -1,8 +1,29 @@
-"""CSC111 Project: Beta-Go
+"""Beta-Go: Course project for CSC111 Winter 2023
+
+Authors:
+Henry "TJ" Chen
+Dmitrii Vlasov
+Ming Yau (Oscar) Lam
+Duain Chhabra
+
+Date: April 3, 2023
+
+Version: pre-Alpha
+
+Module Description
+==================
+
+This module contains a python class that is used to represent a Tree of possible move
+sequences in a game of Go.
+
+Copyright and Usage Information
 ===============================
 
-This Python module contains the GameTree class that will represent each game
+This file was developed as part of the course project for CSC111 Winter 2023.
+Feel free to test it out, but please contact us to obtain permission if you
+intend to redistribute it or use it for your own work.
 """
+
 from __future__ import annotations
 from typing import Optional
 
