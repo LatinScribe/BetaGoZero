@@ -38,7 +38,7 @@ class Board:
         grid (list): A 2D list representing the board, containing Stone objects.
     """
 
-    def __init__(self, size=9):
+    def __init__(self, size: int = 9):
         """
         Initializes a Board object.
 
@@ -47,6 +47,17 @@ class Board:
         """
         self.size = size
         self.grid = [[Stone(x, y) for y in range(size)] for x in range(size)]
+
+        for column in self.grid:
+            for stone in column:
+                if stone.x + 1 < size:
+                    stone.add_neighbour(self.get_stone(stone.x + 1, stone.y))
+                if stone.x - 1 >= 0:
+                    stone.add_neighbour(self.get_stone(stone.x - 1, stone.y))
+                if stone.y + 1 < size:
+                    stone.add_neighbour(self.get_stone(stone.x, stone.y + 1))
+                if stone.y - 1 >= 0:
+                    stone.add_neighbour(self.get_stone(stone.x, stone.y - 1))
 
     def __getitem__(self, position):
         """
@@ -61,7 +72,7 @@ class Board:
         x, y = position
         return self.grid[x][y]
 
-    def add_stone(self, x, y, color="Neither"):
+    def add_stone(self, x: int, y: int, color: str = "Neither"):
         """
         Adds a Stone object to the board at the specified position.
 
@@ -71,7 +82,6 @@ class Board:
             color (str): The color of the stone. Defaults to "Neither".
         """
         self.grid[x][y].color = color
-        # TODO: add neighbours implementation
 
     def get_stone(self, x, y):
         """Return the stone situated at the given coordinates"""
@@ -220,7 +230,7 @@ class Stone:
     def __str__(self):
         return f'Stone on coordinates {self.x}, {self.y} is {self.color} and has {self.count_neighbours()} neighbours.'
 
-    def add_neighbour(self, neighbour):
+    def add_neighbour(self, neighbour: Stone):
         """
         Adds a neighbour to the stone if it is adjacent to the stone.
 
