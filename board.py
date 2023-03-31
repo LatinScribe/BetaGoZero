@@ -1,4 +1,34 @@
+"""Beta-Go: Course project for CSC111 Winter 2023
+
+Authors:
+Henry "TJ" Chen
+Dmitrii Vlasov
+Ming Yau (Oscar) Lam
+Duain Chhabra
+
+Date: April 3, 2023
+
+Version: pre-Alpha
+
+Module Description
+==================
+
+This module contains python classes which represent the actual components to
+a game of Go - the board and the stones.
+
+Copyright and Usage Information
+===============================
+
+This file was developed as part of the course project for CSC111 Winter 2023.
+Feel free to test it out, but please contact us to obtain permission if you
+intend to redistribute it or use it for your own work.
+"""
+
 # TODO: rewrite so that the board starts with the complete graph (maybe not, coz running time)
+from __future__ import annotations
+from typing import Optional
+
+
 class Board:
     """
     A class that represents the game board.
@@ -40,27 +70,12 @@ class Board:
             y (int): The y-coordinate of the position.
             color (str): The color of the stone. Defaults to "Neither".
         """
-        stone = Stone(x, y, color)
+        self.grid[x][y].color = color
         # TODO: add neighbours implementation
-        self.grid[x][y] = stone
 
     def get_stone(self, x, y):
+        """Return the stone situated at the given coordinates"""
         return self.grid[x][y]
-
-    # TODO: potentially move to Stone
-    def update_neighbours(self):
-        """
-        Updates the neighboring Stone objects for each Stone object on the board.
-        """
-        for x in range(self.size):
-            for y in range(self.size):
-                stone = self.grid[x][y]
-                neighbours = stone.get_neighbours()
-                for neighbour in neighbours:
-                    if neighbour.color != "Neither":
-                        stone.add_neighbour(neighbour)
-                    else:
-                        stone.remove_neighbour(neighbour)
 
     # pretty useless methods
     def remove_stones(self, stones):
@@ -119,6 +134,39 @@ class Board:
             ans += "-" * (self.size * 2 + 1) + '\n'
         return ans
 
+    def board_to_move_sequence(self) -> list[tuple[int, int, int]]:
+        """Convert a board state into a sequence of moves, store as a list of tuples
+        NOTE: This does not store the sequence that the moves were actually played in
+        """
+        sequence = []
+        i = 0
+        for row in self.grid:
+            for move in row:
+                sequence.append((i, move.x, move.y))
+                i += 1
+        return sequence
+
+    def get_winner(self) -> Optional[str]:
+        """return winner of game, assuming the game reached an end state."""
+        num_stones = {'black': 0, 'white': 0}
+        for stone_row in self.grid:
+            for stone in stone_row:
+                if stone.color == 'black':
+                    num_stones['black'] += 1
+                elif stone.color == 'white':
+                    num_stones['white'] += 1
+                else:
+                    print('A stone has invalid color')
+                    return None
+        print(num_stones)
+        if num_stones['black'] > num_stones['white']:
+            return 'black wins'
+        elif num_stones['black'] == num_stones['white']:
+            return 'tie'
+        else:
+            return 'white wins'
+        # TODO: may need a game end state for board class.
+
 
 class Stone:
     """
@@ -140,7 +188,7 @@ class Stone:
     color: str
     x: int
     y: int
-    neighbours: dict[tuple[int, int], ...]
+    neighbours: dict[tuple[int, int], Stone]
 
     def __init__(self, x, y, color="Neither"):
         """
@@ -210,6 +258,18 @@ class Stone:
             set: A set of neighbouring Stone objects.
         """
         return self.neighbours.values()
+
+    # TODO: potentially move to Stone
+    def update_neighbours(self,):
+        """
+        Updates the neighboring Stone objects for each Stone object on the board.
+        """
+        neighbours = self.get_neighbours()
+        for neighbour in neighbours:
+            if neighbour.color != "Neither":
+                self.add_neighbour(neighbour)
+            else:
+                self.remove_neighbour(neighbour)
 
     # TODO: potentially move to Board
     def die(self):
