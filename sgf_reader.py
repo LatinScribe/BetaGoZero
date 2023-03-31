@@ -121,32 +121,38 @@ def read_all_sgf_in_folder(folder_directory: str, do_deletion: bool = False):
         read_sgf(file, folder_directory, do_deletion)
 
 
-def sgf_to_game_sequence(file_name: str, file_directory: str) -> list[tuple[int, int, int]]:
+def sgf_to_game_sequence(file_name: str, file_directory: str) -> tuple[list[tuple[int, int, int]], int]:
     """
-    Reads an SGF file and converts it into a sequence of moves for the GameTree
+    Reads an SGF file and converts it into a sequence of moves for the GameTree and a win state
     # TODO: finish the docstring
     :param file_name:
     :param file_directory:
-    :return move_seq:
+    :return move_seq, win_state:
     """
     with open(file_directory + file_name) as sgf_file:
         header = sgf_file.readline()
         if header.find('RE') != -1:
             sgf_file.readline()
             sgf_file.readline()
-            current_game = sgf_file.readline().split(';')
-            current_game = current_game[1:]
+            score_start_index = header.find('RE') + 3
+            game_score_str = header[score_start_index: score_start_index + 3]
+            if game_score_str[0] == 'B':
+                game_score = int(game_score_str[2])  # if it is a victory by black, it is positive
+            elif game_score_str[0] == 'W':  # if it is a victory by white, it is negative
+                game_score = -1 * int(game_score_str[2])
+            game = sgf_file.readline().split(';')
+            game = game[1:]
             move_seq = []
             i = 1  # index of turn, starts at 1 (0 is the default, placeholder move)
-            for stone in current_game:
-                if stone[-2:] == "[]":  # is a pass
+            for stone in game:
+                if stone[1:3] == "[]":  # is a pass
                     move_seq.append((i, -1, -1))
                 else:
                     x = ord(stone[2]) - 97
                     y = ord(stone[3]) - 97
-                move_seq.append((i, x, y))
+                    move_seq.append((i, x, y))
                 i += 1
-            return move_seq
+            return move_seq, game_score
         else:
             raise ValueError
 
@@ -219,8 +225,8 @@ def sgf_folder_to_tree(folder_directory: str) -> Gt.GameTree:
     """
     tree = Gt.GameTree()
     for file in os.listdir(folder_directory):
-        # TODO: add final state
-        tree.insert_move_sequence(sgf_to_game_sequence(file, folder_directory))
+        sequence, probability = sgf_to_game_sequence(file, folder_directory)
+        tree.insert_move_sequence(sequence, probability)
     return tree
 
 
@@ -249,14 +255,13 @@ def load_tree_from_file(file_name: str, folder_directory: str) -> Gt.GameTree:
 if __name__ == '__main__':
     # All of this is for debugging
     # TODO: prints multiple times, fix when it should and should not print
-    # games_folder_path_absolute = '/Users/dmitriivlasov/Downloads/go9/'
-    # games_folder_path_relative = 'DataSet/2015-Go9/'
+    games_folder_path_absolute = '/Users/dmitriivlasov/Downloads/go9/'
+    games_folder_path_relative = 'DataSet/2015-Go9/'
+    games_folder_path_relative_small = 'DataSet/2015-Go9-small/'
+    games_folder_path_relative_super_small = 'DataSet/2015-Go9-super-small/'
     # read_all_sgf_in_folder(games_folder_path_relative, True)
-    # go9folder_game_tree = sgf_folder_to_tree(games_folder_path_relative)
+    go9folder_game_tree = sgf_folder_to_tree(games_folder_path_relative_super_small)
     # go9folder_game_tree = load_tree_from_file("treeSave.txt", "")
-    # print(go9folder_game_tree)
-    # print(f"length of the 2015-Go9 tree: {len(go9folder_game_tree)}")
-    # save_tree_to_file(go9folder_game_tree, "treeSave.txt", "")
-    # read_sgf("2015-07-27T12_22_10.954Z_m4y9p9qafyed.sgf", "DataSet/2015-Go9/", False)
-    game = sgf_to_game("2015-07-27T12_22_10.954Z_m4y9p9qafyed.sgf", "DataSet/2015-Go9/")
-    seq = sgf_to_game_sequence("2015-07-27T12_22_10.954Z_m4y9p9qafyed.sgf", "DataSet/2015-Go9/")
+    print(go9folder_game_tree)
+    print(f"length of the 2015-Go9 tree: {len(go9folder_game_tree)}")
+    save_tree_to_file(go9folder_game_tree, "treeSave.txt", "")

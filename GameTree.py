@@ -37,18 +37,16 @@ class GameTree:
     Each node in the tree stores a GO move.
 
     Instance Attributes:
-        - _parent: the parent of the game tree, None if it is the root
         - move: the current move (spot on the board), or (0, -1, -1) if this tree represents the start of a game
         - _subtrees: the dictionary of the subtrees of the game trees, with keys corresponding to the moves
         - win_probability: probability of going down this branch  (backpropagation)  #TODO: assume win probability for black
     TODO: finish the docstring
     """
-    _parent: None | GameTree
     move: tuple[int, int, int]
     _subtrees: dict[tuple[int, int, int], GameTree]
     win_probability: float
 
-    def __init__(self, parent: None | GameTree = None, move: tuple[int, int, int] = GAME_START_MOVE,
+    def __init__(self, move: tuple[int, int, int] = GAME_START_MOVE,
                  win_probability: float = 0.0) -> None:
         """Initialize a new game tree.
 
@@ -58,7 +56,6 @@ class GameTree:
         >>> game.move == GAME_START_MOVE
         True
         """
-        self._parent = parent
         self.move = move
         self._subtrees = {}
         self.win_probability = win_probability
@@ -66,10 +63,6 @@ class GameTree:
     def get_subtrees(self) -> list[GameTree]:
         """Return the subtrees of this game tree."""
         return list(self._subtrees.values())
-
-    def get_parent(self) -> GameTree:
-        """Return the parent of this game tree."""
-        return self._parent
 
     def find_subtree_by_move(self, move: tuple[int, int, int]) -> Optional[GameTree]:
         """Return the subtree corresponding to the given move.
@@ -125,67 +118,32 @@ class GameTree:
         """Add a subtree to this game tree."""
         self._subtrees[subtree.move] = subtree
 
-    def insert_move_sequence(self, moves: list[tuple[int, int, int]], probability: float = 0.0) -> None:
+    def insert_move_sequence(self, moves: list[tuple[int, int, int]], probability: float) -> None:
         """Insert the given move sequence with this tree as the parent"""
         # TODO: potentially add the proability to the parameters
-        self._insert_move_sequence_helper(moves, 0)
+        self._insert_move_sequence_helper(moves, 0, probability)
+        self.update_win_probability()
 
-    def _insert_move_sequence_helper(self, moves: list[tuple[int, int, int]], current_index: int) -> None:
+    def _insert_move_sequence_helper(self, moves: list[tuple[int, int, int]], current_index: int,
+                                     probability: float) -> None:
         """helps, hopefully"""
         # TODO: add parents to trees
         if current_index == len(moves):
+            self.win_probability = probability
             return
-        if moves[current_index] not in self._subtrees:
-            self.add_subtree(GameTree(self._parent, moves[current_index]))  # added parent here
-        # self._update_win_probability()
-        self._subtrees[moves[current_index]]._insert_move_sequence_helper(moves, current_index + 1)
+        elif moves[current_index] not in self._subtrees:
+            self.add_subtree(GameTree(moves[current_index], probability))  # added parent here
+        self._subtrees[moves[current_index]]._insert_move_sequence_helper(moves, current_index + 1, probability)
 
-    # TODO: the backpropagation_step
-    # def update_win_probability_one(self) -> None:
-    #     """Recalculate the guesser win probability of this tree.
-    #
-    #     Note: like the "_length" Tree attribute from tutorial, you should only need
-    #     to update self here, not any of its subtrees. (You should *assume* that each
-    #     subtree has the correct guesser win probability already.)
-    #
-    #     Use the following definition for the guesser win probability of self:
-    #         - if self is a leaf, don't change the guesser win probability
-    #           (leave the current value alone)
-    #         - if self is not a leaf and self.is_black_turn() is True, the guesser win probability
-    #           is equal to the MAXIMUM of the black win probabilities of its subtrees
-    #         - if self is not a leaf and self.is_black_turn is False, the guesser win probability
-    #           is equal to the minimum (or average) of the guesser win probabilities of its subtrees
-    #     """
-    #
-    #     probabilities = []
-    #     for subtree in self._subtrees:
-    #         prob = self._subtrees[subtree].win_probability
-    #         probabilities.append(prob)
-    #     if self.is_black_turn():
-    #         self._subtrees.win_probability = max(probabilities)
-    #     else:
-    #         self._subtrees.win_probability = min(probabilities)
-
-    def update_win_probability_all(self) -> None:
-        """updates the probability of 1 branch use this method after it creates after 1 complete game is added.
-        if self is a leaf, don't change the guesser win probability
-               (leave the current value alone)
-            - if self is not a leaf and self.is_black_turn() is True, the guesser win probability
-              is equal to the MAXIMUM of the black win probabilities of its subtrees
-            - if self is not a leaf and self.is_black_turn is False, the guesser win probability
-              is equal to the minimum (or average) of the black win probabilities of its subtrees"""
-        probabilities = [self._subtrees[subtree].win_probability for subtree in self._subtrees]
-        if not self._subtrees:  # if the tree is a leaf
-            self._parent.update_win_probability_all()
-        elif self._parent is None:
-            self.win_probability = max(probabilities)  # black always starts first
+    def update_win_probability(self) -> None:
+        """updates the probability of 1 branch use this method after it creates after 1 complete game is added."""
+        if not self._subtrees:
+            return
         else:
-            if self.is_black_turn():
-                self.win_probability = max(probabilities)
-            else:
-                self.win_probability = min(probabilities)
-                # self.win_probability = sum(probabilities)/len(probabilities)
-            self._parent.update_win_probability_all()
+            for subtree in self._subtrees.values():
+                subtree.update_win_probability()
+        probabilities = [subtree.win_probability for subtree in self.get_subtrees()]
+        self.win_probability = sum(probabilities) / len(probabilities)
 
 
 if __name__ == '__main__':
