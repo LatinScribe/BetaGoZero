@@ -23,23 +23,17 @@ to delete files without a valid result.
 Note:
 - requires the os and board modules to be imported
 """
-from __future__ import annotations
-
+import os
 from typing import Optional
-from go_gui import draw_board
-import pickle
-import shutil
+
 import board as b
-import GameTree as gt
+from go_gui import draw_board
 
 
-
-def read_sgf(file_name: str, file_directory: str, do_deletion: bool) -> None | b.Board:
+def read_sgf(file_name: str, file_directory: str, do_deletion: bool):
     """
     Reads a single SGF file and checks if it has a valid result. If it does not have a valid result and
     do_deletion is True, the file will be deleted.
-
-    Return None if the file is being deleted
 
     Args:
         file_name (str): The name of the SGF file to read.
@@ -51,15 +45,13 @@ def read_sgf(file_name: str, file_directory: str, do_deletion: bool) -> None | b
         if header.find('RE') == -1:
             print("Game does not have a valid result, unusable.")
             if do_deletion:
-                print("Proceeding with deletion.")
+                print("Proceeding with deletion:")
                 try:
-                    # shutil.move(file_directory + file_name, "/DataSet/Unusable//" + file_name) does not work
                     os.remove(file_directory + file_name)
                 except FileNotFoundError:
                     print("Fail. File was not found.")
                 else:
                     print("Success. File deleted.")
-                    return
         else:
             print(f"Game has a valid result of {header[header.index('RE') + 2:header.index('KM')]} aka is usable.")
             sgf_file.readline()
@@ -68,15 +60,18 @@ def read_sgf(file_name: str, file_directory: str, do_deletion: bool) -> None | b
             game = game[1:-2]
             board = b.Board(9)
             for stone in game:
-                if stone[-2:] != "[]":  # is not a pass
-                    x = ord(stone[2]) - 97
-                    y = ord(stone[3]) - 97
-                    if stone[0] == "B":
-                        board.add_stone(x, y, "Black")
-                    elif stone[0] == "W":
-                        board.add_stone(x, y, "White")
+                if stone[-2:] == "[]":  # if the stone is a pass TODO: Need to handle this case
+                    break
+                x = ord(stone[2]) - 97
+                y = ord(stone[3]) - 97
+                if stone[0] == "B":
+                    board.add_stone(x, y, "Black")
+                elif stone[0] == "W":
+                    board.add_stone(x, y, "White")
             # print(board)
-    return board
+
+            draw_board(board, "\games_2015/" + f"{file_name[:15]}.jpg")
+            return board
 
 
 def read_all_sgf_in_folder(folder_directory: str, do_deletion: bool = False):
@@ -91,77 +86,7 @@ def read_all_sgf_in_folder(folder_directory: str, do_deletion: bool = False):
         read_sgf(file, folder_directory, do_deletion)
 
 
-def sgf_to_game_sequence(file_name: str, file_directory: str) -> list[tuple[int, int, int]]:
-    """
-    Reads an SGF file and converts it into a sequence of moves for the GameTree
-    # TODO: finish the docstring
-    :param file_name:
-    :param file_directory:
-    :return move_seq:
-    """
-    with open(file_directory + file_name) as sgf_file:
-        header = sgf_file.readline()
-        if header.find('RE') != -1:
-            sgf_file.readline()
-            sgf_file.readline()
-            game = sgf_file.readline().split(';')
-            game = game[1:]
-            move_seq = []
-            i = 1  # index of turn, starts at 1 (0 is the default, placeholder move)
-            for stone in game:
-                if stone[-2:] == "[]":  # is a pass
-                    move_seq.append((i, -1, -1))
-                else:
-                    x = ord(stone[2]) - 97
-                    y = ord(stone[3]) - 97
-                move_seq.append((i, x, y))
-                i += 1
-            return move_seq
-        else:
-            raise ValueError
-
-
-def sgf_folder_to_tree(folder_directory: str) -> gt.GameTree:
-    """Returns a game tree by exctracting move sequences out of all sgf files in a given folder
-
-    Preciditions:
-    - all files have to be sgf
-    """
-    tree = gt.GameTree()
-    for file in os.listdir(folder_directory):
-        tree.insert_move_sequence(sgf_to_game_sequence(file, folder_directory))
-    return tree
-
-
-def rotate_move_seq_by_90(moves: list[tuple[int, int, int]], board_size=9) -> list[tuple[int, int, int]]:
-    """rotates a sequence of moves clockwise by 90 degrees"""
-    rotated_sequence = []
-    id_added = 1000  # TODO: modify this (possibly with reference to total number of moves in data set)
-    for move in moves:  # TODO: check if this works
-        new_move = (id_added + move[0], move[2], board_size - move[1])
-        rotated_sequence.append(new_move)
-    return rotated_sequence
-
-
-def save_tree_to_file(tree: gt.GameTree, file_name: str, folder_directory: str) -> None:
-    with open(folder_directory + file_name, 'wb') as file:
-        pickle.dump(tree, file)
-
-
-def load_tree_from_file(file_name: str, folder_directory: str) -> gt.GameTree:
-    with open(folder_directory + file_name, 'rb') as file:
-        return pickle.load(file)
-
-
 if __name__ == '__main__':
-    # All of this is for debugging
-    # TODO: prints multiple times, fix when it should and should not print
     games_folder_path_absolute = '/Users/dmitriivlasov/Downloads/go9/'
     games_folder_path_relative = 'DataSet/2015-Go9/'
-    # read_all_sgf_in_folder(games_folder_path_relative, True)
-    # go9folder_game_tree = sgf_folder_to_tree(games_folder_path_relative)
-    go9folder_game_tree = load_tree_from_file("treeSave.txt", "")
-    print(go9folder_game_tree)
-    print(f"length of the 2015-Go9 tree: {len(go9folder_game_tree)}")
-    # save_tree_to_file(go9folder_game_tree, "treeSave.txt", "")
-
+    read_all_sgf_in_folder(games_folder_path_relative, False)
