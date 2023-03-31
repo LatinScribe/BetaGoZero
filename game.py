@@ -87,6 +87,7 @@ class Game:
         for move in moves_sequence:
             x, y = move
             print(f"Playing {self.current_player}'s move at ({x}, {y})")
+
     def is_valid_move(self, x, y) -> bool:
         """
         Return True if the move at (x, y) is valid, False otherwise
