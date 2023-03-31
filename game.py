@@ -39,6 +39,13 @@ class Game:
         else:
             return False
 
+    def played_moves(self) -> list[tuple[int, int]]:
+        """Return a list of the moves that have been played so far in the game"""
+        new_moves = []
+        for i, x, y in self.moves:
+            new_moves.append((x, y))
+        return new_moves
+
     def run_example(self, moves_sequence) -> None:
         """Function for testing the ouputting of a final board state"""
         for move in moves_sequence:
