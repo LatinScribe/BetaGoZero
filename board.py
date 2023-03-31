@@ -62,7 +62,7 @@ class Board:
                 if stone.y - 1 >= 0:
                     stone.add_neighbour(self.get_stone(stone.x, stone.y - 1))
 
-    def __getitem__(self, position):
+    def __getitem__(self, position: tuple[int, int]):
         """
         Returns the Stone object at the specified position.
 
@@ -86,12 +86,12 @@ class Board:
         """
         self.grid[x][y].color = color
 
-    def get_stone(self, x, y):
+    def get_stone(self, x: int, y: int):
         """Return the stone situated at the given coordinates"""
         return self.grid[x][y]
 
     # pretty useless methods
-    def remove_stones(self, stones):
+    def remove_stones(self, stones: list[Stone]):
         """
         Removes the specified Stone objects from the board.
 
@@ -180,7 +180,7 @@ class Board:
             return 'white wins'
         # TODO: may need a game end state for board class.
 
-    def is_valid_coord(self, x, y):
+    def is_valid_coord(self, x: int, y: int):
         """Check if a coordinate is valid for the board."""
         return 0 <= x < self.size and 0 <= y < self.size
 
@@ -207,7 +207,7 @@ class Stone:
     y: int
     neighbours: dict[tuple[int, int], Stone]
 
-    def __init__(self, x, y, color="Neither"):
+    def __init__(self, x: int, y: int, color: str = "Neither"):
         """
         Initializes a new stone with the specified color and position.
 
@@ -248,7 +248,7 @@ class Stone:
             print('You fucked up the neighbours')
             raise Exception
 
-    def remove_neighbour(self, neighbour):
+    def remove_neighbour(self, neighbour: Stone):
         """
         Removes a neighbour from the stone.
 
@@ -277,7 +277,7 @@ class Stone:
         return self.neighbours.values()
 
     # TODO: potentially move to Stone
-    def update_neighbours(self, ):
+    def update_neighbours(self):
         """
         Updates the neighboring Stone objects for each Stone object on the board.
         """
