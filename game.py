@@ -47,7 +47,7 @@ class Game:
     def __init__(self, active_board: Optional[Board] = None, player_turn: Optional[str] = "Black",
                  move_sequence: Optional[list[tuple[int, int, int]]] = None, size: Optional[int] = 9):
         """
-        Initialise a new Go Game with the given board size - defaults to a 9x9 board
+        Initialise a new Go Game with the given board size - defaults to a 9x9 empty board
 
         """
         if active_board is None:
