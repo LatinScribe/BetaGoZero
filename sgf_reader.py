@@ -53,7 +53,7 @@ import os
 import pickle
 # import shutil
 import board as b
-import GameTree as gt
+import GameTree as Gt
 from game import Game
 
 
@@ -92,12 +92,12 @@ def read_sgf(file_name: str, file_directory: str, do_deletion: bool) -> None | b
             print("Boardsize:", num_size)
             sgf_file.readline()
             sgf_file.readline()
-            game = sgf_file.readline().split(';')
-            game = game[1:-2]
+            current_game = sgf_file.readline().split(';')
+            current_game = current_game[1:-2]
 
             # generate the board class
             board = b.Board(size=num_size)
-            for stone in game:
+            for stone in current_game:
                 if stone[-2:] != "[]":  # is not a pass
                     x = ord(stone[2]) - 97
                     y = ord(stone[3]) - 97
@@ -211,13 +211,13 @@ def sgf_to_game(file_name: str, file_directory: str) -> Game:
         return current_game
 
 
-def sgf_folder_to_tree(folder_directory: str) -> gt.GameTree:
+def sgf_folder_to_tree(folder_directory: str) -> Gt.GameTree:
     """Returns a game tree by exctracting move sequences out of all sgf files in a given folder
 
     Preciditions:
     - all files have to be sgf
     """
-    tree = gt.GameTree()
+    tree = Gt.GameTree()
     for file in os.listdir(folder_directory):
         # TODO: add final state
         tree.insert_move_sequence(sgf_to_game_sequence(file, folder_directory))
@@ -234,13 +234,13 @@ def rotate_move_seq_by_90(moves: list[tuple[int, int, int]], board_size=9) -> li
     return rotated_sequence
 
 
-def save_tree_to_file(tree: gt.GameTree, file_name: str, folder_directory: str) -> None:
+def save_tree_to_file(tree: Gt.GameTree, file_name: str, folder_directory: str) -> None:
     """Saves the given GameTree as a txt file"""
     with open(folder_directory + file_name, 'wb') as file:
         pickle.dump(tree, file)
 
 
-def load_tree_from_file(file_name: str, folder_directory: str) -> gt.GameTree:
+def load_tree_from_file(file_name: str, folder_directory: str) -> Gt.GameTree:
     """Load the tree from the txt file"""
     with open(folder_directory + file_name, 'rb') as file:
         return pickle.load(file)
