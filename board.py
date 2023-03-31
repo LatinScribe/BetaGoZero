@@ -252,6 +252,8 @@ class Stone:
         """
         Removes a neighbour from the stone.
 
+        Effectively deletes the connection between two stones.
+
         Args:
             neighbour (Stone): The neighbouring stone to remove.
         """
