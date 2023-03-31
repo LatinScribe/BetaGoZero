@@ -255,8 +255,8 @@ class Stone:
         Args:
             neighbour (Stone): The neighbouring stone to remove.
         """
-        self.neighbours[(neighbour.x, neighbour.y)] = None
-        neighbour.neighbours[(self.x, self.y)] = None
+        del self.neighbours[(neighbour.x, neighbour.y)]
+        del neighbour.neighbours[(self.x, self.y)]
 
     def count_neighbours(self):
         """
