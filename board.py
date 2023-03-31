@@ -40,7 +40,10 @@ class Board:
 
     def __init__(self, size: int = 9):
         """
-        Initializes a Board object.
+        Initializes a Board object. Populates all valid positions with "imaginary stones" of
+        neither colour - in reality, these stones would not exist on the board - it is
+        our way of representing an empty board. Then, update all the stones to have the correct
+        neighbours.
 
         Args:
             size (int): The size of the board. Defaults to 9.
