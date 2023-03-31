@@ -167,6 +167,10 @@ class Board:
             return 'white wins'
         # TODO: may need a game end state for board class.
 
+    def is_valid_coord(self, x, y):
+        """Check if a coordinate is valid for the board."""
+        return 0 <= x < self.size and 0 <= y < self.size
+
 
 class Stone:
     """
@@ -260,7 +264,7 @@ class Stone:
         return self.neighbours.values()
 
     # TODO: potentially move to Stone
-    def update_neighbours(self,):
+    def update_neighbours(self, ):
         """
         Updates the neighboring Stone objects for each Stone object on the board.
         """

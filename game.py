@@ -87,6 +87,62 @@ class Game:
         for move in moves_sequence:
             x, y = move
             print(f"Playing {self.current_player}'s move at ({x}, {y})")
+    def is_valid_move(self, x, y) -> bool:
+        """
+        Return True if the move at (x, y) is valid, False otherwise
+        :param x:
+        :param y:"""
+        return self.board.get_stone(x, y).color == "Neither"
+
+    def played_moves(self) -> list[tuple[int, int]]:
+        """Return a list of the moves that have been played so far in the game"""
+        new_moves = []
+        for i, x, y in self.moves:
+            new_moves.append((x, y))
+        return new_moves
+
+    def available_moves(self) -> list[tuple[int, int]]:
+        """
+        Return a list of the moves that are available to be played
+        """
+        available_moves = []
+        for x in range(self.board.size):
+            for y in range(self.board.size):
+                if self.is_valid_move(x, y):
+                    available_moves.append((x, y))
+        return available_moves
+
+    def get_move_info(self, x, y) -> tuple[int, str]:
+        """Returns the turn number and player color based on the given coordinates"""
+        for turn, move_x, move_y in self.moves:
+            if move_x == x and move_y == y:
+                player_color = "Black" if turn % 2 == 1 else "White"
+                return turn, player_color
+        return -1, "Neither"
+
+    def is_game_over(self) -> bool:
+        """Checks if the game is over if both players have passed their turns it returns True, otherwise False
+        TODO: add a check for if the board is full and check its fucntionality"""
+
+        if self.played_moves()[-1] == (-1, -1) and len(self.moves) >= 2 and self.played_moves()[-1] == (-1, -1):
+            return True
+        else:
+            return False
+
+    def last_turn_no(self) -> int:
+        """Returns the turn number of the last move played"""
+        return len(self.moves)
+
+    def pass_turn(self) -> None:
+        """Allows a player to pass their turn."""
+        self.current_player = "White" if self.current_player == "Black" else "Black"
+        self.moves.append((self.last_turn_no() + 1, -1, -1))
+
+    def run_example(self, moves_sequence) -> None:
+        """Function for testing the ouputting of a final board state"""
+        for move in moves_sequence:
+            x, y = move
+            print(f"Playing {self.current_player}'s move at ({x}, {y})")
             success = self.play_move(x, y)
             if success:
                 print("Move successful.")
