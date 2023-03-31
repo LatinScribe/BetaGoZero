@@ -47,8 +47,11 @@ class Game:
     def __init__(self, active_board: Optional[Board] = None, player_turn: Optional[str] = "Black",
                  move_sequence: Optional[list[tuple[int, int, int]]] = None, size: Optional[int] = 9):
         """
-        Initialise a new Go Game with the given board size - defaults to a 9x9 empty board
+        Initialise a new Go game - defaults to a 9x9 empty board
 
+        Other board sizes are typically 13x13 or 19x19 (19x19 is by far the most common of them all)
+
+        Requires that the moves on the active board match those of the given move sequence
         """
         if active_board is None:
             self.board = Board(size=size)  # initialise a new board with the give size
@@ -64,9 +67,8 @@ class Game:
     def play_move(self, x, y) -> bool:
         """
         Given the location of a new move, updates the board and game.
-        :param x:
-        :param y:
-        :return:
+
+        returns whether updating was sucessful or not
         """
         if self.board.get_stone(x, y).color == "Neither":
             self.board.add_stone(x, y, self.current_player)
@@ -78,8 +80,10 @@ class Game:
         else:
             return False
 
-    def run_example(self, moves_sequence) -> None:
-        """Function for testing the ouputting of a final board state"""
+    def add_sequence(self, moves_sequence) -> None:
+        """Function for testing the ouputting of a final board state
+        Given a move sequence, it adds each move to the board
+        """
         for move in moves_sequence:
             x, y = move
             print(f"Playing {self.current_player}'s move at ({x}, {y})")
