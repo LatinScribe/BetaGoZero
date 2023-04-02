@@ -295,9 +295,9 @@ if __name__ == '__main__':
     games_folder_path_small = 'DataSet/2015-Go9-small/'
     games_folder_path_super_small = 'DataSet/2015-Go9-super-small/'
     # read_all_sgf_in_folder(games_folder_path, True)
-    go9folder_game_tree_relative = sgf_folder_to_tree(games_folder_path)
+    # go9folder_game_tree_relative = sgf_folder_to_tree(games_folder_path)
     go9folder_game_tree_absolute = sgf_folder_to_tree(games_folder_path, is_absolute=True)
     # go9folder_game_tree = load_tree_from_file("CompleteWinRateTree.txt", "")
-    print(games_folder_path)
-    print(f"length of the 2015-Go9 tree: {len(games_folder_path)}")
-    save_tree_to_file(games_folder_path, "CompleteWinRateTree.txt", "")
+    print(go9folder_game_tree_absolute)
+    print(f"length of the 2015-Go9 tree: {len(go9folder_game_tree_absolute)}")
+    save_tree_to_file(go9folder_game_tree_absolute, "CompleteWinRateTree.txt", "")
