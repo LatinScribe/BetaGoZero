@@ -75,7 +75,7 @@ class RandomGoPlayer(AbstractGoPlayer):
             coord = random.choice(
                 [(check_stone.x + 1, check_stone.y), (check_stone.x - 1, check_stone.y),
                  (check_stone.x, check_stone.y + 1), (check_stone.x, check_stone.y - 1)])
-        return (len(self.game.moves), coord[0], coord[1])
+        return (len(self.game.moves)+1, coord[0], coord[1])
     
 class SlightlyBetterBlackPlayer(AbstractGoPlayer):
     """A Go AI that makes the best move given in its subtree."""
@@ -107,7 +107,7 @@ class SlightlyBetterBlackPlayer(AbstractGoPlayer):
                     [(check_stone.x + 1, check_stone.y), (check_stone.x - 1, check_stone.y),
                      (check_stone.x, check_stone.y + 1), (check_stone.x, check_stone.y - 1)])
 
-            return (len(self.game.moves), coord[0], coord[1])
+            return (len(self.game.moves)+1, coord[0], coord[1])
         else:
             max_win_prob = -9999
             for subtree in self.gt.get_subtrees():
