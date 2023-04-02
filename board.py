@@ -437,3 +437,10 @@ if __name__ == '__main__':
     # print(board[(1, 6)])
     # # print(board)
     # print(board.print_max_neighbours())
+    board.grid[8][0].color = 'White'
+    board.grid[7][0].color = 'White'
+    # board.capture_stones(board.grid[7][0])
+    board.grid[8][1].color = 'Black'
+    board.grid[7][1].color = 'Black'
+    board.grid[6][0].color = 'Black'
+    print(board.grid[7][0].check_is_dead(set()))
