@@ -156,6 +156,38 @@ def sgf_to_game_sequence(file_name: str, file_directory: str) -> tuple[list[tupl
         else:
             raise ValueError
 
+def sgf_to_game_sequence_absolute(file_name: str, file_directory: str) -> tuple[list[tuple[int, int, int]], int]:
+    """
+    Reads an SGF file and converts it into a sequence of moves for the GameTree and a win state
+    (pure wins or pure loses).
+    """
+    with open(file_directory + file_name) as sgf_file:
+        header = sgf_file.readline()
+        if header.find('RE') != -1:
+            sgf_file.readline()
+            sgf_file.readline()
+            score_start_index = header.find('RE') + 3
+            game_score_str = header[score_start_index: score_start_index + 3]
+            if game_score_str[0] == 'B':
+                game_score = 1  # if it is a victory by black, it is 1
+            elif game_score_str[0] == 'W':
+                game_score = 0  # if it is a victory by white, it is 0 (loss for black)
+            game = sgf_file.readline().split(';')
+            game = game[1:]
+            move_seq = []
+            i = 1  # index of turn, starts at 1 (0 is the default, placeholder move)
+            for stone in game:
+                if stone[1:3] == "[]":  # is a pass
+                    move_seq.append((i, -1, -1))
+                else:
+                    x = ord(stone[2]) - 97
+                    y = ord(stone[3]) - 97
+                    move_seq.append((i, x, y))
+                i += 1
+            return move_seq, game_score
+        else:
+            raise ValueError
+
 
 def sgf_to_game(file_name: str, file_directory: str) -> Game:
     """
@@ -217,15 +249,19 @@ def sgf_to_game(file_name: str, file_directory: str) -> Game:
         return current_game
 
 
-def sgf_folder_to_tree(folder_directory: str) -> Gt.GameTree:
+def sgf_folder_to_tree(folder_directory: str, is_absolute: bool = False) -> Gt.GameTree:
     """Returns a game tree by exctracting move sequences out of all sgf files in a given folder
 
     Preciditions:
     - all files have to be sgf
     """
     tree = Gt.GameTree()
+    if is_absolute:
+        method = sgf_to_game_sequence_absolute
+    else:
+        method = sgf_to_game_sequence
     for file in os.listdir(folder_directory):
-        sequence, probability = sgf_to_game_sequence(file, folder_directory)
+        sequence, probability = method(file, folder_directory)
         tree.insert_move_sequence(sequence, probability)
     return tree
 
@@ -255,13 +291,13 @@ def load_tree_from_file(file_name: str, folder_directory: str) -> Gt.GameTree:
 if __name__ == '__main__':
     # All of this is for debugging
     # TODO: prints multiple times, fix when it should and should not print
-    games_folder_path_absolute = '/Users/dmitriivlasov/Downloads/go9/'
-    games_folder_path_relative = 'DataSet/2015-Go9/'
-    games_folder_path_relative_small = 'DataSet/2015-Go9-small/'
-    games_folder_path_relative_super_small = 'DataSet/2015-Go9-super-small/'
-    # read_all_sgf_in_folder(games_folder_path_relative, True)
-    go9folder_game_tree = sgf_folder_to_tree(games_folder_path_relative_super_small)
-    # go9folder_game_tree = load_tree_from_file("treeSave.txt", "")
-    print(go9folder_game_tree)
-    print(f"length of the 2015-Go9 tree: {len(go9folder_game_tree)}")
-    save_tree_to_file(go9folder_game_tree, "treeSave.txt", "")
+    games_folder_path = 'DataSet/2015-Go9/'
+    games_folder_path_small = 'DataSet/2015-Go9-small/'
+    games_folder_path_super_small = 'DataSet/2015-Go9-super-small/'
+    # read_all_sgf_in_folder(games_folder_path, True)
+    go9folder_game_tree_relative = sgf_folder_to_tree(games_folder_path)
+    go9folder_game_tree_absolute = sgf_folder_to_tree(games_folder_path, is_absolute=True)
+    # go9folder_game_tree = load_tree_from_file("CompleteWinRateTree.txt", "")
+    print(games_folder_path)
+    print(f"length of the 2015-Go9 tree: {len(games_folder_path)}")
+    save_tree_to_file(games_folder_path, "CompleteWinRateTree.txt", "")
