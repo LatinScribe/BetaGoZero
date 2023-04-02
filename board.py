@@ -369,7 +369,7 @@ class Stone:
             else:
                 self.remove_neighbour(neighbour)
 
-    # TODO: potentially move to Board
+    # TODO: check this, probably not nesscary - don't need to delete the connections
     def die(self):
         """
         Removes the stone and its connections from the board.
