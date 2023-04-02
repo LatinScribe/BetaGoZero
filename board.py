@@ -154,8 +154,8 @@ class Board:
         sequence = []
         i = 0
         for row in self.grid:
-            for move in row:
-                sequence.append((i, move.x, move.y))
+            for stone in row:
+                sequence.append((i, stone.x, stone.y))
                 i += 1
         return sequence
 
@@ -168,16 +168,16 @@ class Board:
             raise ValueError
         elif self.get_stone(x, y).color != "Neither":
             return False
-        elif x < 0 or x > 8 or y < 0 or y > 8:
-            return False
-        else:
-            self.get_stone(x, y).color = color
-            if self.get_stone(x, y).check_is_dead(set()):
-                self.get_stone(x, y).color = 'Neither'
-                return False
-            else:
-                self.get_stone(x, y).color = 'Neither'
-                return True
+        # elif x < 0 or x > 8 or y < 0 or y > 8:
+        #     return False
+        # else:
+        #     self.get_stone(x, y).color = color
+        #     if self.get_stone(x, y).check_is_dead(set()):
+        #         self.get_stone(x, y).color = 'Neither'
+        #         return False
+        #     else:
+        #         self.get_stone(x, y).color = 'Neither'
+        return True
 
     def calculate_score(self: Board) -> list:
         """Calculates the score for both players.

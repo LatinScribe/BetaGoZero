@@ -49,7 +49,12 @@ def run_game() -> None:
                 x, y = event.pos
                 row, col = retnr_row_col(x, y)
 
-                if 0 <= row < 9 and 0 <= col < 9 and (row, col) not in new_game.played_moves():
+                if len(new_game.moves) % 2 == 0:
+                    color = "Black"
+                else:
+                    color = "White"
+
+                if 0 <= row < 9 and 0 <= col < 9 and (row, col) and game.board.is_valid_move(row, col, color):
                     print((len(new_game.moves) + 1, row, col))
                     print("coordinates: ", row, col)
                     new_game.play_move(row, col)

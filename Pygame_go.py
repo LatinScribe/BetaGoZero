@@ -55,7 +55,7 @@ font = pygame.font.Font(None, 24)
 
 # Create a game board
 board = Board(9)
-game = Game()
+# game = Game()
 
 def retnr_row_col(x, y):
     row = (x - MARGIN + 15) // CELL_SIZE
@@ -87,12 +87,20 @@ def update_display(game: Game):
         # screen.blit(label, (WIDTH - MARGIN + NUMBER_OFFSET - 50, MARGIN + i * CELL_SIZE - NUMBER_OFFSET + 5))
 
     # Draw stones
-    for i, x, y in game.moves:
-        if i % 2 == 0:
-            color = BLACK
-        else:
-            color = WHITE
-        pygame.draw.circle(screen, color, (MARGIN + x * CELL_SIZE, MARGIN + y * CELL_SIZE), CELL_SIZE // 2 - 2)
+    for move in game.moves:
+        color = (game.board.get_stone(move[1], move[2])).color
+        if color != "Neither":
+            if color == "White":
+                color = WHITE
+            else:
+                color = BLACK
+            pygame.draw.circle(screen, color, (MARGIN + move[1] * CELL_SIZE, MARGIN + move[2] * CELL_SIZE), CELL_SIZE // 2 - 2)
+    # for i, x, y in game.moves:
+    #     if i % 2 == 0:
+    #         color = BLACK
+    #     else:
+    #         color = WHITE
+    #     pygame.draw.circle(screen, color, (MARGIN + x * CELL_SIZE, MARGIN + y * CELL_SIZE), CELL_SIZE // 2 - 2)
 
     pygame.display.flip()
 
