@@ -42,7 +42,7 @@ def run_game() -> None:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:  # if the user clicks the close button
                 print("Black captured:", new_game.black_captured)
-                print("Black captured:", new_game.white_captured)
+                print("White captured:", new_game.white_captured)
                 draw_board(new_game.board, "go2434.jpg", True)
                 sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:  # if the user clicks the mouse
