@@ -37,12 +37,15 @@ class Game:
         - current_player: who's turn is it, either "Black" or "White
         - moves: a list that represents the sequence of moves played so far in the game
         - board_size: the size of the board. Note that the board is always a square
-
+        - black_captured: the amount of stones captured BY BLACK so far
+        - white_captured: the amount of stones captured BY WHITE so far
     """
     board: Board
     current_player: str
     moves: list[tuple[int, int, int]]
-    board_size = int
+    board_size: int
+    black_captured: int
+    white_captured: int
 
     def __init__(self, active_board: Optional[Board] = None, player_turn: Optional[str] = "Black",
                  move_sequence: Optional[list[tuple[int, int, int]]] = None, size: Optional[int] = 9):
@@ -63,6 +66,9 @@ class Game:
         else:
             self.moves = move_sequence
         self.board_size = size
+
+        self.white_captured = 0
+        self.black_captured = 0
 
     def play_move(self, x, y) -> bool:
         """
