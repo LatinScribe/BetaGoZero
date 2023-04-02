@@ -159,30 +159,25 @@ class Board:
                 i += 1
         return sequence
 
-    def get_winner(self) -> Optional[str]:
-        """return winner of game, assuming the game reached an end state."""
-        num_stones = {'black': 0, 'white': 0}
-        for stone_row in self.grid:
-            for stone in stone_row:
-                if stone.color == 'black':
-                    num_stones['black'] += 1
-                elif stone.color == 'white':
-                    num_stones['white'] += 1
-                else:
-                    print('A stone has invalid color')
-                    return None
-        print(num_stones)
-        if num_stones['black'] > num_stones['white']:
-            return 'black wins'
-        elif num_stones['black'] == num_stones['white']:
-            return 'tie'
+    def is_valid_move(self, x: int, y: int, color: str) -> bool:
+        """Check if a coordinate is valid for the board. (It does not overwrite any stone, is not placed in a location
+        that leads to instant death, and within boundaries of the board. It does not mutate the board
+        Raises ValueError if color is not 'White' or 'Black'
+        """
+        if color not in {'Black', 'White'}:
+            raise ValueError
+        elif self.get_stone(x, y).color != "Neither":
+            return False
+        elif x < 0 or x > 8 or y < 0 or y > 8:
+            return False
         else:
-            return 'white wins'
-        # TODO: may need a game end state for board class.
-
-    def is_valid_coord(self, x: int, y: int):
-        """Check if a coordinate is valid for the board."""
-        return 0 <= x < self.size and 0 <= y < self.size
+            self.get_stone(x, y).color = color
+            if self.get_stone(x, y).check_is_dead(set()):
+                self.get_stone(x, y).color = 'Neither'
+                return False
+            else:
+                self.get_stone(x, y).color = 'Neither'
+                return True
 
     def calculate_score(self: Board) -> list:
         """Calculates the score for both players.
