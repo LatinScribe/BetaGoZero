@@ -47,8 +47,8 @@ def draw_board(given_board: Board, save_path: str = "Game_result/example.jpg", o
 
     for i in range(given_board.size):
         x = padding + i * cell_size
-        draw.line([(x, padding), (x, board_size + padding)], "black")
-        draw.line([(padding, x), (board_size + padding, x)], "black")
+        draw.line([(x, padding), (x, board_size + padding - 50)], "black")
+        draw.line([(padding, x), (board_size + padding - 50, x)], "black")
 
     for x in range(given_board.size):
         for y in range(given_board.size):

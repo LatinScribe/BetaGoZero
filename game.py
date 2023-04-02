@@ -139,6 +139,11 @@ class Game:
         self.current_player = "White" if self.current_player == "Black" else "Black"
         self.moves.append((self.last_turn_no() + 1, -1, -1))
 
+    def add_move_using_color(self, turn: str, x, y) -> None:
+        """Adds a move to the game using the turn number and coordinates
+            TESTING DO NOT USE"""
+        self.board.add_stone(x, y, turn)
+
     def run_example(self, moves_sequence) -> None:
         """Function for testing the ouputting of a final board state"""
         for move in moves_sequence:
@@ -152,7 +157,6 @@ class Game:
         print("Final board state:")
         print(self.board)
         draw_board(self.board, open_in_browser=True)
-
 
 ################################################################################
 # Functions for running games
