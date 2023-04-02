@@ -58,8 +58,8 @@ board = Board(9)
 game = Game()
 
 def retnr_row_col(x, y):
-    row = (x - MARGIN) // CELL_SIZE
-    col = (y - MARGIN) // CELL_SIZE
+    row = (x - MARGIN + 15) // CELL_SIZE
+    col = (y - MARGIN + 15) // CELL_SIZE
     return row, col
 def update_display(game: Game):
     """ Generate and Update the display

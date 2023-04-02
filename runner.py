@@ -36,6 +36,7 @@ def run_game() -> None:
     returns the newly created game
     """
     new_game = Game()
+    update_display(new_game)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:# if the user clicks the close button
