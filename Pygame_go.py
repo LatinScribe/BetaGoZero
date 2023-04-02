@@ -57,11 +57,14 @@ font = pygame.font.Font(None, 24)
 board = Board(9)
 # game = Game()
 
+
 def retnr_row_col(x, y):
     row = (x - MARGIN + 15) // CELL_SIZE
     col = (y - MARGIN + 15) // CELL_SIZE
     return row, col
-def update_display(game: Game):
+
+
+def update_display(game: Game, territory: bool = False) -> None:
     """ Generate and Update the display
         We can use this function to update the display after each move
         Also Change the display to show the number of stones captured by each player
@@ -70,8 +73,10 @@ def update_display(game: Game):
 
     # Draw grid lines
     for i in range(BOARD_SIZE):
-        pygame.draw.line(screen, BLACK, (MARGIN + i * CELL_SIZE, MARGIN), (MARGIN + i * CELL_SIZE, HEIGHT - MARGIN - 50), 1)
-        pygame.draw.line(screen, BLACK, (MARGIN, MARGIN + i * CELL_SIZE), (WIDTH - MARGIN - 50, MARGIN + i * CELL_SIZE), 1)
+        pygame.draw.line(screen, BLACK, (MARGIN + i * CELL_SIZE, MARGIN),
+                         (MARGIN + i * CELL_SIZE, HEIGHT - MARGIN - 50), 1)
+        pygame.draw.line(screen, BLACK, (MARGIN, MARGIN + i * CELL_SIZE), (WIDTH - MARGIN - 50, MARGIN + i * CELL_SIZE),
+                         1)
 
     # Draw letters
     for i, letter in enumerate("ABCDEFGHIJKLMNOP"):
@@ -102,9 +107,23 @@ def update_display(game: Game):
     #         color = WHITE
     #     pygame.draw.circle(screen, color, (MARGIN + x * CELL_SIZE, MARGIN + y * CELL_SIZE), CELL_SIZE // 2 - 2)
 
+    # Draw territory
+    if territory:
+        territories = game.board.calculate_score()
+        square_size = 16
+        for x, y in territories[2]:  # black territory
+            rect_color = BLACK
+            rect = pygame.Surface((square_size, square_size), pygame.SRCALPHA)
+            rect.fill(rect_color)
+            screen.blit(rect, (MARGIN + x * CELL_SIZE - square_size // 2, MARGIN + y * CELL_SIZE - square_size // 2))
+
+        for x, y in territories[1]:  # white territory
+            rect_color = WHITE
+            rect = pygame.Surface((square_size, square_size), pygame.SRCALPHA)
+            rect.fill(rect_color)
+            screen.blit(rect, (MARGIN + x * CELL_SIZE - square_size // 2, MARGIN + y * CELL_SIZE - square_size // 2))
+
     pygame.display.flip()
-
-
 
 # Test Loop
 # turn = 0

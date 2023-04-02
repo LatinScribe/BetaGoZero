@@ -49,7 +49,6 @@ from __future__ import annotations
 
 import os
 # from typing import Optional
-# from go_gui import draw_board
 import pickle
 # import shutil
 import board as b
@@ -117,8 +116,10 @@ def read_all_sgf_in_folder(folder_directory: str, do_deletion: bool = False):
         folder_directory (str): The directory containing the SGF files.
         do_deletion (bool): If True and the SGF file does not have a valid result, the file will be deleted.
     """
+    boards = []
     for file in os.listdir(folder_directory):
-        read_sgf(file, folder_directory, do_deletion)
+        boards.append(read_sgf(file, folder_directory, do_deletion))
+    return boards
 
 
 def sgf_to_game_sequence(file_name: str, file_directory: str) -> tuple[list[tuple[int, int, int]], int]:

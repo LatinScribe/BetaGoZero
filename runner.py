@@ -28,6 +28,7 @@ import pygame
 from game import Game
 from Pygame_go import update_display, retnr_row_col
 from go_gui import draw_board
+from sgf_reader import sgf_to_game, read_all_sgf_in_folder
 
 
 def run_game() -> None:
@@ -54,7 +55,7 @@ def run_game() -> None:
                 else:
                     color = "White"
 
-                if 0 <= row < 9 and 0 <= col < 9 and (row, col) and game.board.is_valid_move(row, col, color):
+                if 0 <= row < 9 and 0 <= col < 9 and (row, col) and new_game.board.is_valid_move(row, col, color):
                     print((len(new_game.moves) + 1, row, col))
                     print("coordinates: ", row, col)
                     new_game.play_move(row, col)
@@ -63,6 +64,18 @@ def run_game() -> None:
                     print("Invalid move")
 
 
+
+count = 5
+for board in read_all_sgf_in_folder("DataSet/2015-Go9-super-small/"):
+    count += 1
+    print(board.calculate_score("dfs"))
+    draw_board(board, format(f"hello{count}.jpg"), territory=True)
+
+    print(board)
+
 if __name__ == "__main__":
-    game = Game()
-    run_game()
+    sgf_reader = sgf_to_game("/2015-07-25T13_10_48.748Z_seowzegj5utb.sgf", "DataSet/2015-Go9")
+    # draw_board(sgf_reader.board, "hello.jpg", True, True)
+    # print(sgf_reader.board)
+    # print(sgf_reader.board.calculate_score())
+    # run_game(sgf_reader)

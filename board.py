@@ -179,7 +179,11 @@ class Board:
         #         self.get_stone(x, y).color = 'Neither'
         return True
 
-    def calculate_score(self: Board) -> list:
+    def is_valid_coord(self, x, y):
+        """Check if a coordinate is valid for the board."""
+        return 0 <= x < self.size and 0 <= y < self.size
+
+    def calculate_score(self: Board, technique: str) -> list:
         """Calculates the score for both players.
         """
         black_score, white_score = 0.0, 0.0
@@ -197,7 +201,7 @@ class Board:
                 # else:
 
                 # Captured stones are not counted as territory
-                territory_owner = self.get_territory_owner(x, y)
+                territory_owner = self.get_territory_owner(x, y, technique)
                 if territory_owner == "Black":
                     black_territory += 1
                     black_territory_cord.append((x, y))
@@ -215,13 +219,17 @@ class Board:
         white_score += white_territory
         return [("Black score:", black_score, "WhiteScore:", white_score), black_territory_cord, white_territory_cord]
 
-    def is_valid_coord(self, x: int, y: int):
+    def is_valid_coord_do(self, x: int, y: int):
         """Check if a coordinate is valid for the board."""
         return 0 <= x < self.size and 0 <= y < self.size
 
-    def get_territory_owner(self: Board, x, y) -> str:
-        """Determines the owner of the territory at the given coordinates."""
-        def single_territory_owner(x, y, visited):
+    def get_territory_owner(self: Board, x, y, technique: str = "flood_fill") -> str:
+        """Determines the owner of the territory at the given coordinates.
+            Flood_fill is a recursive algorithm that checks if the territory is surrounded by one color. it includes the
+            current stone in the check and rest of the stones on board.
+            DFS is a recursive algorithm that checks if the territory is surrounded by one color. it does not include the
+            current stone in the check and only checks territory on the board."""
+        def dfs(x, y, visited):
             """
             Using a smilara approach from A3
             """
@@ -232,16 +240,36 @@ class Board:
             neighbors = self.get_stone(x, y).get_neighbours()  # get the neighbours of the stone
             result = set()
             for nx, ny in neighbors:
-                if self.is_valid_coord(nx, ny) and (nx, ny) not in visited:
+                if self.is_valid_coord_do(nx, ny) and (nx, ny) not in visited:
                     stone = self.get_stone(nx, ny)
                     if stone.color == "Neither":
-                        result = result.union(single_territory_owner(nx, ny, visited))
+                        result = result.union(dfs(nx, ny, visited))
                     else:
                         result.add(stone.color)
             return result
 
+        def flood_fill(x, y, visited):
+            if (x, y) in visited or not self.is_valid_coord_do(x, y):
+                return set()
+
+            visited.add((x, y))
+            stone = self.get_stone(x, y)
+            if stone.color != "Neither":
+                return {stone.color}
+
+            neighbors = stone.get_neighbours()
+            result = set()
+            for nx, ny in neighbors:
+                result = result.union(flood_fill(nx, ny, visited))
+            return result
+
         visited = set()
-        stone_colors = single_territory_owner(x, y, visited)
+        if technique == "flood_fill":
+            stone_colors = flood_fill(x, y, visited)
+        else:
+            stone_colors = dfs(x, y, visited)
+
+        # stone_colors = (x, y, visited)
         if len(stone_colors) == 1:
             return next(iter(stone_colors))
         else:

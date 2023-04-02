@@ -174,6 +174,7 @@ class Game:
         print(self.board)
         draw_board(self.board, open_in_browser=True)
 
+
 ################################################################################
 # Functions for running games
 ################################################################################

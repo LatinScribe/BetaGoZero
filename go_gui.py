@@ -30,7 +30,9 @@ import webbrowser
 import os
 
 
-def draw_board(given_board: Board, save_path: str = "Game_result/example.jpg", open_in_browser: bool = False):
+
+
+def draw_board(given_board: Board, save_path: str = "Game_result/example.jpg", open_in_browser: bool = False, territory: bool = False , technique: str = "flood_fill"):
     """
     Generates a visualisation of the given board and saves it as a jpg file to the designated location.
 
@@ -45,11 +47,13 @@ def draw_board(given_board: Board, save_path: str = "Game_result/example.jpg", o
     image = Image.new("RGB", (board_size + 2 * padding, board_size + 2 * padding), "#EEDC82")
     draw = ImageDraw.Draw(image)
 
+    # Draw the lines
     for i in range(given_board.size):
         x = padding + i * cell_size
         draw.line([(x, padding), (x, board_size + padding - 50)], "black")
         draw.line([(padding, x), (board_size + padding - 50, x)], "black")
 
+    # Draw the stones
     for x in range(given_board.size):
         for y in range(given_board.size):
             stone = given_board.get_stone(x, y)
@@ -60,6 +64,22 @@ def draw_board(given_board: Board, save_path: str = "Game_result/example.jpg", o
                 draw.ellipse([(stone_x - radius, stone_y - radius),
                               (stone_x + radius, stone_y + radius)],
                              fill=stone.color.lower())
+
+    # Draw territory
+    if territory:
+        territories = given_board.calculate_score(technique=technique)
+        square_size = 16
+
+        for x, y in territories[1]:  # black territory
+            rect_color = "black"
+            rect = Image.new("RGBA", (square_size, square_size), rect_color)
+            image.paste(rect, (padding + x * cell_size - square_size // 2, padding + y * cell_size - square_size // 2), rect)
+
+        for x, y in territories[2]:  # white territory
+            rect_color = "white"
+            rect = Image.new("RGBA", (square_size, square_size), rect_color)
+            image.paste(rect, (padding + x * cell_size - square_size // 2, padding + y * cell_size - square_size // 2), rect)
+
 
     # save_path = "Game_result" + save_path
     image.save(save_path)
