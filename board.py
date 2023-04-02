@@ -159,30 +159,104 @@ class Board:
                 i += 1
         return sequence
 
-    def get_winner(self) -> Optional[str]:
-        """return winner of game, assuming the game reached an end state."""
-        num_stones = {'black': 0, 'white': 0}
-        for stone_row in self.grid:
-            for stone in stone_row:
-                if stone.color == 'black':
-                    num_stones['black'] += 1
-                elif stone.color == 'white':
-                    num_stones['white'] += 1
-                else:
-                    print('A stone has invalid color')
-                    return None
-        print(num_stones)
-        if num_stones['black'] > num_stones['white']:
-            return 'black wins'
-        elif num_stones['black'] == num_stones['white']:
-            return 'tie'
+    def is_valid_move(self, x: int, y: int, color: str) -> bool:
+        """Check if a coordinate is valid for the board. (It does not overwrite any stone, is not placed in a location
+        that leads to instant death, and within boundaries of the board. It does not mutate the board
+        Raises ValueError if color is not 'White' or 'Black'
+        """
+        if color not in {'Black', 'White'}:
+            raise ValueError
+        elif self.get_stone(x, y).color != "Neither":
+            return False
+        elif x < 0 or x > 8 or y < 0 or y > 8:
+            return False
         else:
-            return 'white wins'
-        # TODO: may need a game end state for board class.
+            self.get_stone(x, y).color = color
+            if self.get_stone(x, y).check_is_dead(set()):
+                self.get_stone(x, y).color = 'Neither'
+                return False
+            else:
+                self.get_stone(x, y).color = 'Neither'
+                return True
 
-    def is_valid_coord(self, x: int, y: int):
-        """Check if a coordinate is valid for the board."""
-        return 0 <= x < self.size and 0 <= y < self.size
+    def calculate_score(self: Board) -> list:
+        """Calculates the score for both players.
+        """
+        black_score, white_score = 0.0, 0.0
+        black_territory, white_territory = 0, 0
+        black_territory_cord, white_territory_cord = [], []
+
+        for x in range(self.size):
+            for y in range(self.size):
+                stone = self.get_stone(x, y)
+                # This code is relevant if you want to count the stones as well
+                # if stone.color == "Black":
+                #     black_score += 1
+                # elif stone.color == "White":
+                #     white_score += 1
+                # else:
+
+                # Captured stones are not counted as territory
+                territory_owner = self.get_territory_owner(x, y)
+                if territory_owner == "Black":
+                    black_territory += 1
+                    black_territory_cord.append((x, y))
+                elif territory_owner == "White":
+                    white_territory += 1
+                    white_territory_cord.append((x, y))
+
+        # WIP for dead stones
+        # for i in get_dead_cells(board, "Black"):
+        #     white_territory_cord.append(i)
+        # for i in get_dead_cells(board, "White"):
+        #     black_territory_cord.append(i)
+
+        black_score += black_territory
+        white_score += white_territory
+        return [("Black score:", black_score, "WhiteScore:", white_score), black_territory_cord, white_territory_cord]
+
+    def get_territory_owner(self: Board, x, y) -> str:
+        """Determines the owner of the territory at the given coordinates."""
+        def single_territory_owner(x, y, visited):
+            """
+            Using a smilara approach from A3
+            """
+            if (x, y) in visited:  # if we have already visited this stone, return an empty set
+                return set()
+            visited.add((x, y))
+
+            neighbors = self.get_stone(x, y).get_neighbours()  # get the neighbours of the stone
+            result = set()
+            for nx, ny in neighbors:
+                if self.is_valid_coord(nx, ny) and (nx, ny) not in visited:
+                    stone = self.get_stone(nx, ny)
+                    if stone.color == "Neither":
+                        result = result.union(single_territory_owner(nx, ny, visited))
+                    else:
+                        result.add(stone.color)
+            return result
+
+        visited = set()
+        stone_colors = single_territory_owner(x, y, visited)
+        if len(stone_colors) == 1:
+            return next(iter(stone_colors))
+        else:
+            return "Neither"
+
+    def get_dead_cells(self, color) -> list[tuple[int, int]]:
+        """Function to get dead cells for a given color on a board.
+           WIP and it does not work yet. or capture stones."""
+        dead_cells = []
+
+        for x in range(self.size):
+            for y in range(self.size):
+                stone = self.get_stone(x, y)
+                if stone.color == color:
+                    liberties = self.get_stone(x, y).get_liberties(color)
+                    if liberties == 0:
+                        dead_cells.append((x, y))
+        print("dead cells", dead_cells, "color", color)
+        return dead_cells
 
 
 class Stone:
@@ -277,7 +351,7 @@ class Stone:
         Returns:
             set: A set of neighbouring Stone objects.
         """
-        return self.neighbours.values()
+        return self.neighbours
 
     # TODO: potentially move to Stone
     def update_neighbours(self):
@@ -300,7 +374,7 @@ class Stone:
             neighbour.remove_neighbour(self)
         self.color = "Neither"
         self.neighbours = {}
-    
+
     def check_is_dead(self,visited:set[Stone])-> bool:
         if len(self.neighbours)<self.max_num_neighbours:
             return False
@@ -314,6 +388,18 @@ class Stone:
                     bools.append(neighbour.check_is_dead(visited))
             return any(bools)
 
+    def get_liberties(self, color) -> int:
+        """Returns the number of liberties the stone has.
+        TODO: Experimental Function"""
+        liberties = 0
+        for neighbour in self.neighbours.values():
+            if neighbour.color == "Neither":
+                liberties += 1
+            elif neighbour.color != color:
+                liberties += 1
+        return liberties
+
+
 
 if __name__ == '__main__':
     # Create a new 9x9 board
@@ -326,5 +412,5 @@ if __name__ == '__main__':
     # board.add_stone(1, 6, "White")
     # print(board[(1, 5)])
     # print(board[(1, 6)])
-    # print(board)
-    print(board.print_max_neighbours())
+    # # print(board)
+    # print(board.print_max_neighbours())
