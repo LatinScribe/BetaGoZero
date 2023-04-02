@@ -76,12 +76,22 @@ class Game:
 
         returns whether updating was sucessful or not
         """
-        if self.board.get_stone(x, y).color == "Neither":
+        stone = self.board.get_stone(x, y)
+        if stone.color == "Neither":
             self.board.add_stone(x, y, self.current_player)
-            self.current_player = "White" if self.current_player == "Black" else "Black"
-
             new_move = (len(self.moves) + 1, x, y)
             self.moves.append(new_move)
+
+            for adjacent in stone.neighbours.values():
+                if adjacent.check_is_dead(set()):
+                    color = adjacent.color
+                    if color == "White":
+                        self.white_captured += self.board.capture_stones(adjacent)
+                    else:
+                        self.black_captured += self.board.capture_stones(adjacent)
+
+            # update current player attribute
+            self.current_player = "White" if self.current_player == "Black" else "Black"
             return True
         else:
             return False

@@ -29,6 +29,7 @@ from game import Game
 from Pygame_go import update_display, retnr_row_col
 from go_gui import draw_board
 
+
 def run_game() -> None:
     """Run a basic Go game
 
@@ -39,7 +40,7 @@ def run_game() -> None:
     update_display(new_game)
     while True:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:# if the user clicks the close button
+            if event.type == pygame.QUIT:  # if the user clicks the close button
                 draw_board(new_game.board, "go2434.jpg", True)
                 sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:  # if the user clicks the mouse

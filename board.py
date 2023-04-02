@@ -261,7 +261,7 @@ class Board:
                         dead_cells.append((x, y))
         print("dead cells", dead_cells, "color", color)
         return dead_cells
-    
+
     def capture_stones(self, stone: Stone) -> int:
         """turns all same color stones connected to the given stone into Neither
         Assume the given stone is dead"""
@@ -274,7 +274,7 @@ class Board:
             captured_so_far = 1
             color = stone.color
             stone.color = 'Neither'
-            for neighbour in stone.get_neighbours():
+            for neighbour in stone.neighbours.values():
                 if neighbour.color == color:
                     captured_so_far += self.capture_stones(neighbour)
             return captured_so_far
@@ -398,7 +398,9 @@ class Stone:
 
     def check_is_dead(self, visited: set[Stone]) -> bool:
         """this function checks if the stone is dead"""
-        if len(self.neighbours) < self.max_num_neighbours:
+        if self.color == "Neither":
+            return False
+        elif len(self.neighbours) < self.max_num_neighbours:
             return False
         elif all(((neighbour.color != self.color) or (neighbour in visited)) for neighbour in self.neighbours.values()):
             return True
