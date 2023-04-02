@@ -85,10 +85,12 @@ class Game:
             for adjacent in stone.neighbours.values():
                 if adjacent.check_is_dead(set()):
                     color = adjacent.color
+
+                    # remember that the attribute keeps track of amount captured BY player
                     if color == "White":
-                        self.white_captured += self.board.capture_stones(adjacent)
-                    else:
                         self.black_captured += self.board.capture_stones(adjacent)
+                    else:
+                        self.white_captured += self.board.capture_stones(adjacent)
 
             # update current player attribute
             self.current_player = "White" if self.current_player == "Black" else "Black"
