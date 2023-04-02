@@ -206,6 +206,7 @@ class Stone:
     x: int
     y: int
     neighbours: dict[tuple[int, int], Stone]
+    max_num_neighbours: int
 
     def __init__(self, x: int, y: int, color: str = "Neither"):
         """
@@ -299,6 +300,19 @@ class Stone:
             neighbour.remove_neighbour(self)
         self.color = "Neither"
         self.neighbours = {}
+    
+    def check_is_dead(self,visited:set[Stone])-> bool:
+        if len(self.neighbours)<self.max_num_neighbours:
+            return False
+        elif all(((neighbour.color!=self.color) or (neighbour in visited)) for neighbour in self.neighbours.values()):
+            return True
+        else:
+            visited.add(self)
+            bools=[]
+            for neighbour in self.neighbours.values():
+                if neighbour not in visited:
+                    bools.append(neighbour.check_is_dead(visited))
+            return any(bools)
 
 
 if __name__ == '__main__':
