@@ -38,7 +38,7 @@ class Board:
         grid (list): A 2D list representing the board, containing Stone objects.
     """
 
-    def __init__(self, size: int = 9):
+    def __init__(self, size: Optional[int] = 9):
         """
         Initializes a Board object. Populates all valid positions with "imaginary stones" of
         neither colour - in reality, these stones would not exist on the board - it is
@@ -160,7 +160,7 @@ class Board:
         return sequence
 
     def is_valid_move(self, x: int, y: int, color: str) -> bool:
-        """Check if a coordinate is valid for the board. (It does not overwrite any stone, is not placed in a location
+        """Check if a coordinate is valid for the board. It does not overwrite any stone, is not placed in a location
         that leads to instant death, and within boundaries of the board. It does not mutate the board
         Raises ValueError if color is not 'White' or 'Black'
         """
@@ -188,8 +188,8 @@ class Board:
 
         for x in range(self.size):
             for y in range(self.size):
-                stone = self.get_stone(x, y)
                 # This code is relevant if you want to count the stones as well
+                # stone = self.get_stone(x, y)
                 # if stone.color == "Black":
                 #     black_score += 1
                 # elif stone.color == "White":
@@ -214,6 +214,10 @@ class Board:
         black_score += black_territory
         white_score += white_territory
         return [("Black score:", black_score, "WhiteScore:", white_score), black_territory_cord, white_territory_cord]
+
+    def is_valid_coord(self, x: int, y: int):
+        """Check if a coordinate is valid for the board."""
+        return 0 <= x < self.size and 0 <= y < self.size
 
     def get_territory_owner(self: Board, x, y) -> str:
         """Determines the owner of the territory at the given coordinates."""
@@ -375,14 +379,15 @@ class Stone:
         self.color = "Neither"
         self.neighbours = {}
 
-    def check_is_dead(self,visited:set[Stone])-> bool:
-        if len(self.neighbours)<self.max_num_neighbours:
+    def check_is_dead(self, visited: set[Stone]) -> bool:
+        """this function checks if the stone is dead"""
+        if len(self.neighbours) < self.max_num_neighbours:
             return False
-        elif all(((neighbour.color!=self.color) or (neighbour in visited)) for neighbour in self.neighbours.values()):
+        elif all(((neighbour.color != self.color) or (neighbour in visited)) for neighbour in self.neighbours.values()):
             return True
         else:
             visited.add(self)
-            bools=[]
+            bools = []
             for neighbour in self.neighbours.values():
                 if neighbour not in visited:
                     bools.append(neighbour.check_is_dead(visited))
@@ -398,7 +403,6 @@ class Stone:
             elif neighbour.color != color:
                 liberties += 1
         return liberties
-
 
 
 if __name__ == '__main__':
