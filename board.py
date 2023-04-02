@@ -168,15 +168,15 @@ class Board:
             raise ValueError
         elif self.get_stone(x, y).color != "Neither":
             return False
-        # elif x < 0 or x > 8 or y < 0 or y > 8:
-        #     return False
-        # else:
-        #     self.get_stone(x, y).color = color
-        #     if self.get_stone(x, y).check_is_dead(set()):
-        #         self.get_stone(x, y).color = 'Neither'
-        #         return False
-        #     else:
-        #         self.get_stone(x, y).color = 'Neither'
+        elif x < 0 or x > 8 or y < 0 or y > 8:
+            return False
+        else:
+            self.get_stone(x, y).color = color
+            if self.get_stone(x, y).check_is_dead(set()):
+                self.get_stone(x, y).color = 'Neither'
+                return False
+            else:
+                self.get_stone(x, y).color = 'Neither'
         return True
 
     def is_valid_coord(self, x, y):
@@ -428,9 +428,9 @@ class Stone:
         """this function checks if the stone is dead"""
         if self.color == "Neither":
             return False
-        elif len(self.neighbours) < self.max_num_neighbours:
+        elif len([neighbour for neighbour in self.neighbours.values() if neighbour.color !='Neither']) < self.max_num_neighbours:
             return False
-        elif all(((neighbour.color != self.color) or (neighbour in visited)) for neighbour in self.neighbours.values()):
+        elif all(((neighbour.color not in {self.color,'Neither'}) or (neighbour in visited)) for neighbour in self.neighbours.values()):
             return True
         else:
             visited.add(self)
@@ -465,3 +465,10 @@ if __name__ == '__main__':
     # print(board[(1, 6)])
     # # print(board)
     # print(board.print_max_neighbours())
+    board.grid[8][0].color = 'White'
+    board.grid[7][0].color = 'White'
+    # board.capture_stones(board.grid[7][0])
+    board.grid[8][1].color = 'Black'
+    board.grid[7][1].color = 'Black'
+    board.grid[6][0].color = 'Black'
+    print(board.grid[7][0].check_is_dead(set()))
