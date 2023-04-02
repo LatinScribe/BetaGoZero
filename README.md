@@ -1,2 +1,4 @@
 # Beta-GO-AI
-## AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH BE CAREFUL
+
+### For instructions and project information, see this document:
+### https://www.overleaf.com/read/nwfthdmhmdkf
