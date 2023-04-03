@@ -301,4 +301,4 @@ if __name__ == '__main__':
     # go9folder_game_tree = load_tree_from_file("CompleteWinRateTree.txt", "")
     print(go9folder_game_tree_absolute)
     print(f"length of the 2015-Go9 tree: {len(go9folder_game_tree_absolute)}")
-    save_tree_to_file(go9folder_game_tree_absolute, "CompleteWinRateTree.txt", "")
+    save_tree_to_file(go9folder_game_tree_absolute, "tree_saves/CompleteWinRateTree.txt", "")
