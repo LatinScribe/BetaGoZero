@@ -77,8 +77,8 @@ def simulate_game(max_moves: int, game_tree: GameTree) -> tuple[Game, float]:
 
     game = Game()
 
-    random_player = ProbabilityBaseGoplayer(game_tree)
-    ai_player = Fully_random(game_tree)
+    random_player = Fully_random(game_tree)
+    ai_player = ProbabilityBaseGoplayer(game_tree)
     for i in range(max_moves):
         if game.game_end(max_moves):
             break
