@@ -67,26 +67,26 @@ class RandomGoPlayer(AbstractGoPlayer):
         """Initialize this GoPlayer"""
         AbstractGoPlayer.__init__(self, gt)
 
-    def make_move(self, game) -> tuple:
+    def make_move(self, game:Game) -> tuple:
         """This function determines how the next move should be made. It
         plays randomly by choosing its next move randomly from empty positions
         in proximity the last move played
         """
         valid_moves = []
-        move_sequence = self.game.moves
+        move_sequence = game.moves
         if move_sequence != []:
 
-            last_move = self.game.get_move_info(move_sequence[-1][1], move_sequence[-1][2])
+            last_move = game.get_move_info(move_sequence[-1][1], move_sequence[-1][2])
 
-            check_stone = self.board.get_stone(move_sequence[-1][1], move_sequence[-1][2])
+            check_stone = game.board.get_stone(move_sequence[-1][1], move_sequence[-1][2])
             choices = [(check_stone.x + 1, check_stone.y), (check_stone.x - 1, check_stone.y),
                        (check_stone.x, check_stone.y + 1), (check_stone.x, check_stone.y - 1)]
             print(last_move[1])
 
-            if not any(self.board.is_valid_move(choice[0], choice[1], last_move[1]) for choice in choices):
-                for x in range(0, self.board.size):
-                    for y in range(0, self.board.size):
-                        if self.board.is_valid_move(x, y, last_move[1]):
+            if not any(game.board.is_valid_move(choice[0], choice[1], last_move[1]) for choice in choices):
+                for x in range(0, game.board.size):
+                    for y in range(0, game.board.size):
+                        if game.board.is_valid_move(x, y, last_move[1]):
                             valid_moves += (last_move[0], x, y)
                             valid_moves.append((last_move[0] + 1, x, y))
                             print(valid_moves)
@@ -95,11 +95,11 @@ class RandomGoPlayer(AbstractGoPlayer):
             else:
 
                 coord = random.choice(choices)
-                while not self.board.is_valid_move(coord[0], coord[1], last_move[1]):
+                while not game.board.is_valid_move(coord[0], coord[1], last_move[1]):
                     choices.remove(coord)
                     coord = random.choice(choices)
 
-            return (len(self.game.moves) + 1, coord[0], coord[1])
+            return (len(game.moves) + 1, coord[0], coord[1])
         else:
             return (1, random.randint(0, 8), random.randint(0, 8))
 
@@ -111,7 +111,7 @@ class SlightlyBetterBlackPlayer(AbstractGoPlayer):
         """Initialize this GoPlayer"""
         AbstractGoPlayer.__init__(self, gt)
 
-    def make_move(self) -> tuple:
+    def make_move(self, game:Game) -> tuple:
         """This function determines how the next move should be made. It
         plays the best possible move among its given choices, or randomly by choosing its next move randomly from empty
         positions in proximity the last move played if the tree is None or if it is a leaf
@@ -119,37 +119,37 @@ class SlightlyBetterBlackPlayer(AbstractGoPlayer):
         since the AI updates the tree twice, when 2 AIs go against each other, they should not share a tree
         """
         if self.gt is not None:
-            last_move = self.game.moves[-1]
+            last_move = game.moves[-1]
             if self.gt.find_subtree_by_move(last_move) is None:
                 self.gt = None  # update the subtree from previous move
             else:
                 self.gt=self.gt.find_subtree_by_move(last_move)
-        if self.gt is None or self.gt.get_subtrees() == [] or (self.game.moves[-1] not in self.gt._subtrees):
+        if self.gt is None or self.gt.get_subtrees() == [] or (game.moves[-1] not in self.gt._subtrees):
             self.gt = None                                             # TODO: _subtrees is private
             valid_moves = []
-            move_sequence = self.game.moves
+            move_sequence = game.moves
             if move_sequence != []:
 
-                last_move = self.game.get_move_info(move_sequence[-1][1], move_sequence[-1][2])
+                last_move = game.get_move_info(move_sequence[-1][1], move_sequence[-1][2])
 
-                check_stone = self.board.get_stone(move_sequence[-1][1], move_sequence[-1][2])
+                check_stone = game.board.get_stone(move_sequence[-1][1], move_sequence[-1][2])
                 choices = [(check_stone.x + 1, check_stone.y), (check_stone.x - 1, check_stone.y),
                            (check_stone.x, check_stone.y + 1), (check_stone.x, check_stone.y - 1)]
 
-                if not any(self.board.is_valid_move(choice[0], choice[1], last_move[1]) for choice in choices):
-                    for x in range(0, self.board.size):
-                        for y in range(0, self.board.size):
-                            if self.board.is_valid_move(x, y, last_move[1]):
+                if not any(game.board.is_valid_move(choice[0], choice[1], last_move[1]) for choice in choices):
+                    for x in range(0, game.board.size):
+                        for y in range(0, game.board.size):
+                            if game.board.is_valid_move(x, y, last_move[1]):
                                 valid_moves.append((last_move[0] + 1, x, y))
                     return random.choice(valid_moves)
                 else:
 
                     coord = random.choice(choices)
-                    while not self.board.is_valid_move(coord[0], coord[1], last_move[1]):
+                    while not game.board.is_valid_move(coord[0], coord[1], last_move[1]):
                         choices.remove(coord)
                         coord = random.choice(choices)
 
-                return (len(self.game.moves) + 1, coord[0], coord[1])
+                return (len(game.moves) + 1, coord[0], coord[1])
             else:
                 return (1, random.randint(0, 8), random.randint(0, 8))
         else:
