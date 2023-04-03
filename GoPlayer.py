@@ -61,24 +61,27 @@ class RandomGoPlayer(AbstractGoPlayer):
         plays randomly by choosing its next move randomly from empty positions
         in proximity the last move played
         """
+        valid_moves = []
         move_sequence = self.game.moves
-        i = -1
+        last_move = self.game.get_move_info(move_sequence[-1][1], move_sequence[-1][2])
+
         check_stone = self.board.get_stone(move_sequence[i][1], move_sequence[i][2])
         choices = [(check_stone.x + 1, check_stone.y), (check_stone.x - 1, check_stone.y),
                    (check_stone.x, check_stone.y + 1), (check_stone.x, check_stone.y - 1)]
 
-        while not any(self.game.is_valid_move(choice[0], choice[1]) for choice in choices):
-            i -= 1
-            check_stone = self.board.get_stone(move_sequence[i][1], move_sequence[i][2])
-            choices = [(check_stone.x + 1, check_stone.y), (check_stone.x - 1, check_stone.y),
-                       (check_stone.x, check_stone.y + 1), (check_stone.x, check_stone.y - 1)]
-        coord = random.choice(choices)
-        while not self.game.is_valid_move(coord[0], coord[1]):
-            choices.remove(coord)
+        if not any(self.board.is_valid_move(choice[0], choice[1], last_move[1]) for choice in choices):
+            for x in range(0, self.board.size):
+                for y in range(0, self.board.size):
+                    if self.board.is_valid_move(x, y, last_move[1]):
+                        valid_moves += (last_move[0], x, y)
+            return random.choice(valid_moves)
+        else:
             coord = random.choice(choices)
+            while not self.board.is_valid_move(coord[0], coord[1], last_move[1]):
+                choices.remove(coord)
+                coord = random.choice(choices)
 
         return (len(self.game.moves), coord[0], coord[1])
-
 
 class SlightlyBetterBlackPlayer(AbstractGoPlayer):
     """A Go AI that makes the best move given in its subtree."""
