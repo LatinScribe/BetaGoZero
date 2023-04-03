@@ -28,6 +28,8 @@ intend to redistribute it or use it for your own work.
 """
 import sys
 
+import Runner_solo
+
 # from board import Board
 # from sgf_reader import read_sgf
 # from Pygame_go import draw_board
@@ -36,7 +38,7 @@ import sys
 MENU = 'Welcome! Below are possible actions you can perform using our program.' \
        '\nTo SELECT an option, please enter the corresponding number as an integer.' \
        '\n0) Exit the program' \
-       '\n1)' \
+       '\n1) Run a basic solo game' \
        '\n2)' \
        '\n3)' \
        '\n4)' \
@@ -51,7 +53,8 @@ while not user_choice == 0:
     if user_choice == 0:
         sys.exit()
     elif user_choice == 1:
-        ...  # Do something
+        Runner_solo.run_game()
+        print("Ran solo game sucessfully!")
     elif user_choice == 2:
         ...  # Do something
     elif user_choice == 3:
