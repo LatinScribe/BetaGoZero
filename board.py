@@ -84,6 +84,8 @@ class Board:
             x (int): The x-coordinate of the position.
             y (int): The y-coordinate of the position.
             color (str): The color of the stone. Defaults to "Neither".
+        Preconditions:
+        - x<self.size and y<self.size and 0<=x and 0<=y
         """
         self.grid[x][y].color = color
 
@@ -98,6 +100,8 @@ class Board:
 
         Args:
             stones (list): A list of Stone objects to remove.
+        Preconditions:
+        - all((stone in self.grid) for stone in stones)
         """
         for stone in stones:
             self.grid[stone.x][stone.y].die()
@@ -163,7 +167,8 @@ class Board:
     def is_valid_move(self, x: int, y: int, color: str) -> bool:
         """Check if a coordinate is valid for the board. It does not overwrite any stone, is not placed in a location
         that leads to instant death, and within boundaries of the board. It does not mutate the board
-        Raises ValueError if color is not 'White' or 'Black'
+        Preconditions:
+        - color in {'Black' , 'White'}
         """
         if color not in {'Black', 'White'}:
             raise ValueError
@@ -281,7 +286,10 @@ class Board:
 
     def capture_stones(self, stone: Stone) -> int:
         """turns all same color stones connected to the given stone into Neither
-        Assume the given stone is dead"""
+        Preconditions:
+        - Assume the given stone is dead
+        - any([(stone in row) for row in self.grid])
+        """
         if stone.color not in {'Black', 'White'}:
             raise ValueError
         else:
@@ -391,7 +399,7 @@ class Stone:
         """
         Updates the neighboring Stone objects for each Stone object on the board.
         """
-        neighbours = self.get_neighbours()
+        neighbours = self.get_neighbours().values()
         for neighbour in neighbours:
             if neighbour.color != "Neither":
                 self.add_neighbour(neighbour)
@@ -409,7 +417,8 @@ class Stone:
         self.neighbours = {}
 
     def check_is_dead(self, visited: set[Stone]) -> bool:
-        """this function checks if the stone is dead"""
+        """this function checks if the stone is dead
+        visited should be an empty set"""
         if self.color == "Neither":
             return False
         elif len([neighbour for neighbour in self.neighbours.values() if
