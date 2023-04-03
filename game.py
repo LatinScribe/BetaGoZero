@@ -193,7 +193,7 @@ class Game:
         Preconditions:
             - technique is a valid technique
         """
-        total_white, total_black = 0.5, 0
+        total_white, total_black = 2.5, 0
 
         territory_score = self.board.calculate_score(technique)
 
