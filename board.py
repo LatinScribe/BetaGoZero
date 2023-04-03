@@ -436,9 +436,10 @@ class Stone:
             visited.add(self)
             bools = []
             for neighbour in self.neighbours.values():
-                if neighbour not in visited:
+                if neighbour not in visited and neighbour.color==self.color:
                     bools.append(neighbour.check_is_dead(visited))
-            return any(bools)
+            return all(bools)
+
 
     def get_liberties(self, color) -> int:
         """Returns the number of liberties the stone has.
