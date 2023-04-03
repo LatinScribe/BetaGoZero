@@ -145,3 +145,14 @@ class SlightlyBetterBlackPlayer(AbstractGoPlayer):
                     best_choice = subtree
             self.gt = best_choice  # updates GameTree to be a subtree with the best choice
             return best_choice.move  # will not be referenced before
+
+if __name__ == '__main__':
+    import sgf_reader
+    gametree = None
+    # game = Game()
+    # ai=RandomGoPlayer(gametree,game)
+    # print(ai.make_move())
+    test_seq=sgf_reader.sgf_to_game_sequence('2015-06-30T13_28_05.990Z_j15601s5g8gk.sgf', 'DataSet/2015-Go9/')[0]
+    game=Game(None,'Black',test_seq)
+    ai = RandomGoPlayer(gametree, game)
+    print(ai.make_move())
