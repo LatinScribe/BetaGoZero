@@ -166,3 +166,62 @@ class Game:
             return True
         else:
             return False
+
+    def overall_score(self, technique: str = "dfs") -> tuple[float, float]:
+        total_white, total_black = 5.5, 0
+
+        territory_score = self.board.calculate_score(technique)
+
+        total_black = len(territory_score[0]) - self.black_captured
+
+        total_white = len(territory_score[1]) - self.white_captured
+
+        return total_white, total_black
+
+    def iswinner(self, player: str) -> bool:
+        """Returns True if the given player is the winner of the game, False otherwise"""
+        if self.overall_score()[0] > self.overall_score()[1]:
+            return player == "White"
+        else:
+            return player == "Black"
+
+################################################################################
+# Functions for running games
+################################################################################
+
+def run_game() -> Game:
+    """Run a basic Go game on a 9x9 board game
+
+    prompts user to input the moves they would like to make
+    returns the newly created game
+    """
+    new_game = Game()
+    next_move = ''
+
+    while next_move != 'STOP':
+        # used for creating a new line in f-string
+        n1 = '\n'
+
+        # get input from user
+        next_move = input(
+            f'It is currently {new_game.current_player}\'s turn. Please enter your next move as a coordinate'
+            f'in the form: x,y.{n1}If you would like to end the game, enter \"STOP\" without qoutation marks!')
+
+        # convert to upper case to avoid case sensitivity
+        next_move.upper()
+
+        if not next_move == 'STOP':
+            coords = next_move.split(",")
+            x = int(coords[0])
+            y = int(coords[1])
+
+            new_game.play_move(x, y)
+
+    return new_game
+
+
+if __name__ == "__main__":
+    # game = Game()
+    # moves = [(0, 0), (1, 1), (0, 1), (1, 0), (0, 2), (2, 2)]
+    # game.run_example(moves)
+    pass

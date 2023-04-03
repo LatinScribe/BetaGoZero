@@ -85,8 +85,42 @@ def part_runner_score(max_moves: int) -> Game:
         print("AI Guess: ", ai_guess[1], ai_guess[2])
     return game
 
+def run_gam():
+    """Testting Function for the GUI"""
+    # Initialize pygame
+    pygame.init()
 
-nwp = part_runner_score(50)
-draw_board(nwp.board, "go2434.jpg", True, True)
+    game = sgf_to_game("2015-07-19T12_32_03.406Z_ycdor3fuul2s.sgf", "Dataset/2015-Go9/", )
+    # Main game loop
+    running = True
+    clock = pygame.time.Clock()
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:  # Left mouse button
+                    x, y = 0, 0
+                    if game.is_valid_move(x, y):
+                        game.play_move(x, y)
+        clock.get_time()
+        # Update the display
+        update_display(game, territory=True)
+
+        # Control the frame rate
+        clock.tick(30)
+
+    # Quit pygame
+    pygame.quit()
+
+run_gam()
+#
+# nwp = part_runner_score(50)
+# draw_board(nwp.board, "go2434.jpg", True, True)
+#
+
+game = sgf_to_game("2015-07-19T12_32_03.406Z_ycdor3fuul2s.sgf", "Dataset/2015-Go9/")
+print(game.moves)
 
 # if __name__ == "__main__":

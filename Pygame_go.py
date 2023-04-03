@@ -71,7 +71,7 @@ def retnr_row_col(x, y):
     return row, col
 
 
-def update_display(game: Game, territory: bool = False) -> None:
+def update_display(game: Game, territory: bool = False, technique: str = "flood_fill") -> None:
     """ Generate and Update the display
         We can use this function to update the display after each move
         Also Change the display to show the number of stones captured by each player
@@ -100,6 +100,9 @@ def update_display(game: Game, territory: bool = False) -> None:
 
     # Draw stones
     for move in game.moves:
+        # if (-1, -1) == move[1:]:
+        #     break
+
         color = (game.board.get_stone(move[1], move[2])).color
         if color != "Neither":
             if color == "White":
@@ -117,9 +120,9 @@ def update_display(game: Game, territory: bool = False) -> None:
 
     # Draw territory
     if territory:
-        territories = game.board.calculate_score()
+        territories = game.board.calculate_score(technique)
         square_size = 16
-        for x, y in territories[2]:  # black territory
+        for x, y in territories[0]:  # black territory
             rect_color = BLACK
             rect = pygame.Surface((square_size, square_size), pygame.SRCALPHA)
             rect.fill(rect_color)
@@ -173,13 +176,13 @@ def draw_board(given_board: Board, save_path: str = "Game_result/example.jpg", o
         territories = given_board.calculate_score(technique=technique)
         square_size = 16
 
-        for x, y in territories[1]:  # black territory
+        for x, y in territories[0]:  # black territory
             rect_color = "black"
             rect = Image.new("RGBA", (square_size, square_size), rect_color)
             image.paste(rect, (padding + x * cell_size - square_size // 2, padding + y * cell_size - square_size // 2),
                         rect)
 
-        for x, y in territories[2]:  # white territory
+        for x, y in territories[1]:  # white territory
             rect_color = "white"
             rect = Image.new("RGBA", (square_size, square_size), rect_color)
             image.paste(rect, (padding + x * cell_size - square_size // 2, padding + y * cell_size - square_size // 2),

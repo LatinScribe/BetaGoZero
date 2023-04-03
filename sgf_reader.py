@@ -214,7 +214,7 @@ def sgf_to_game(file_name: str, file_directory: str) -> Game:
             move_seq = []
             i = 1  # index of turn, starts at 1 (0 is the default, placeholder move)
             for stone in current_game:
-                if stone[-2:] == "[]":  # is a pass
+                if stone[1:3] == "[]":  # is a pass
                     move_seq.append((i, -1, -1))
                 else:
                     x = ord(stone[2]) - 97
@@ -226,7 +226,7 @@ def sgf_to_game(file_name: str, file_directory: str) -> Game:
             # generate the board class
             board = b.Board(size=num_size)
             for stone in current_game:
-                if stone[-2:] != "[]":  # is not a pass
+                if stone[1:3] != "[]":  # is not a pass
                     x = ord(stone[2]) - 97
                     y = ord(stone[3]) - 97
                     if stone[0] == "B":

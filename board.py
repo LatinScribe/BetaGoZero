@@ -183,7 +183,7 @@ class Board:
         """Check if a coordinate is valid for the board."""
         return 0 <= x < self.size and 0 <= y < self.size
 
-    def calculate_score(self: Board, technique: str) -> list:
+    def calculate_score(self: Board, technique: str) -> list[list[tuple[int, int]], list[tuple[int, int]]]:
         """Calculates the score for both players.
         """
         black_score, white_score = 0.0, 0.0
@@ -217,7 +217,7 @@ class Board:
 
         black_score += black_territory
         white_score += white_territory
-        return [("Black score:", black_score, "WhiteScore:", white_score), black_territory_cord, white_territory_cord]
+        return [black_territory_cord, white_territory_cord]
 
     def is_valid_coord_do(self, x: int, y: int):
         """Check if a coordinate is valid for the board."""
