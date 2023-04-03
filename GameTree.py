@@ -41,6 +41,9 @@ class GameTree:
         - move: the current move (spot on the board), or (0, -1, -1) if this tree represents the start of a game
         - _subtrees: the dictionary of the subtrees of the game trees, with keys corresponding to the moves
         - win_probability: probability of going down this branch  (backpropagation)  #: assume win probability for black
+    Representation Invariants:
+        - self.move[0]>=-1 and self.move[1]>=-1 and self.move[2]>=-1
+        - all(self._subtrees[subtree].move==subtree for subtree in self._subtrees)
     """
     move: tuple[int, int, int]
     _subtrees: dict[tuple[int, int, int], GameTree]

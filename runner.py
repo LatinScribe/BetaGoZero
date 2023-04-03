@@ -50,6 +50,15 @@ def run_game() -> None:
             if event.type == pygame.QUIT:  # if the user clicks the close button
                 print("Black captured:", new_game.black_captured)
                 print("White captured:", new_game.white_captured)
+                win = new_game.overall_score("dfs")
+                if new_game.iswinner("White"):
+                    print("white wins by", win[0] - win[1])
+
+                elif new_game.iswinner("Black"):
+                    print("black wins by", win[1] - win[0])
+                else:
+                    print("tie")
+
                 draw_board(new_game.board, "go2434.jpg", True, True)
                 sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:  # if the user clicks the mouse

@@ -31,13 +31,18 @@ from typing import Optional
 class Game:
     """A class representing the state of a game of Go.
 
-     Instance Attributes:
+    Instance Attributes:
         - board: representation of the current state of the board
         - current_player: who's turn is it, either "Black" or "White
         - moves: a list that represents the sequence of moves played so far in the game
         - board_size: the size of the board. Note that the board is always a square
         - black_captured: the amount of stones captured BY BLACK so far
         - white_captured: the amount of stones captured BY WHITE so far
+    Representation Invariants:
+        - self.current_player in {'Black','White'}
+        - self.board_size>0
+        - self.black_captured>=0
+        - self.white_captured>=0
     """
     board: Board
     current_player: str
@@ -74,6 +79,9 @@ class Game:
         Given the location of a new move, updates the board and game.
 
         returns whether updating was sucessful or not
+        Preconditions:
+            - x<self.board.size
+            - y<self.board.size
         """
         stone = self.board.get_stone(x, y)
         if stone.color == "Neither":
@@ -100,6 +108,8 @@ class Game:
     def add_sequence(self, moves_sequence: list[tuple[int, int]]) -> None:
         """Function for testing the ouputting of a final board state
         Given a move sequence, it adds each move to the board
+        Preconditions:
+            - every move is a valid move
         """
         for move in moves_sequence:
             x, y = move
@@ -108,8 +118,10 @@ class Game:
     def is_valid_move(self, x: int, y: int) -> bool:
         """
         Return True if the move at (x, y) is valid, False otherwise
-        :param x:
-        :param y:"""
+        Preconditions:
+            - x<self.board.size
+            - y<self.board.size
+        """
         return self.board.get_stone(x, y).color == "Neither"
 
     def played_moves(self) -> list[tuple[int, int]]:
@@ -131,7 +143,8 @@ class Game:
         return available_moves
 
     def get_move_info(self, x: int, y: int) -> tuple[int, str]:
-        """Returns the turn number and player color based on the given coordinates"""
+        """Returns the turn number and player color based on the given coordinates
+        """
         for turn, move_x, move_y in self.moves:
             if move_x == x and move_y == y:
                 player_color = "Black" if turn % 2 == 1 else "White"
@@ -164,6 +177,8 @@ class Game:
     def game_end(self, max_moves: int) -> bool:
         """
         Checks if the game has ended
+        Preconditions:
+            - max_moves>0
         """
         if len(self.moves) == max_moves:
             return True
@@ -175,6 +190,8 @@ class Game:
     def overall_score(self, technique: str = "dfs") -> tuple[float, float]:
         """
         Returns the overall score of the game
+        Preconditions:
+            - technique is a valid technique
         """
         total_white, total_black = 2.5, 0
 
@@ -187,7 +204,10 @@ class Game:
         return total_white, total_black
 
     def iswinner(self, player: str) -> bool:
-        """Returns True if the given player is the winner of the game, False otherwise"""
+        """Returns True if the given player is the winner of the game, False otherwise
+        Preconditions:
+            - player in {'White', 'Black'}
+        """
         if self.overall_score()[0] > self.overall_score()[1]:
             return player == "White"
         else:
