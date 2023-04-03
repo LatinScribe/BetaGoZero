@@ -149,7 +149,7 @@ class GameTree:
         """Insert a game into a tree as a sequence,
         with the leaf probability of territory score at the end of the game."""
         # TODO: fix the output of calculate_score and adjust this method accordingly
-        victory_score = game.board.calculate_score()[0][1] - game.board.calculate_score()[0][3]
+        victory_score = game.overall_score()[1] - game.overall_score()[0]
         self.insert_move_sequence(game.moves, victory_score)
 
 

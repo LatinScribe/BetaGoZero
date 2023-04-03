@@ -200,11 +200,9 @@ def sgf_to_game(file_name: str, file_directory: str) -> Game:
         # procress the given file
         header = sgf_file.readline()
         if header.find('RE') != -1:
-            print(f"Game has a valid result of {header[header.index('RE') + 2:header.index('KM')]} aka is usable.")
             board_size = header[header.index('SZ') + 2:header.index('RE')]
             board_size = board_size.translate({ord(i): None for i in '[]'})
             num_size = int(board_size)
-            print("Boardsize:", num_size)
             sgf_file.readline()
             sgf_file.readline()
             current_game = sgf_file.readline().split(';')
@@ -340,7 +338,7 @@ if __name__ == '__main__':
     # print(f"Average game length of our 9x9 games is {average_game_length} with the standard deviation of {sd}")
     # print(f"Hence, our 80th percentile cutoff will be {average_game_length + z_score_80 * sd}")
     go9folder_game_tree_relative = load_tree_from_file("completeScoreTree.txt", "tree_saves/")
-    tree = sgf_folder_to_tree_recalc_win_score(games_folder_path_super_small)
+    tree = sgf_folder_to_tree_recalc_win_score(games_folder_path)
     save_tree_to_file(tree, "RecalcWinRateTree.txt", "tree_saves/")
     print(f"Score at root of the complete score tree is {go9folder_game_tree_relative.win_probability}"
           f"and score at root of the complete recalculated score tree is {tree.win_probability}")
