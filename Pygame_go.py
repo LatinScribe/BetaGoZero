@@ -23,8 +23,14 @@ This file was developed as part of the course project for CSC111 Winter 2023.
 Feel free to test it out, but please contact us to obtain permission if you
 intend to redistribute it or use it for your own work.
 """
+from typing import Tuple
+
 import pygame
 import sys
+
+from pygame import Surface, SurfaceType
+from pygame.font import Font
+
 from board import Board
 from game import Game
 
@@ -32,9 +38,6 @@ from PIL import Image, ImageDraw
 from board import Board
 import webbrowser
 import os
-
-# Initialize Pygame
-pygame.init()
 
 # Constants
 BOARD_SIZE = 9
@@ -52,17 +55,17 @@ BACKGROUND = (240, 230, 200)
 WIDTH = BOARD_SIZE * CELL_SIZE + 2 * MARGIN
 HEIGHT = BOARD_SIZE * CELL_SIZE + 2 * MARGIN
 
-# Create a Pygame window
-pygame.init()
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Go Board")
-font = pygame.font.Font(None, 24)
 
-# Create a game board
-board = Board(9)
+def intialise_pygame() -> tuple[Surface | SurfaceType, Font]:
+    """
+    Initialise pygame and create the screen
+    """
+    pygame.init()
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("Go Board")
+    font = pygame.font.Font(None, 24)
 
-
-# game = Game()
+    return screen , font
 
 
 def retnr_row_col(x, y) -> tuple[int, int]:
@@ -79,6 +82,7 @@ def update_display(game: Game, territory: bool = False, technique: str = "flood_
         We can use this function to update the display after each move
         Also Change the display to show the number of stones captured by each player
         Attributes can be changed later for better representation"""
+    screen, font = intialise_pygame()
     screen.fill(BACKGROUND)
 
     # Draw grid lines
@@ -197,7 +201,8 @@ def draw_board(given_board: Board, save_path: str = "Game_result/example.jpg", o
     if open_in_browser:
         webbrowser.open("file://" + os.path.realpath(save_path))
 
-if __name__ == '__main__':
-        import doctest
 
-        doctest.testmod(verbose=True)
+if __name__ == '__main__':
+    import doctest
+
+    doctest.testmod(verbose=True)

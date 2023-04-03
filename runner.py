@@ -25,13 +25,15 @@ intend to redistribute it or use it for your own work.
 
 import sys
 import random
+from typing import Tuple
 
 import pygame
 from game import Game
-from Pygame_go import draw_board, retnr_row_col, update_display
+from Pygame_go import draw_board, retnr_row_col, update_display, intialise_pygame
 from GameTree import GameTree
-from sgf_reader import sgf_to_game, read_all_sgf_in_folder, load_tree_from_file
+from sgf_reader import sgf_to_game, read_all_sgf_in_folder, load_tree_from_file, save_tree_to_file
 from GoPlayer import AbstractGoPlayer, RandomGoPlayer, SlightlyBetterBlackPlayer, Fully_random, ProbabilityBaseGoplayer
+import plotly.graph_objs as go
 
 
 def run_game() -> None:
@@ -41,6 +43,7 @@ def run_game() -> None:
     returns the newly created game
     """
     new_game = Game()
+
     update_display(new_game)
     while True:
         for event in pygame.event.get():
@@ -74,8 +77,8 @@ def simulate_game(max_moves: int, game_tree: GameTree) -> tuple[Game, float]:
 
     game = Game()
 
-    random_player = Fully_random(game_tree)
-    ai_player = ProbabilityBaseGoplayer(game_tree)
+    random_player = ProbabilityBaseGoplayer(game_tree)
+    ai_player = Fully_random(game_tree)
     for i in range(max_moves):
         if game.game_end(max_moves):
             break
@@ -100,10 +103,10 @@ def simulate_game(max_moves: int, game_tree: GameTree) -> tuple[Game, float]:
     return game, win[1] - win[0]
 
 
-def simulate_games(n: int) -> None:
+def simulate_games(n: int) -> tuple[float, float]:
     """Run n AI games and print the results"""
     wins = []
-    tree = load_tree_from_file("CompleteWinRateTree.txt", "tree_saves/")
+    tree = load_tree_from_file("expiremental.txt", "tree_saves/")
     white_win_rate = 0
     black_win_rate = 0
     for i in range(n):
@@ -113,10 +116,36 @@ def simulate_games(n: int) -> None:
         else:
             black_win_rate += 1
         tree.insert_game_into_tree_absolute(game)
-        draw_board(game.board, f"Game_result/go{i}.jpg", territory=True, technique="dfs")
 
+    save_tree_to_file(tree, "expiremental.txt", "tree_saves/")
     print("black win rate:", black_win_rate / n)
     print("white win rate:", white_win_rate / n)
+
+    return black_win_rate / n, white_win_rate / n
+
+
+def plot_win_rate_progress(n_games: int, n_simulations: int) -> None:
+    black_win_rates = []
+    white_win_rates = []
+
+    for i in range(1, n_simulations + 1):
+        black_win_rate, white_win_rate = simulate_games(n_games)
+        black_win_rates.append(black_win_rate)
+        white_win_rates.append(white_win_rate)
+
+    fig = go.Figure()
+    fig.add_trace(
+        go.Scatter(x=list(range(1, n_simulations + 1)), y=black_win_rates, mode='lines+markers', name='Black Win Rate'))
+    fig.add_trace(
+        go.Scatter(x=list(range(1, n_simulations + 1)), y=white_win_rates, mode='lines+markers', name='White Win Rate'))
+
+    fig.update_layout(title=f'Win Rate Progression over {n_simulations} Simulations', xaxis_title='Simulation',
+                      yaxis_title='Win Rate', legend_title='Player')
+
+    # To save the plot to a file, uncomment the following line:
+    # pio.write_image(fig, 'win_rate_progression.png')
+
+    fig.show()
 
 
 if __name__ == "__main__":
@@ -126,4 +155,6 @@ if __name__ == "__main__":
     # run_game()
     # nwp, win_score = simulate_game(50)
     # draw_board(nwp.board, "go2434.jpg", True, True)
+    plot_win_rate_progress(n_games=100, n_simulations=20)
+
     pass
