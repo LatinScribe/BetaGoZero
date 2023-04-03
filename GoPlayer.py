@@ -24,7 +24,6 @@ Feel free to test it out, but please contact us to obtain permission if you
 intend to redistribute it or use it for your own work.
 """
 
-
 import board
 
 from game import Game
@@ -36,10 +35,10 @@ class AbstractGoPlayer:
     """An abstract class for different algorithms to play Go"""
     gt: GameTree
 
-    def __init__(self, gt: GameTree):
+    def __init__(self, gt: GameTree) -> None:
         self.gt = gt
 
-    def make_move(self, game):
+    def make_move(self, game) -> None:
         """This function will determine how the algorithm chooses the
         next move to play
         """
@@ -49,10 +48,10 @@ class AbstractGoPlayer:
 class Fully_random:
     """A Go player that plays randomly by choosing its next move randomly"""
 
-    def __init__(self, gt: GameTree):
+    def __init__(self, gt: GameTree) -> None:
         self.gt = gt
 
-    def make_move(self, game) -> tuple:
+    def make_move(self, game: Game) -> tuple:
         """This function determines how the next move should be made. It
         plays randomly by choosing its next move randomly from empty positions
         """
@@ -63,7 +62,7 @@ class RandomGoPlayer(AbstractGoPlayer):
     """A Go player that plays randomly by choosing its next move randomly
     from empty positions in proximity the last move played"""
 
-    def __init__(self, gt: GameTree):
+    def __init__(self, gt: GameTree)  -> None:
         """Initialize this GoPlayer"""
         AbstractGoPlayer.__init__(self, gt)
 
@@ -71,6 +70,8 @@ class RandomGoPlayer(AbstractGoPlayer):
         """This function determines how the next move should be made. It
         plays randomly by choosing its next move randomly from empty positions
         in proximity the last move played
+
+        Does not work as of now
         """
         valid_moves = []
         move_sequence = game.moves
@@ -87,7 +88,6 @@ class RandomGoPlayer(AbstractGoPlayer):
                 for x in range(0, game.board.size):
                     for y in range(0, game.board.size):
                         if game.board.is_valid_move(x, y, last_move[1]):
-
                             valid_moves.append((last_move[0] + 1, x, y))
 
                 return random.choice(valid_moves)
@@ -106,7 +106,7 @@ class RandomGoPlayer(AbstractGoPlayer):
 class SlightlyBetterBlackPlayer(AbstractGoPlayer):
     """A Go AI that makes the best move given in its subtree."""
 
-    def __init__(self, gt: GameTree):
+    def __init__(self, gt: GameTree) -> None:
         """Initialize this GoPlayer"""
         AbstractGoPlayer.__init__(self, gt)
 
@@ -116,6 +116,8 @@ class SlightlyBetterBlackPlayer(AbstractGoPlayer):
         positions in proximity the last move played if the tree is None or if it is a leaf
         notes: this DOES NOT update the move sequence
         since the AI updates the tree twice, when 2 AIs go against each other, they should not share a tree
+
+        Does not work as of now
         """
         if self.gt is not None:
             last_move = game.moves[-1]
@@ -123,8 +125,8 @@ class SlightlyBetterBlackPlayer(AbstractGoPlayer):
                 self.gt = None  # update the subtree from previous move
             else:
                 self.gt = self.gt.find_subtree_by_move(last_move)
-        if self.gt is None or self.gt.get_subtrees() == [] or (game.moves[-1] not in self.gt._subtrees):
-            self.gt = None  # TODO: _subtrees is private
+        if self.gt is None or self.gt.get_subtrees() == [] or (game.moves[-1] not in self.gt.get_subtrees()):
+            self.gt = None
             valid_moves = []
             move_sequence = game.moves
             if move_sequence != []:
@@ -154,22 +156,22 @@ class SlightlyBetterBlackPlayer(AbstractGoPlayer):
         else:
 
             max_win_prob = -99999999
-            for subtree in self.gt.get_subtrees():  # TODO: get rid of private instance attribute
+            for subtree in self.gt.get_subtrees():
                 if subtree.win_probability > max_win_prob:
                     max_win_prob = subtree.win_probability
                     best_choice = subtree
             self.gt = best_choice  # updates GameTree to be a subtree with the best choice
-            return (best_choice.move[1],best_choice.move[2])  # will not be referenced before
+            return (best_choice.move[1], best_choice.move[2])  # will not be referenced before
 
 
 class ProbabilityBaseGoplayer(AbstractGoPlayer):
     """A Go AI that makes the best move given in its subtree and its score probability."""
 
-    def __init__(self, gt: GameTree):
+    def __init__(self, gt: GameTree) -> None:
         """Initialize this GoPlayer"""
         AbstractGoPlayer.__init__(self, gt)
 
-    def make_move(self, game) -> tuple:
+    def make_move(self, game: Game) -> tuple:
         """ This function determines how the next move should be made.
         It moves forward to the last move on the tree, then chooses a move based on the probability of that move,
         and follows the tree to make a random move."""
@@ -212,11 +214,15 @@ class ProbabilityBaseGoplayer(AbstractGoPlayer):
 if __name__ == '__main__':
     import sgf_reader
 
-    gametree = None
+    # gametree = None
     # game = Game()
     # ai=RandomGoPlayer(gametree,game)
     # print(ai.make_move())
-    test_seq = sgf_reader.sgf_to_game_sequence('2015-06-30T13_28_05.990Z_j15601s5g8gk.sgf', 'DataSet/2015-Go9/')[0]
-    game = Game(None, 'Black', test_seq)
-    ai = RandomGoPlayer(gametree, game)
-    print(ai.make_move())
+    # test_seq = sgf_reader.sgf_to_game_sequence('2015-06-30T13_28_05.990Z_j15601s5g8gk.sgf', 'DataSet/2015-Go9/')[0]
+    # game = Game(None, 'Black', test_seq)
+    # ai = RandomGoPlayer(gametree, game)
+    # print(ai.make_move())
+    if __name__ == '__main__':
+        import doctest
+
+        doctest.testmod(verbose=True)

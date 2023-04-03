@@ -47,7 +47,7 @@ class Game:
     white_captured: int
 
     def __init__(self, active_board: Optional[Board] = None, player_turn: Optional[str] = "Black",
-                 move_sequence: Optional[list[tuple[int, int, int]]] = None, size: Optional[int] = 9):
+                 move_sequence: Optional[list[tuple[int, int, int]]] = None, size: Optional[int] = 9) -> None:
         """
         Initialise a new Go game - defaults to a 9x9 empty board
 
@@ -69,7 +69,7 @@ class Game:
         self.white_captured = 0
         self.black_captured = 0
 
-    def play_move(self, x, y) -> bool:
+    def play_move(self, x: int, y: int) -> bool:
         """
         Given the location of a new move, updates the board and game.
 
@@ -97,7 +97,7 @@ class Game:
         else:
             return False
 
-    def add_sequence(self, moves_sequence) -> None:
+    def add_sequence(self, moves_sequence: list[tuple[int, int]]) -> None:
         """Function for testing the ouputting of a final board state
         Given a move sequence, it adds each move to the board
         """
@@ -105,7 +105,7 @@ class Game:
             x, y = move
             print(f"Playing {self.current_player}'s move at ({x}, {y})")
 
-    def is_valid_move(self, x, y) -> bool:
+    def is_valid_move(self, x: int, y: int) -> bool:
         """
         Return True if the move at (x, y) is valid, False otherwise
         :param x:
@@ -130,7 +130,7 @@ class Game:
                     available_moves.append((x, y))
         return available_moves
 
-    def get_move_info(self, x, y) -> tuple[int, str]:
+    def get_move_info(self, x: int, y: int) -> tuple[int, str]:
         """Returns the turn number and player color based on the given coordinates"""
         for turn, move_x, move_y in self.moves:
             if move_x == x and move_y == y:
@@ -140,7 +140,7 @@ class Game:
 
     def is_game_over(self) -> bool:
         """Checks if the game is over if both players have passed their turns it returns True, otherwise False
-        TODO: add a check for if the board is full and check its fucntionality"""
+         add a check for if the board is full and check its fucntionality"""
 
         if self.played_moves()[-1] == (-1, -1) and len(self.moves) >= 2 and self.played_moves()[-1] == (-1, -1):
             return True
@@ -156,12 +156,15 @@ class Game:
         self.current_player = "White" if self.current_player == "Black" else "Black"
         self.moves.append((self.last_turn_no() + 1, -1, -1))
 
-    def add_move_using_color(self, turn: str, x, y) -> None:
+    def add_move_using_color(self, turn: str, x: int, y: int) -> None:
         """Adds a move to the game using the turn number and coordinates
             TESTING DO NOT USE"""
         self.board.add_stone(x, y, turn)
 
-    def game_end(self, max_moves):
+    def game_end(self, max_moves: int) -> bool:
+        """
+        Checks if the game has ended
+        """
         if len(self.moves) == max_moves:
             return True
         elif not self.available_moves():
@@ -170,6 +173,9 @@ class Game:
             return False
 
     def overall_score(self, technique: str = "dfs") -> tuple[float, float]:
+        """
+        Returns the overall score of the game
+        """
         total_white, total_black = 5.5, 0
 
         territory_score = self.board.calculate_score(technique)
@@ -190,6 +196,7 @@ class Game:
     def get_move_sequence(self) -> list[tuple[int, int, int]]:
         """Returns the move sequence of the game"""
         return self.moves
+
 
 ################################################################################
 # Functions for running games
@@ -230,4 +237,4 @@ if __name__ == "__main__":
     # game = Game()
     # moves = [(0, 0), (1, 1), (0, 1), (1, 0), (0, 2), (2, 2)]
     # game.run_example(moves)
-    pass
+    import python_ta

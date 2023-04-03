@@ -65,7 +65,10 @@ board = Board(9)
 # game = Game()
 
 
-def retnr_row_col(x, y):
+def retnr_row_col(x, y) -> tuple[int, int]:
+    """
+    Return the row and column of the cell that was clicked on
+    """
     row = (x - MARGIN + 15) // CELL_SIZE
     col = (y - MARGIN + 15) // CELL_SIZE
     return row, col
@@ -124,13 +127,13 @@ def update_display(game: Game, territory: bool = False, technique: str = "flood_
         square_size = 16
         for x, y in territories[0]:  # black territory
             rect_color = BLACK
-            rect = pygame.Surface((square_size, square_size), pygame.SRCALPHA)
+            rect = pygame.Surface((square_size, square_size))
             rect.fill(rect_color)
             screen.blit(rect, (MARGIN + x * CELL_SIZE - square_size // 2, MARGIN + y * CELL_SIZE - square_size // 2))
 
         for x, y in territories[1]:  # white territory
             rect_color = WHITE
-            rect = pygame.Surface((square_size, square_size), pygame.SRCALPHA)
+            rect = pygame.Surface((square_size, square_size))
             rect.fill(rect_color)
             screen.blit(rect, (MARGIN + x * CELL_SIZE - square_size // 2, MARGIN + y * CELL_SIZE - square_size // 2))
 
@@ -138,7 +141,7 @@ def update_display(game: Game, territory: bool = False, technique: str = "flood_
 
 
 def draw_board(given_board: Board, save_path: str = "Game_result/example.jpg", open_in_browser: bool = False,
-               territory: bool = False, technique: str = "flood_fill"):
+               territory: bool = False, technique: str = "flood_fill") -> None:
     """
     Generates a visualisation of the given board and saves it as a jpg file to the designated location.
 
@@ -193,3 +196,8 @@ def draw_board(given_board: Board, save_path: str = "Game_result/example.jpg", o
 
     if open_in_browser:
         webbrowser.open("file://" + os.path.realpath(save_path))
+
+if __name__ == '__main__':
+        import doctest
+
+        doctest.testmod(verbose=True)

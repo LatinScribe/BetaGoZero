@@ -339,7 +339,7 @@ def print_misc_stats() -> None:
 
 if __name__ == '__main__':
     # All of this is for debugging
-    # TODO: prints multiple times, fix when it should and should not print
+    # : prints multiple times, fix when it should and should not print
     games_folder_path = 'DataSet/2015-Go9/'
     games_folder_path_small = 'DataSet/2015-Go9-small/'
     games_folder_path_super_small = 'DataSet/2015-Go9-super-small/'

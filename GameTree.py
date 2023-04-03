@@ -26,6 +26,7 @@ intend to redistribute it or use it for your own work.
 
 from __future__ import annotations
 from typing import Optional
+from game import Game
 
 GAME_START_MOVE = (0, -1, -1)
 PASS_MOVE = (-1, -1, -1)
@@ -39,8 +40,7 @@ class GameTree:
     Instance Attributes:
         - move: the current move (spot on the board), or (0, -1, -1) if this tree represents the start of a game
         - _subtrees: the dictionary of the subtrees of the game trees, with keys corresponding to the moves
-        - win_probability: probability of going down this branch  (backpropagation)  #TODO: assume win probability for black
-    TODO: finish the docstring
+        - win_probability: probability of going down this branch  (backpropagation)  #: assume win probability for black
     """
     move: tuple[int, int, int]
     _subtrees: dict[tuple[int, int, int], GameTree]
@@ -100,7 +100,7 @@ class GameTree:
         Preconditions:
             - depth >= 0
         """
-        # TODO: check whether it's working correctly
+        #  check whether it's working correctly
         # seems to be
         if self.move[0] == 0:
             turn_desc = "Game start:"
@@ -120,14 +120,14 @@ class GameTree:
 
     def insert_move_sequence(self, moves: list[tuple[int, int, int]], probability: float) -> None:
         """Insert the given move sequence with this tree as the parent"""
-        # TODO: potentially add the proability to the parameters
+        #: potentially add the proability to the parameters
         self._insert_move_sequence_helper(moves, 0, probability)
         self.update_win_probability()
 
     def _insert_move_sequence_helper(self, moves: list[tuple[int, int, int]], current_index: int,
                                      probability: float) -> None:
         """helps, hopefully"""
-        # TODO: add parents to trees
+        #  add parents to trees
         if current_index == len(moves):
             self.win_probability = probability
             return
@@ -148,14 +148,14 @@ class GameTree:
     def insert_game_into_tree(self, game: Game) -> None:
         """Insert a game into a tree as a sequence,
         with the leaf probability of territory score at the end of the game."""
-        # TODO: fix the output of calculate_score and adjust this method accordingly
+        #  fix the output of calculate_score and adjust this method accordingly
         victory_score = game.overall_score()[1] - game.overall_score()[0]
         self.insert_move_sequence(game.moves, victory_score)
 
     def insert_game_into_tree_absolute(self, game: Game) -> None:
         """Insert a game into a tree as a sequence,
         with the leaf probability of territory score at the end of the game."""
-        # TODO: fix the output of calculate_score and adjust this method accordingly
+        #  fix the output of calculate_score and adjust this method accordingly
         if game.overall_score()[1] - game.overall_score()[0] > 0:
             victory_score = 1
         else:

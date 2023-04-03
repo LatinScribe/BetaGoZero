@@ -47,7 +47,7 @@ def run_game() -> None:
             if event.type == pygame.QUIT:  # if the user clicks the close button
                 print("Black captured:", new_game.black_captured)
                 print("White captured:", new_game.white_captured)
-                draw_board(new_game.board, "go2434.jpg", True)
+                draw_board(new_game.board, "go2434.jpg", True, True)
                 sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:  # if the user clicks the mouse
                 x, y = event.pos
@@ -93,9 +93,10 @@ def simulate_game(max_moves: int, game_tree: GameTree) -> tuple[Game, float]:
         print("white wins by", win[0] - win[1])
 
     elif game.iswinner("Black"):
-        print("black wins by",  win[1] - win[0])
+        print("black wins by", win[1] - win[0])
     else:
         print("tie")
+
     return game, win[1] - win[0]
 
 
@@ -112,45 +113,17 @@ def simulate_games(n: int) -> None:
         else:
             black_win_rate += 1
         tree.insert_game_into_tree_absolute(game)
+        draw_board(game.board, f"Game_result/go{i}.jpg", territory=True, technique="dfs")
 
     print("black win rate:", black_win_rate / n)
     print("white win rate:", white_win_rate / n)
 
 
-
-def run_gam():
-    """Testting Function for the GUI"""
-    # Initialize pygame
-    pygame.init()
-
-    game = sgf_to_game("2015-07-19T12_32_03.406Z_ycdor3fuul2s.sgf", "Dataset/2015-Go9/", )
-    # Main game loop
-    running = True
-    clock = pygame.time.Clock()
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:  # Left mouse button
-                    x, y = 0, 0
-                    if game.is_valid_move(x, y):
-                        game.play_move(x, y)
-        clock.get_time()
-        # Update the display
-        update_display(game, territory=True)
-
-        # Control the frame rate
-        clock.tick(30)
-
-    # Quit pygame
-    pygame.quit()
-
-
 if __name__ == "__main__":
     # nwp = simulate_game(30)
     # draw_board(nwp.board, "go2434.jpg", True, True)
-    simulate_games(5000)
+    # simulate_games(500)
+    # run_game()
     # nwp, win_score = simulate_game(50)
     # draw_board(nwp.board, "go2434.jpg", True, True)
+    pass
