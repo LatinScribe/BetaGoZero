@@ -33,36 +33,36 @@ from board import Board
 import webbrowser
 import os
 
-# Initialize Pygame
-pygame.init()
-
-# Constants
-BOARD_SIZE = 9
-CELL_SIZE = 50
-LETTER_OFFSET = 20
-NUMBER_OFFSET = 20
-MARGIN = 50
-
-# Colors
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-BACKGROUND = (240, 230, 200)
-
-# Screen size calculation
-WIDTH = BOARD_SIZE * CELL_SIZE + 2 * MARGIN
-HEIGHT = BOARD_SIZE * CELL_SIZE + 2 * MARGIN
-
-# Create a Pygame window
-pygame.init()
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Go Board")
-font = pygame.font.Font(None, 24)
-
-# Create a game board
-board = Board(9)
-
-
-# game = Game()
+# # Initialize Pygame
+# pygame.init()
+#
+# # Constants
+# BOARD_SIZE = 9
+# CELL_SIZE = 50
+# LETTER_OFFSET = 20
+# NUMBER_OFFSET = 20
+# MARGIN = 50
+#
+# # Colors
+# WHITE = (255, 255, 255)
+# BLACK = (0, 0, 0)
+# BACKGROUND = (240, 230, 200)
+#
+# # Screen size calculation
+# WIDTH = BOARD_SIZE * CELL_SIZE + 2 * MARGIN
+# HEIGHT = BOARD_SIZE * CELL_SIZE + 2 * MARGIN
+#
+# # Create a Pygame window
+# pygame.init()
+# screen = pygame.display.set_mode((WIDTH, HEIGHT))
+# pygame.display.set_caption("Go Board")
+# font = pygame.font.Font(None, 24)
+#
+# # Create a game board
+# board = Board(9)
+#
+#
+# # game = Game()
 
 
 def retnr_row_col(x, y):

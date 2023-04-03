@@ -152,6 +152,16 @@ class GameTree:
         victory_score = game.overall_score()[1] - game.overall_score()[0]
         self.insert_move_sequence(game.moves, victory_score)
 
+    def insert_game_into_tree_absolute(self, game: Game) -> None:
+        """Insert a game into a tree as a sequence,
+        with the leaf probability of territory score at the end of the game."""
+        # TODO: fix the output of calculate_score and adjust this method accordingly
+        if game.overall_score()[1] - game.overall_score()[0] > 0:
+            victory_score = 1
+        else:
+            victory_score = 0
+        self.insert_move_sequence(game.moves, victory_score)
+
 
 if __name__ == '__main__':
     import doctest

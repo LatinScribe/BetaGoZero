@@ -26,7 +26,8 @@ intend to redistribute it or use it for your own work.
 import sys
 import pygame
 from game import Game
-from Pygame_go import update_display, retnr_row_col, draw_board
+from Pygame_go import draw_board
+from GameTree import GameTree
 from sgf_reader import sgf_to_game, read_all_sgf_in_folder, load_tree_from_file
 from GoPlayer import AbstractGoPlayer, RandomGoPlayer, SlightlyBetterBlackPlayer, Fully_random, ProbabilityBaseGoplayer
 
@@ -64,24 +65,25 @@ def run_game() -> None:
                     print("Invalid move")
 
 
-def part_runner_score(max_moves: int) -> Game:
+def simulate_game(max_moves: int, game_tree: GameTree) -> tuple[Game, float]:
     """
     Run the part of the project that calculates the score of a game
     """
-    game_tree = load_tree_from_file("\completeScoreTree.txt", "tree_saves")
 
     game = Game()
 
-    random_player = Fully_random(game_tree)
+    random_player = ProbabilityBaseGoplayer(game_tree)
     ai_player = ProbabilityBaseGoplayer(game_tree)
     for i in range(max_moves):
         guess = random_player.make_move(game)
         game.play_move(guess[0], guess[1])
 
         ai_guess = ai_player.make_move(game)
-        game.play_move(ai_guess[0], ai_guess[1])
+        check = game.play_move(ai_guess[0], ai_guess[1])
+        if not check:
+            raise ValueError
 
-    win = game.overall_score("flood_fill")
+    win = game.overall_score("dfs")
     if game.iswinner("White"):
         print("white wins by", win[0] - win[1])
         print()
@@ -89,8 +91,20 @@ def part_runner_score(max_moves: int) -> Game:
         print("black wins by",  win[1] - win[0])
     else:
         print("tie")
+    return game, win[1] - win[0]
 
-    return game
+
+def simulate_games(n: int) -> None:
+    """Run n AI games and print the results"""
+    wins = []
+    tree = load_tree_from_file("CompleteWinRateTree.txt", "tree_saves/")
+    print(tree)
+    for i in range(n):
+        game, win = simulate_game(50, tree)
+        wins.append(win)
+        tree.insert_game_into_tree_absolute(game)
+        print(tree)
+    print(sum(wins) / len(wins))
 
 
 def run_gam():
@@ -123,10 +137,10 @@ def run_gam():
     pygame.quit()
 
 
-#
-nwp = part_runner_score(30)
-draw_board(nwp.board, "go2434.jpg", True, True)
-#
+if __name__ == "__main__":
+    # nwp = simulate_game(30)
+    # draw_board(nwp.board, "go2434.jpg", True, True)
+    simulate_games(2)
+    # nwp, win_score = simulate_game(50)
+    # draw_board(nwp.board, "go2434.jpg", True, True)
 
-
-# if __name__ == "__main__":
