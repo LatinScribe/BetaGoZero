@@ -64,7 +64,7 @@ def run_game() -> None:
                     print("Invalid move")
 
 
-def part_runner_score(max_moves: int, player1, player2) -> Game:
+def part_runner_score(max_moves: int) -> Game:
     """
     Run the part of the project that calculates the score of a game
     """
@@ -80,6 +80,15 @@ def part_runner_score(max_moves: int, player1, player2) -> Game:
 
         ai_guess = ai_player.make_move(game)
         game.play_move(ai_guess[0], ai_guess[1])
+
+    win = game.overall_score("flood_fill")
+    if game.iswinner("White"):
+        print("white wins by", win[0] - win[1])
+        print()
+    elif game.iswinner("Black"):
+        print("black wins by",  win[1] - win[0])
+    else:
+        print("tie")
 
     return game
 
