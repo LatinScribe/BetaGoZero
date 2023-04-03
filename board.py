@@ -85,7 +85,7 @@ class Board:
             y (int): The y-coordinate of the position.
             color (str): The color of the stone. Defaults to "Neither".
         Preconditions:
-        - x<self.size and y<self.size and 0<=x and 0<=y
+            - x<self.size and y<self.size and 0<=x and 0<=y
         """
         self.grid[x][y].color = color
 
@@ -101,7 +101,7 @@ class Board:
         Args:
             stones (list): A list of Stone objects to remove.
         Preconditions:
-        - all((stone in self.grid) for stone in stones)
+            - all((stone in self.grid) for stone in stones)
         """
         for stone in stones:
             self.grid[stone.x][stone.y].die()
@@ -168,7 +168,7 @@ class Board:
         """Check if a coordinate is valid for the board. It does not overwrite any stone, is not placed in a location
         that leads to instant death, and within boundaries of the board. It does not mutate the board
         Preconditions:
-        - color in {'Black' , 'White'}
+            - color in {'Black' , 'White'}
         """
         if color not in {'Black', 'White'}:
             raise ValueError
@@ -287,8 +287,8 @@ class Board:
     def capture_stones(self, stone: Stone) -> int:
         """turns all same color stones connected to the given stone into Neither
         Preconditions:
-        - Assume the given stone is dead
-        - any([(stone in row) for row in self.grid])
+            - Assume the given stone is dead
+            - any([(stone in row) for row in self.grid])
         """
         if stone.color not in {'Black', 'White'}:
             raise ValueError
