@@ -53,7 +53,6 @@ import pickle
 # import shutil
 import board as b
 import GameTree as Gt
-from game import Game
 
 
 def read_sgf(file_name: str, file_directory: str, do_deletion: bool) -> None | b.Board:
@@ -156,6 +155,7 @@ def sgf_to_game_sequence(file_name: str, file_directory: str) -> tuple[list[tupl
             return move_seq, game_score
         else:
             raise ValueError
+
 
 def sgf_to_game_sequence_absolute(file_name: str, file_directory: str) -> tuple[list[tuple[int, int, int]], int]:
     """
@@ -289,6 +289,22 @@ def load_tree_from_file(file_name: str, folder_directory: str) -> Gt.GameTree:
         return pickle.load(file)
 
 
+def average_length_of_game_in_folder(folder_directory: str) -> float:
+    """Returns an average length of games in a sgf folder"""
+    sequence_lengths = []
+    for file in os.listdir(folder_directory):
+        sequence_lengths.append(len(sgf_to_game_sequence(file, folder_directory)[0]))  # simpler this way
+    return sum(sequence_lengths) / len(sequence_lengths)
+
+
+def sd_length_of_game_in_folder(folder_directory: str, average: float) -> float:
+    """Returns the standard deviation of length of games in a sgf folder"""
+    square_distances_to_mean = []
+    for file in os.listdir(folder_directory):
+        square_distances_to_mean.append(pow(abs(len(sgf_to_game_sequence(file, folder_directory)[0]) - average), 2))
+    return pow((sum(square_distances_to_mean) / len(square_distances_to_mean)), 0.5)
+
+
 if __name__ == '__main__':
     # All of this is for debugging
     # TODO: prints multiple times, fix when it should and should not print
@@ -297,8 +313,15 @@ if __name__ == '__main__':
     games_folder_path_super_small = 'DataSet/2015-Go9-super-small/'
     # read_all_sgf_in_folder(games_folder_path, True)
     # go9folder_game_tree_relative = sgf_folder_to_tree(games_folder_path)
-    go9folder_game_tree_absolute = sgf_folder_to_tree(games_folder_path, is_absolute=True)
+    # go9folder_game_tree_absolute = sgf_folder_to_tree(games_folder_path, is_absolute=True)
     # go9folder_game_tree = load_tree_from_file("CompleteWinRateTree.txt", "")
-    print(go9folder_game_tree_absolute)
-    print(f"length of the 2015-Go9 tree: {len(go9folder_game_tree_absolute)}")
-    save_tree_to_file(go9folder_game_tree_absolute, "tree_saves/CompleteWinRateTree.txt", "")
+    # print(go9folder_game_tree_absolute)
+    # print(f"length of the 2015-Go9 tree: {len(go9folder_game_tree_absolute)}")
+    # save_tree_to_file(go9folder_game_tree_absolute, "CompleteWinRateTree.txt", "")
+    average_game_length = average_length_of_game_in_folder(games_folder_path)
+    sd = sd_length_of_game_in_folder(games_folder_path, average_game_length)
+    z_score_80 = 0.842  # for 90th percentile
+    z_score_90 = 1.2816  # for 90th percentile
+    z_score_99 = 2.326  # for 99th percentile
+    print(f"Average game length of our 9x9 games is {average_game_length} with the standard deviation of {sd}")
+    print(f"Hence, our 80th percentile cutoff will be {average_game_length + z_score_80 * sd}")
