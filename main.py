@@ -29,8 +29,9 @@ intend to redistribute it or use it for your own work.
 import sys
 
 import Runner_solo
-from sgf_reader import print_misc_stats
+from sgf_reader import print_misc_stats, load_tree_from_file
 from runner import run_game
+from runner import simulate_game, simulate_games, plot_win_rate_progress
 
 # from board import Board
 # from sgf_reader import read_sgf
@@ -41,9 +42,9 @@ MENU = 'Welcome! Below are possible actions you can perform using our program.' 
        '\nTo SELECT an option, please enter the corresponding number as an integer.' \
        '\n0) Exit the program' \
        '\n1) Run a basic solo game' \
-       '\n2)' \
-       '\n3)' \
-       '\n4)' \
+       '\n2) Run a simulattion of one game of tree AI against a random guesse'\
+       '\n3) Simulate n games of tree AI against a random guesser ' \
+       '\n4) simulates m trials of n games of tree AI against a random guesser and plots the data ' \
        '\n5) Some misc. stats about our data set' \
        '\n6) Experimental options'
 
@@ -67,11 +68,16 @@ def main_menu() -> None:
             run_game()
             print("Ran solo game sucessfully!")
         elif user_choice == 2:
-            ...  # Do something
+            max_game_len = int(
+                input('Please enter your choice of max number of moves per game (50-67 is recommended):'))
+            simulate_game(max_game_len, load_tree_from_file("completeScoreTree.txt", "tree_saves/"))
         elif user_choice == 3:
-            ...  # Do something
+            n = int(input('Please enter your choice of the number of games simulated:'))
+            simulate_games(n)
         elif user_choice == 4:
-            ...  # Do something
+            n_games = int(input('Please enter your choice of the number of games simulated per trial:'))
+            n_simulations = int(input('Please enter your choice of the number of trials simulated:'))
+            plot_win_rate_progress(n_games, n_simulations)
         elif user_choice == 5:
             print("Please wait for a moment...")
             print_misc_stats()
