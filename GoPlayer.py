@@ -67,35 +67,41 @@ class RandomGoPlayer(AbstractGoPlayer):
         """Initialize this GoPlayer"""
         AbstractGoPlayer.__init__(self, gt)
 
-    def make_move(self , game) -> tuple:
+    def make_move(self, game) -> tuple:
         """This function determines how the next move should be made. It
         plays randomly by choosing its next move randomly from empty positions
         in proximity the last move played
         """
         valid_moves = []
-        move_sequence = game.moves
-        if move_sequence:
-            last_move = game.get_move_info(move_sequence[-1][1], move_sequence[-1][2])
+        move_sequence = self.game.moves
+        if move_sequence != []:
 
-            check_stone = game.board.get_stone(move_sequence[-1][1], move_sequence[-1][2])
+            last_move = self.game.get_move_info(move_sequence[-1][1], move_sequence[-1][2])
+
+            check_stone = self.board.get_stone(move_sequence[-1][1], move_sequence[-1][2])
             choices = [(check_stone.x + 1, check_stone.y), (check_stone.x - 1, check_stone.y),
                        (check_stone.x, check_stone.y + 1), (check_stone.x, check_stone.y - 1)]
             print(last_move[1])
-            if not any(game.board.is_valid_move(choice[0], choice[1], last_move[1]) for choice in choices):
-                for x in range(0, game.board.size):
-                    for y in range(0, game.board.size):
-                        if game.board.is_valid_move(x, y, last_move[1]):
+
+            if not any(self.board.is_valid_move(choice[0], choice[1], last_move[1]) for choice in choices):
+                for x in range(0, self.board.size):
+                    for y in range(0, self.board.size):
+                        if self.board.is_valid_move(x, y, last_move[1]):
                             valid_moves += (last_move[0], x, y)
+                            valid_moves.append((last_move[0] + 1, x, y))
+                            print(valid_moves)
+
                 return random.choice(valid_moves)
             else:
+
                 coord = random.choice(choices)
-                while not game.board.is_valid_move(coord[0], coord[1], last_move[1]):
+                while not self.board.is_valid_move(coord[0], coord[1], last_move[1]):
                     choices.remove(coord)
                     coord = random.choice(choices)
 
-            return (len(game.moves), coord[0], coord[1])
+            return (len(self.game.moves) + 1, coord[0], coord[1])
         else:
-            return random.choice(game.available_moves())
+            return (1, random.randint(0, 8), random.randint(0, 8))
 
 
 class SlightlyBetterBlackPlayer(AbstractGoPlayer):
@@ -146,6 +152,7 @@ class SlightlyBetterBlackPlayer(AbstractGoPlayer):
             self.gt = best_choice  # updates GameTree to be a subtree with the best choice
             return best_choice.move  # will not be referenced before
 
+
 class ProbabilityBaseGoplayer(AbstractGoPlayer):
     """A Go AI that makes the best move given in its subtree and its score probability."""
 
@@ -191,8 +198,6 @@ class ProbabilityBaseGoplayer(AbstractGoPlayer):
                 return random.choice(list(possible_moves))
 
             return self.gt.move
-
-
 
 
 if __name__ == '__main__':
