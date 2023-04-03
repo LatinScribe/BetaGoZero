@@ -166,10 +166,11 @@ class Board:
         """
         if color not in {'Black', 'White'}:
             raise ValueError
-        elif self.get_stone(x, y).color != "Neither":
-            return False
         elif x < 0 or x > 8 or y < 0 or y > 8:
             return False
+        elif self.get_stone(x, y).color != "Neither":
+            return False
+        
         else:
             self.get_stone(x, y).color = color
             if self.get_stone(x, y).check_is_dead(set()):
