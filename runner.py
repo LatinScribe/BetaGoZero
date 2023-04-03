@@ -26,8 +26,7 @@ intend to redistribute it or use it for your own work.
 import sys
 import pygame
 from game import Game
-from Pygame_go import update_display, retnr_row_col
-from go_gui import draw_board
+from Pygame_go import update_display, retnr_row_col, draw_board
 from sgf_reader import sgf_to_game, read_all_sgf_in_folder
 
 

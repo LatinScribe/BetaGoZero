@@ -25,7 +25,7 @@ Feel free to test it out, but please contact us to obtain permission if you
 intend to redistribute it or use it for your own work.
 """
 from board import Board
-from go_gui import draw_board
+from Pygame_go import draw_board
 from typing import Optional
 
 

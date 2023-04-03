@@ -28,6 +28,11 @@ import sys
 from board import Board
 from game import Game
 
+from PIL import Image, ImageDraw
+from board import Board
+import webbrowser
+import os
+
 # Initialize Pygame
 pygame.init()
 
@@ -55,6 +60,8 @@ font = pygame.font.Font(None, 24)
 
 # Create a game board
 board = Board(9)
+
+
 # game = Game()
 
 
@@ -99,7 +106,8 @@ def update_display(game: Game, territory: bool = False) -> None:
                 color = WHITE
             else:
                 color = BLACK
-            pygame.draw.circle(screen, color, (MARGIN + move[1] * CELL_SIZE, MARGIN + move[2] * CELL_SIZE), CELL_SIZE // 2 - 2)
+            pygame.draw.circle(screen, color, (MARGIN + move[1] * CELL_SIZE, MARGIN + move[2] * CELL_SIZE),
+                               CELL_SIZE // 2 - 2)
     # for i, x, y in game.moves:
     #     if i % 2 == 0:
     #         color = BLACK
@@ -125,18 +133,60 @@ def update_display(game: Game, territory: bool = False) -> None:
 
     pygame.display.flip()
 
-# Test Loop
-# turn = 0
-#
-# while True:
-#     for event in pygame.event.get():
-#         if event.type == pygame.QUIT:
-#             sys.exit()
-#         elif event.type == pygame.MOUSEBUTTONDOWN:
-#             x, y = event.pos
-#             row = (x - MARGIN) // CELL_SIZE
-#             col = (y - MARGIN) // CELL_SIZE
-#             if 0 <= row < BOARD_SIZE and 0 <= col < BOARD_SIZE:
-#                 turn += 1
-#                 game.moves.append((turn, row, col))
-#                 update_display(game)
+
+def draw_board(given_board: Board, save_path: str = "Game_result/example.jpg", open_in_browser: bool = False,
+               territory: bool = False, technique: str = "flood_fill"):
+    """
+    Generates a visualisation of the given board and saves it as a jpg file to the designated location.
+
+    Defaults to saving in the Game_results folder as example.jpg
+
+    The user can specify whether to open the image in their browser, default to not open it
+    """
+    cell_size = 50
+    board_size = given_board.size * cell_size
+    padding = 20
+
+    image = Image.new("RGB", (board_size + 2 * padding, board_size + 2 * padding), "#EEDC82")
+    draw = ImageDraw.Draw(image)
+
+    # Draw the lines
+    for i in range(given_board.size):
+        x = padding + i * cell_size
+        draw.line([(x, padding), (x, board_size + padding - 50)], "black")
+        draw.line([(padding, x), (board_size + padding - 50, x)], "black")
+
+    # Draw the stones
+    for x in range(given_board.size):
+        for y in range(given_board.size):
+            stone = given_board.get_stone(x, y)
+            if stone.color != "Neither":
+                radius = (cell_size // 2) - 4
+                stone_x = padding + x * cell_size
+                stone_y = padding + y * cell_size
+                draw.ellipse([(stone_x - radius, stone_y - radius),
+                              (stone_x + radius, stone_y + radius)],
+                             fill=stone.color.lower())
+
+    # Draw territory
+    if territory:
+        territories = given_board.calculate_score(technique=technique)
+        square_size = 16
+
+        for x, y in territories[1]:  # black territory
+            rect_color = "black"
+            rect = Image.new("RGBA", (square_size, square_size), rect_color)
+            image.paste(rect, (padding + x * cell_size - square_size // 2, padding + y * cell_size - square_size // 2),
+                        rect)
+
+        for x, y in territories[2]:  # white territory
+            rect_color = "white"
+            rect = Image.new("RGBA", (square_size, square_size), rect_color)
+            image.paste(rect, (padding + x * cell_size - square_size // 2, padding + y * cell_size - square_size // 2),
+                        rect)
+
+    # save_path = "Game_result" + save_path
+    image.save(save_path)
+
+    if open_in_browser:
+        webbrowser.open("file://" + os.path.realpath(save_path))
