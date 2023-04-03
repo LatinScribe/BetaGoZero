@@ -295,9 +295,6 @@ class Board:
         Assume the given stone is dead"""
         if stone.color not in {'Black', 'White'}:
             raise ValueError
-        elif not stone.check_is_dead(set()):
-            print("given stone is alive")
-            raise AssertionError
         else:
             captured_so_far = 1
             color = stone.color
