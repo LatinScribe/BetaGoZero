@@ -25,7 +25,6 @@ Feel free to test it out, but please contact us to obtain permission if you
 intend to redistribute it or use it for your own work.
 """
 from board import Board
-from Pygame_go import draw_board
 from typing import Optional
 
 
@@ -162,19 +161,11 @@ class Game:
             TESTING DO NOT USE"""
         self.board.add_stone(x, y, turn)
 
-    def run_example(self, moves_sequence) -> None:
-        """Function for testing the ouputting of a final board state"""
-        for move in moves_sequence:
-            x, y = move
-            print(f"Playing {self.current_player}'s move at ({x}, {y})")
-            success = self.play_move(x, y)
-            if success:
-                print("Move successful.")
-            else:
-                print("Move failed. Position already occupied.")
-        print("Final board state:")
-        print(self.board)
-        draw_board(self.board, open_in_browser=True)
+    def game_end(self, max_moves):
+        if len(self.moves) == max_moves:
+            return True
+        else:
+            return False
 
 
 ################################################################################

@@ -53,6 +53,7 @@ import pickle
 # import shutil
 import board as b
 import GameTree as Gt
+from game import Game
 
 
 def read_sgf(file_name: str, file_directory: str, do_deletion: bool) -> None | b.Board:

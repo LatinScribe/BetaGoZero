@@ -27,7 +27,8 @@ import sys
 import pygame
 from game import Game
 from Pygame_go import update_display, retnr_row_col, draw_board
-from sgf_reader import sgf_to_game, read_all_sgf_in_folder
+from sgf_reader import sgf_to_game, read_all_sgf_in_folder, load_tree_from_file
+from GoPlayer import AbstractGoPlayer, RandomGoPlayer, SlightlyBetterBlackPlayer, Fully_random
 
 
 def run_game() -> None:
@@ -63,18 +64,29 @@ def run_game() -> None:
                     print("Invalid move")
 
 
+def part_runner_score(max_moves: int) -> Game:
+    """
+    Run the part of the project that calculates the score of a game
+    """
+    game_tree = load_tree_from_file("\completeScoreTree.txt", "tree_saves")
 
-count = 5
-for board in read_all_sgf_in_folder("DataSet/2015-Go9-super-small/"):
-    count += 1
-    print(board.calculate_score("dfs"))
-    draw_board(board, format(f"hello{count}.jpg"), territory=True)
+    game = Game()
 
-    print(board)
+    random_player = Fully_random(game_tree)
+    ai_player = SlightlyBetterBlackPlayer(game_tree)
+    for i in range(max_moves):
+        guess = random_player.make_move(game)
 
-if __name__ == "__main__":
-    sgf_reader = sgf_to_game("/2015-07-25T13_10_48.748Z_seowzegj5utb.sgf", "DataSet/2015-Go9")
-    # draw_board(sgf_reader.board, "hello.jpg", True, True)
-    # print(sgf_reader.board)
-    # print(sgf_reader.board.calculate_score())
-    # run_game(sgf_reader)
+        game.play_move(guess[0], guess[1])
+        print("Random Guess: ", guess[0], guess[1])
+
+        ai_guess = ai_player.make_move(game)
+        game.play_move(ai_guess[1], ai_guess[2])
+        print("AI Guess: ", ai_guess[1], ai_guess[2])
+    return game
+
+
+nwp = part_runner_score(50)
+draw_board(nwp.board, "go2434.jpg", True, True)
+
+# if __name__ == "__main__":
