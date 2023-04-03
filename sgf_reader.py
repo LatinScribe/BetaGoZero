@@ -268,6 +268,19 @@ def sgf_folder_to_tree(folder_directory: str, is_absolute: bool = False) -> Gt.G
     return tree
 
 
+def sgf_folder_to_tree_recalc_win_score(folder_directory: str) -> Gt.GameTree:
+    """Returns a game tree by exctracting move sequences out of all sgf files in a given folder
+
+    Preciditions:
+    - all files have to be sgf
+    """
+    tree = Gt.GameTree()
+    for file in os.listdir(folder_directory):
+        game = sgf_to_game(file, folder_directory)
+        tree.insert_game_into_tree(game)
+    return tree
+
+
 def rotate_move_seq_by_90(moves: list[tuple[int, int, int]], board_size=9) -> list[tuple[int, int, int]]:
     """rotates a sequence of moves clockwise by 90 degrees"""
     rotated_sequence = []
@@ -319,10 +332,15 @@ if __name__ == '__main__':
     # print(go9folder_game_tree_absolute)
     # print(f"length of the 2015-Go9 tree: {len(go9folder_game_tree_absolute)}")
     # save_tree_to_file(go9folder_game_tree_absolute, "CompleteWinRateTree.txt", "")
-    average_game_length = average_length_of_game_in_folder(games_folder_path)
-    sd = sd_length_of_game_in_folder(games_folder_path, average_game_length)
-    z_score_80 = 0.842  # for 90th percentile
-    z_score_90 = 1.2816  # for 90th percentile
-    z_score_99 = 2.326  # for 99th percentile
-    print(f"Average game length of our 9x9 games is {average_game_length} with the standard deviation of {sd}")
-    print(f"Hence, our 80th percentile cutoff will be {average_game_length + z_score_80 * sd}")
+    # average_game_length = average_length_of_game_in_folder(games_folder_path)
+    # sd = sd_length_of_game_in_folder(games_folder_path, average_game_length)
+    # z_score_80 = 0.842  # for 90th percentile
+    # z_score_90 = 1.2816  # for 90th percentile
+    # z_score_99 = 2.326  # for 99th percentile
+    # print(f"Average game length of our 9x9 games is {average_game_length} with the standard deviation of {sd}")
+    # print(f"Hence, our 80th percentile cutoff will be {average_game_length + z_score_80 * sd}")
+    go9folder_game_tree_relative = load_tree_from_file("completeScoreTree.txt", "tree_saves/")
+    tree = sgf_folder_to_tree_recalc_win_score(games_folder_path_super_small)
+    save_tree_to_file(tree, "RecalcWinRateTree.txt", "tree_saves/")
+    print(f"Score at root of the complete score tree is {go9folder_game_tree_relative.win_probability}"
+          f"and score at root of the complete recalculated score tree is {tree.win_probability}")
