@@ -30,6 +30,7 @@ import sys
 
 import Runner_solo
 from sgf_reader import print_misc_stats
+from runner import run_game
 
 # from board import Board
 # from sgf_reader import read_sgf
@@ -54,7 +55,7 @@ while not user_choice == 0:
     if user_choice == 0:
         sys.exit()
     elif user_choice == 1:
-        Runner_solo.run_game()
+        run_game()
         print("Ran solo game sucessfully!")
     elif user_choice == 2:
         ...  # Do something
