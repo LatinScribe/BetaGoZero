@@ -185,6 +185,10 @@ class Game:
         else:
             return player == "Black"
 
+    def get_move_sequence(self) -> list[tuple[int, int, int]]:
+        """Returns the move sequence of the game"""
+        return self.moves
+
 ################################################################################
 # Functions for running games
 ################################################################################

@@ -28,7 +28,7 @@ import pygame
 from game import Game
 from Pygame_go import update_display, retnr_row_col, draw_board
 from sgf_reader import sgf_to_game, read_all_sgf_in_folder, load_tree_from_file
-from GoPlayer import AbstractGoPlayer, RandomGoPlayer, SlightlyBetterBlackPlayer, Fully_random
+from GoPlayer import AbstractGoPlayer, RandomGoPlayer, SlightlyBetterBlackPlayer, Fully_random, ProbabilityBaseGoplayer
 
 
 def run_game() -> None:
@@ -64,7 +64,7 @@ def run_game() -> None:
                     print("Invalid move")
 
 
-def part_runner_score(max_moves: int) -> Game:
+def part_runner_score(max_moves: int, player1, player2) -> Game:
     """
     Run the part of the project that calculates the score of a game
     """
@@ -73,17 +73,16 @@ def part_runner_score(max_moves: int) -> Game:
     game = Game()
 
     random_player = Fully_random(game_tree)
-    ai_player = SlightlyBetterBlackPlayer(game_tree)
+    ai_player = ProbabilityBaseGoplayer(game_tree)
     for i in range(max_moves):
         guess = random_player.make_move(game)
-
         game.play_move(guess[0], guess[1])
-        print("Random Guess: ", guess[0], guess[1])
 
         ai_guess = ai_player.make_move(game)
-        game.play_move(ai_guess[1], ai_guess[2])
-        print("AI Guess: ", ai_guess[1], ai_guess[2])
+        game.play_move(ai_guess[0], ai_guess[1])
+
     return game
+
 
 def run_gam():
     """Testting Function for the GUI"""
@@ -114,13 +113,11 @@ def run_gam():
     # Quit pygame
     pygame.quit()
 
-run_gam()
+
 #
-# nwp = part_runner_score(50)
-# draw_board(nwp.board, "go2434.jpg", True, True)
+nwp = part_runner_score(30)
+draw_board(nwp.board, "go2434.jpg", True, True)
 #
 
-game = sgf_to_game("2015-07-19T12_32_03.406Z_ycdor3fuul2s.sgf", "Dataset/2015-Go9/")
-print(game.moves)
 
 # if __name__ == "__main__":
