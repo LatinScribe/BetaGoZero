@@ -172,9 +172,9 @@ class Game:
 
         territory_score = self.board.calculate_score(technique)
 
-        total_black = len(territory_score[0]) - self.black_captured
+        total_black += len(territory_score[0]) + self.black_captured
 
-        total_white = len(territory_score[1]) - self.white_captured
+        total_white += len(territory_score[1]) + self.white_captured
 
         return total_white, total_black
 
