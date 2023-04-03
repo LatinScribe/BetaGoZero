@@ -317,28 +317,29 @@ def sd_length_of_game_in_folder(folder_directory: str, average: float) -> float:
     return pow((sum(square_distances_to_mean) / len(square_distances_to_mean)), 0.5)
 
 
+def print_misc_stats() -> None:
+    """Output miscellanious stats about our data set and the resulting trees."""
+    games_folder_path = 'DataSet/2015-Go9/'
+    go9folder_game_tree_relative = load_tree_from_file("completeScoreTree.txt", "tree_saves/")
+    go9folder_game_tree_absolute = load_tree_from_file("CompleteWinRateTree.txt", "tree_saves/")
+    go9folder_game_tree_recalculated = load_tree_from_file("RecalcScoreTree.txt", "tree_saves/")
+    z_score_80 = 0.842  # for 80th percentile
+    average_game_length = average_length_of_game_in_folder(games_folder_path)
+    sd = sd_length_of_game_in_folder(games_folder_path, average_game_length)
+    print(f"Average game length of our 9x9 games is {average_game_length} with the standard deviation of {sd}")
+    print(f"Hence, our 80th percentile cutoff will be {average_game_length + z_score_80 * sd}")
+    print("(This was used to determine the cutoff at which the AI will finish the game and then score it)")
+    print(f"Score at the root of the complete win rate tree is {go9folder_game_tree_absolute.win_probability}")
+    print("(The number represents how many more games were won by black than white)")
+    print(f"Score at the root of the complete score tree is {go9folder_game_tree_relative.win_probability} and score "
+          f"at the root of the complete recalculated score tree is {go9folder_game_tree_recalculated.win_probability}")
+    print("(The two numbers represents how many more point were scored by black in comparison to white,"
+          "first according to our data and second according to our scoring system)")
+
+
 if __name__ == '__main__':
     # All of this is for debugging
     # TODO: prints multiple times, fix when it should and should not print
     games_folder_path = 'DataSet/2015-Go9/'
     games_folder_path_small = 'DataSet/2015-Go9-small/'
     games_folder_path_super_small = 'DataSet/2015-Go9-super-small/'
-    # read_all_sgf_in_folder(games_folder_path, True)
-    # go9folder_game_tree_relative = sgf_folder_to_tree(games_folder_path)
-    # go9folder_game_tree_absolute = sgf_folder_to_tree(games_folder_path, is_absolute=True)
-    # go9folder_game_tree = load_tree_from_file("CompleteWinRateTree.txt", "")
-    # print(go9folder_game_tree_absolute)
-    # print(f"length of the 2015-Go9 tree: {len(go9folder_game_tree_absolute)}")
-    # save_tree_to_file(go9folder_game_tree_absolute, "CompleteWinRateTree.txt", "")
-    # average_game_length = average_length_of_game_in_folder(games_folder_path)
-    # sd = sd_length_of_game_in_folder(games_folder_path, average_game_length)
-    # z_score_80 = 0.842  # for 90th percentile
-    # z_score_90 = 1.2816  # for 90th percentile
-    # z_score_99 = 2.326  # for 99th percentile
-    # print(f"Average game length of our 9x9 games is {average_game_length} with the standard deviation of {sd}")
-    # print(f"Hence, our 80th percentile cutoff will be {average_game_length + z_score_80 * sd}")
-    go9folder_game_tree_relative = load_tree_from_file("completeScoreTree.txt", "tree_saves/")
-    tree = sgf_folder_to_tree_recalc_win_score(games_folder_path)
-    save_tree_to_file(tree, "RecalcWinRateTree.txt", "tree_saves/")
-    print(f"Score at root of the complete score tree is {go9folder_game_tree_relative.win_probability}"
-          f"and score at root of the complete recalculated score tree is {tree.win_probability}")

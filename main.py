@@ -29,6 +29,7 @@ intend to redistribute it or use it for your own work.
 import sys
 
 import Runner_solo
+from sgf_reader import print_misc_stats
 
 # from board import Board
 # from sgf_reader import read_sgf
@@ -42,7 +43,7 @@ MENU = 'Welcome! Below are possible actions you can perform using our program.' 
        '\n2)' \
        '\n3)' \
        '\n4)' \
-       '\n5)'
+       '\n5) Some misc. stats about our data set'
 
 
 user_choice = - 1
@@ -62,6 +63,8 @@ while not user_choice == 0:
     elif user_choice == 4:
         ...  # Do something
     elif user_choice == 5:
-        ...  # Do something
+        print("Please wait for a moment...")
+        print_misc_stats()
+
     else:
         print("ERROR: That number was not one of our options, please try again!\n")
