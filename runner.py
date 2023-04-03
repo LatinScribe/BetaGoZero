@@ -24,9 +24,11 @@ intend to redistribute it or use it for your own work.
 """
 
 import sys
+import random
+
 import pygame
 from game import Game
-from Pygame_go import draw_board
+from Pygame_go import draw_board, retnr_row_col, update_display
 from GameTree import GameTree
 from sgf_reader import sgf_to_game, read_all_sgf_in_folder, load_tree_from_file
 from GoPlayer import AbstractGoPlayer, RandomGoPlayer, SlightlyBetterBlackPlayer, Fully_random, ProbabilityBaseGoplayer
@@ -72,21 +74,24 @@ def simulate_game(max_moves: int, game_tree: GameTree) -> tuple[Game, float]:
 
     game = Game()
 
-    random_player = ProbabilityBaseGoplayer(game_tree)
+    random_player = Fully_random(game_tree)
     ai_player = ProbabilityBaseGoplayer(game_tree)
     for i in range(max_moves):
+        if game.game_end(max_moves):
+            break
         guess = random_player.make_move(game)
         game.play_move(guess[0], guess[1])
 
         ai_guess = ai_player.make_move(game)
         check = game.play_move(ai_guess[0], ai_guess[1])
         if not check:
-            raise ValueError
+            chosen_move = random.choice(game.available_moves())
+            game.play_move(chosen_move[0], chosen_move[1])
 
     win = game.overall_score("dfs")
     if game.iswinner("White"):
         print("white wins by", win[0] - win[1])
-        print()
+
     elif game.iswinner("Black"):
         print("black wins by",  win[1] - win[0])
     else:
@@ -98,13 +103,19 @@ def simulate_games(n: int) -> None:
     """Run n AI games and print the results"""
     wins = []
     tree = load_tree_from_file("CompleteWinRateTree.txt", "tree_saves/")
-    print(tree)
+    white_win_rate = 0
+    black_win_rate = 0
     for i in range(n):
         game, win = simulate_game(50, tree)
-        wins.append(win)
+        if game.iswinner("White"):
+            white_win_rate += 1
+        else:
+            black_win_rate += 1
         tree.insert_game_into_tree_absolute(game)
-        print(tree)
-    print(sum(wins) / len(wins))
+
+    print("black win rate:", black_win_rate / n)
+    print("white win rate:", white_win_rate / n)
+
 
 
 def run_gam():
@@ -140,7 +151,6 @@ def run_gam():
 if __name__ == "__main__":
     # nwp = simulate_game(30)
     # draw_board(nwp.board, "go2434.jpg", True, True)
-    simulate_games(2)
+    simulate_games(5000)
     # nwp, win_score = simulate_game(50)
     # draw_board(nwp.board, "go2434.jpg", True, True)
-

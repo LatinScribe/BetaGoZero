@@ -164,6 +164,8 @@ class Game:
     def game_end(self, max_moves):
         if len(self.moves) == max_moves:
             return True
+        elif not self.available_moves():
+            return True
         else:
             return False
 
