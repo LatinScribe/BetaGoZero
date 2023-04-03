@@ -85,6 +85,10 @@ class RandomGoPlayer(AbstractGoPlayer):
 
             if not any(game.board.is_valid_move(choice[0], choice[1], last_move[1]) for choice in choices):
                 valid_moves = game.available_moves()
+                # for x in range(0, game.board.size):
+                #     for y in range(0, game.board.size):
+                #         if game.board.is_valid_move(x, y, last_move[1]):
+                #             valid_moves.append((x, y))
                 return random.choice(valid_moves)
             else:
 
@@ -132,6 +136,10 @@ class SlightlyBetterBlackPlayer(AbstractGoPlayer):
 
                 if not any(game.board.is_valid_move(choice[0], choice[1], last_move[1]) for choice in choices):
                     valid_moves = game.available_moves()
+                    # for x in range(0, game.board.size):
+                    #     for y in range(0, game.board.size):
+                    #         if game.board.is_valid_move(x, y, last_move[1]):
+                    #             valid_moves.append((x, y))
                     return random.choice(valid_moves)
                 else:
 
