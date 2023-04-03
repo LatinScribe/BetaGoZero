@@ -44,28 +44,58 @@ MENU = 'Welcome! Below are possible actions you can perform using our program.' 
        '\n2)' \
        '\n3)' \
        '\n4)' \
-       '\n5) Some misc. stats about our data set'
+       '\n5) Some misc. stats about our data set' \
+       '\n6) Experimental options'
+
+EXPERIMENTAL_MENU = 'Welcome! Below are some EXPERIMENTAL options you can perform.' \
+                    '\nTo SELECT an option, please enter the corresponding number as an integer.' \
+                    '\n0) Return to Main Menu' \
+                    '\n1) Run a basic 9x9 solo game using keyboard input' \
 
 
-user_choice = - 1
-while not user_choice == 0:
-    print(MENU)
-    user_choice = int(input('Please enter your choice below!'))
 
-    if user_choice == 0:
-        sys.exit()
-    elif user_choice == 1:
-        run_game()
-        print("Ran solo game sucessfully!")
-    elif user_choice == 2:
-        ...  # Do something
-    elif user_choice == 3:
-        ...  # Do something
-    elif user_choice == 4:
-        ...  # Do something
-    elif user_choice == 5:
-        print("Please wait for a moment...")
-        print_misc_stats()
+def main_menu() -> None:
+    """the main menu of our program"""
+    user_choice = - 1
+    while not user_choice == 0:
+        print(MENU)
+        user_choice = int(input('Please enter your choice below!'))
 
-    else:
-        print("ERROR: That number was not one of our options, please try again!\n")
+        if user_choice == 0:
+            sys.exit()
+        elif user_choice == 1:
+            run_game()
+            print("Ran solo game sucessfully!")
+        elif user_choice == 2:
+            ...  # Do something
+        elif user_choice == 3:
+            ...  # Do something
+        elif user_choice == 4:
+            ...  # Do something
+        elif user_choice == 5:
+            print("Please wait for a moment...")
+            print_misc_stats()
+        elif user_choice == 6:
+            sub_menu()
+        else:
+            print("ERROR: That number was not one of our options, please try again!\n")
+
+
+def sub_menu() -> None:
+    """sub menu containing so experimental functions"""
+    user_choice = - 1
+    while not user_choice == 0:
+        print(MENU)
+        user_choice = int(input('Please enter your choice below!'))
+
+        if user_choice == 0:
+            main_menu()
+        elif user_choice == 1:
+            Runner_solo.run_game()
+            print("Ran solo game sucessfully!")
+        else:
+            print("ERROR: That number was not one of our options, please try again!\n")
+
+
+if __name__ == '__main__':
+    main_menu()
