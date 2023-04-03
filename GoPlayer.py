@@ -74,28 +74,32 @@ class RandomGoPlayer(AbstractGoPlayer):
         """
         valid_moves = []
         move_sequence = self.game.moves
-        if move_sequence !=[]:
+        if move_sequence != []:
+
             last_move = self.game.get_move_info(move_sequence[-1][1], move_sequence[-1][2])
 
             check_stone = self.board.get_stone(move_sequence[-1][1], move_sequence[-1][2])
             choices = [(check_stone.x + 1, check_stone.y), (check_stone.x - 1, check_stone.y),
                        (check_stone.x, check_stone.y + 1), (check_stone.x, check_stone.y - 1)]
-            print(last_move[1])
+
             if not any(self.board.is_valid_move(choice[0], choice[1], last_move[1]) for choice in choices):
                 for x in range(0, self.board.size):
                     for y in range(0, self.board.size):
                         if self.board.is_valid_move(x, y, last_move[1]):
-                            valid_moves += (last_move[0], x, y)
+                            valid_moves.append((last_move[0] + 1, x, y))
+                            print(valid_moves)
+
                 return random.choice(valid_moves)
             else:
+
                 coord = random.choice(choices)
                 while not self.board.is_valid_move(coord[0], coord[1], last_move[1]):
                     choices.remove(coord)
                     coord = random.choice(choices)
 
-            return (len(self.game.moves), coord[0], coord[1])
+            return (len(self.game.moves) + 1, coord[0], coord[1])
         else:
-            return (1,random.randint(0,8),random.randint(0,8))
+            return (1, random.randint(0, 8), random.randint(0, 8))
 
 
 class SlightlyBetterBlackPlayer(AbstractGoPlayer):
