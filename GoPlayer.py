@@ -95,7 +95,7 @@ class RandomGoPlayer(AbstractGoPlayer):
 
             return (len(self.game.moves), coord[0], coord[1])
         else:
-            return (random.randint(0,8),random.randint(0,8))
+            return (1,random.randint(0,8),random.randint(0,8))
 
 
 class SlightlyBetterBlackPlayer(AbstractGoPlayer):
