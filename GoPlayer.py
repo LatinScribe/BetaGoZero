@@ -62,7 +62,7 @@ class RandomGoPlayer(AbstractGoPlayer):
     """A Go player that plays randomly by choosing its next move randomly
     from empty positions in proximity the last move played"""
 
-    def __init__(self, gt: GameTree)  -> None:
+    def __init__(self, gt: GameTree) -> None:
         """Initialize this GoPlayer"""
         AbstractGoPlayer.__init__(self, gt)
 
@@ -82,7 +82,6 @@ class RandomGoPlayer(AbstractGoPlayer):
             check_stone = game.board.get_stone(move_sequence[-1][1], move_sequence[-1][2])
             choices = [(check_stone.x + 1, check_stone.y), (check_stone.x - 1, check_stone.y),
                        (check_stone.x, check_stone.y + 1), (check_stone.x, check_stone.y - 1)]
-            print(last_move[1])
 
             if not any(game.board.is_valid_move(choice[0], choice[1], last_move[1]) for choice in choices):
 
@@ -90,7 +89,6 @@ class RandomGoPlayer(AbstractGoPlayer):
                     for y in range(0, game.board.size):
                         if game.board.is_valid_move(x, y, last_move[1]):
                             valid_moves.append((last_move[0] + 1, x, y))
-
 
                 valid_moves = game.available_moves()
                 # for x in range(0, game.board.size):
@@ -128,14 +126,17 @@ class SlightlyBetterBlackPlayer(AbstractGoPlayer):
         Does not work as of now
         """
         if self.gt is not None:
-            last_move = game.moves[-1]
+            if game.moves != []:
+                last_move = game.moves[-1]
+            else:
+                return (random.randint(0, 8), random.randint(0, 8))
             if self.gt.find_subtree_by_move(last_move) is None:
                 self.gt = None  # update the subtree from previous move
             else:
                 self.gt = self.gt.find_subtree_by_move(last_move)
         if self.gt is None or self.gt.get_subtrees() == [] or (game.moves[-1] not in self.gt.get_subtrees()):
             self.gt = None
-            valid_moves = []
+
             move_sequence = game.moves
             if move_sequence != []:
 
