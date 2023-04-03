@@ -67,7 +67,7 @@ class RandomGoPlayer(AbstractGoPlayer):
         """Initialize this GoPlayer"""
         AbstractGoPlayer.__init__(self, gt)
 
-    def make_move(self, game:Game) -> tuple:
+    def make_move(self, game: Game) -> tuple:
         """This function determines how the next move should be made. It
         plays randomly by choosing its next move randomly from empty positions
         in proximity the last move played
@@ -87,9 +87,8 @@ class RandomGoPlayer(AbstractGoPlayer):
                 for x in range(0, game.board.size):
                     for y in range(0, game.board.size):
                         if game.board.is_valid_move(x, y, last_move[1]):
-                            valid_moves += (last_move[0], x, y)
+
                             valid_moves.append((last_move[0] + 1, x, y))
-                            print(valid_moves)
 
                 return random.choice(valid_moves)
             else:
@@ -99,9 +98,9 @@ class RandomGoPlayer(AbstractGoPlayer):
                     choices.remove(coord)
                     coord = random.choice(choices)
 
-            return (len(game.moves) + 1, coord[0], coord[1])
+            return (coord[0], coord[1])
         else:
-            return (1, random.randint(0, 8), random.randint(0, 8))
+            return (random.randint(0, 8), random.randint(0, 8))
 
 
 class SlightlyBetterBlackPlayer(AbstractGoPlayer):
@@ -111,7 +110,7 @@ class SlightlyBetterBlackPlayer(AbstractGoPlayer):
         """Initialize this GoPlayer"""
         AbstractGoPlayer.__init__(self, gt)
 
-    def make_move(self, game:Game) -> tuple:
+    def make_move(self, game: Game) -> tuple:
         """This function determines how the next move should be made. It
         plays the best possible move among its given choices, or randomly by choosing its next move randomly from empty
         positions in proximity the last move played if the tree is None or if it is a leaf
@@ -123,9 +122,9 @@ class SlightlyBetterBlackPlayer(AbstractGoPlayer):
             if self.gt.find_subtree_by_move(last_move) is None:
                 self.gt = None  # update the subtree from previous move
             else:
-                self.gt=self.gt.find_subtree_by_move(last_move)
+                self.gt = self.gt.find_subtree_by_move(last_move)
         if self.gt is None or self.gt.get_subtrees() == [] or (game.moves[-1] not in self.gt._subtrees):
-            self.gt = None                                             # TODO: _subtrees is private
+            self.gt = None  # TODO: _subtrees is private
             valid_moves = []
             move_sequence = game.moves
             if move_sequence != []:
@@ -140,7 +139,7 @@ class SlightlyBetterBlackPlayer(AbstractGoPlayer):
                     for x in range(0, game.board.size):
                         for y in range(0, game.board.size):
                             if game.board.is_valid_move(x, y, last_move[1]):
-                                valid_moves.append((last_move[0] + 1, x, y))
+                                valid_moves.append((x, y))
                     return random.choice(valid_moves)
                 else:
 
@@ -149,9 +148,9 @@ class SlightlyBetterBlackPlayer(AbstractGoPlayer):
                         choices.remove(coord)
                         coord = random.choice(choices)
 
-                return (len(game.moves) + 1, coord[0], coord[1])
+                return (coord[0], coord[1])
             else:
-                return (1, random.randint(0, 8), random.randint(0, 8))
+                return (random.randint(0, 8), random.randint(0, 8))
         else:
 
             max_win_prob = -99999999
@@ -160,7 +159,7 @@ class SlightlyBetterBlackPlayer(AbstractGoPlayer):
                     max_win_prob = subtree.win_probability
                     best_choice = subtree
             self.gt = best_choice  # updates GameTree to be a subtree with the best choice
-            return best_choice.move  # will not be referenced before
+            return (best_choice.move[1],best_choice.move[2])  # will not be referenced before
 
 
 class ProbabilityBaseGoplayer(AbstractGoPlayer):
