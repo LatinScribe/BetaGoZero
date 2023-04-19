@@ -142,7 +142,7 @@ updating this tree with simulations).
 the requirements. Make sure that all files and folders are in the same
 level/folder in your directory\
 It should look something like this:\
-![image](Directory_example.png){width="5cm"}\
+![image](Images/Directory_example.png){width="5cm"}\
 2) Run our main.py, follow the prompts in the python console. Please
 beware to follow the instructions carefully, as we have not implement
 try-except blocks, so unexpected inputs could result in crashes.\
