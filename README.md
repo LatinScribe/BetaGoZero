@@ -142,7 +142,7 @@ updating this tree with simulations).
 the requirements. Make sure that all files and folders are in the same
 level/folder in your directory\
 It should look something like this:\
-![image](Images/Directory_example.png){width="5cm"}\
+![image](Images/Directory_example.png)\
 2) Run our main.py, follow the prompts in the python console. Please
 beware to follow the instructions carefully, as we have not implement
 try-except blocks, so unexpected inputs could result in crashes.\
@@ -329,15 +329,15 @@ Initial Work / Github:\
 We will be using Github to coordinate our work in the group.
 
 Figure 1: End state of game reached\
-![image](Images/GoGameNoSquares.png){width="5cm"}\
+![image](Images/GoGameNoSquares.png)\
 Figure 2: Example of scoring a game\
-![image](Images/GoGameWithSquares.png){width="5cm"}\
+![image](Images/GoGameWithSquares.png)\
 Figure 3: Example of Smart Go file converted to text.\
 ![image](Images/Example_sgf.png)
 \
 \
 
-# Works Cited {#works-cited .unnumbered}
+# Works Cited 
 
 "AlphaGo." *DeepMind*,
 <https://www.deepmind.com/research/highlighted-research/alphago>.
