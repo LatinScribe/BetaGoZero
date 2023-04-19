@@ -275,7 +275,7 @@ fixed hard stopping moving. This would improve the accuracy of our game
 tree, and result in stronger Go AIs. Again, this is computationally
 intensive, but could be another future improvement to our project.
 
-# Appendix {#appendix .unnumbered}
+# Appendix 
 
 Here is some optional additional reading for extra useful and
 interesting details in our project.\
