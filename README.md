@@ -4,7 +4,7 @@
 
 Our project is centered around the domain of the game Go. Go is a two
 player board game that originated in China over 3000 years ago
-(\"AlphaGo\"). The two players - one playing with black stones, one
+(AlphaGo). The two players - one playing with black stones, one
 playing with white stones - rotate placing stones of their respective
 colour on the board, with the player with the black stones starting
 first. The objective of the game is gain more points than your opponent
@@ -17,8 +17,8 @@ Although the [rules](#sec:fn3) of the game are fairly simple, the game
 itself is complex both for players and from a computational perspective.
 On a standard 19 by 19 board, there are in fact 10 to the power of 170
 unique possible board configurations, that's more than the number of
-atoms in the known universe (\"AlphaGo\")! Hence, Go is a googol times
-more complex than chess (\"AlphaGo\").
+atoms in the known universe (AlphaGo)! Hence, Go is a googol times
+more complex than chess (AlphaGo).
 
 Henry has been playing Go for over a decade, and has represented Canada
 at the 2018 World Youth Go Championship in Germany. Henry often uses [Go
@@ -38,9 +38,9 @@ improving their play style**.
 The core of our computational strategy requires both a graph and a
 decision tree. Graphs are used to represent the board, where each vertex
 in the graph represents a unique positions on the board, with three
-possible statuses (empty, black, white). Our \"empty board\" is
+possible statuses (empty, black, white). Our "empty board" is
 pre-generated with all the valid positions on the board populated by
-\"neither\" stones which represents empty positions, with the valid
+"neither" stones which represents empty positions, with the valid
 between positions on the board preset. The result is a very
 interconnected graph that is like a network. The graph is supplemented
 with a decision tree that stores many variations of moves. Note that we
@@ -49,15 +49,15 @@ we plan on allowing the user to analyse their game using our software,
 and to return to previous moves and try out new variation without
 overwriting the original sequence. Moreover, setting it up as a decision
 tree is important for implementing a rudimentary AI, which utilises a
-pre-generated \"GameTree\" - a tree of many variations of moves - to
+pre-generated "GameTree" - a tree of many variations of moves - to
 choose the next move it should play. This tree is generated based on our
 data set of thousands of previous Go games, which keeps track of the
-\"likely hood of winning\" for each possible move. Out of curiosity and
+"likelihood of winning" for each possible move. Out of curiosity and
 for analysis purposes, we are employing two different methods for
-determining this attribute: The first method calculates a \"win rate\"
+determining this attribute: The first method calculates a "win rate"
 based purely on whether that particular sequence of moves resulted in a
-win or a lose for black. Our other implementation also considers the
-\"score\" of each sequence, in which the amount of points at which black
+win or a loss for black. Our other implementation also considers the
+"score" of each sequence, in which the amount of points at which black
 won or lost by also influences the value (see Discussion section for the
 results).
 
@@ -65,13 +65,13 @@ In addition, to reduce the computational complexity of the task, we have
 focused on implementing our project on a smaller 9 by 9 board. However,
 most of our classes/functions allow for different board sizes - such as
 19 by 19 which is the most popular. So if the user desires to test out
-larger board sizes, it will still be possible, but the trade off is that
+larger board sizes, it will still be possible, but the trade-off is that
 generating large trees requires significantly more running time for the
 user.
 
 Furthermore, to give our AI a head start during its initial training
 phase, we are using multiple data sets of thousands of real world games,
-where each game is stored as an \"sgf\" file ([Smart Go
+where each game is stored as an "sgf" file ([Smart Go
 Files](#sec:fn1)) - see Figure 3 for an example of the data (Yamashita).
 We have developed multiple algorithms to process the Smart Game Files,
 which are capable of isolating the data which we are concerned with,
@@ -80,7 +80,7 @@ size. These algorithms allow us to pre-generate large GameTrees which
 our AIs can use, and pre-generating these trees saves significant
 running time for the TA.
 
-New Python Libraries:\
+New Python Libraries:
 - *os* for parsing through and opening files:\
 The os module to manage files through python code. More specifically, we
 will use to scan for game files in a folder with os.listdir(), filtering
@@ -106,7 +106,7 @@ Used for creating (image.paste, image.draw, etc) and saving (image.save)
 
 # Dataset 
 
-\*All go games are stored as .sgf files, see appendix for more info
+Note: All go games are stored as .sgf files, see appendix for more info
 
 Go game datasets were optained from: Yamashita, Hiroshi. "Go Quest game
 records 9x9 and 13x13." - see works cited\
@@ -137,44 +137,44 @@ updating this tree with simulations).
 
 # Instructions 
 
-1\) As outlined in the project handout, download all necessary files
+1) As outlined in the project handout, download all necessary files
 (PLEASE SEE THE COURSE EMAIL FOR THE DATASETS), install all things in
 the requirements. Make sure that all files and folders are in the same
 level/folder in your directory\
 It should look something like this:\
 ![image](Images/Directory_example.png)\
 2) Run our main.py, follow the prompts in the python console. Please
-beware to follow the instructions carefully, as we have not implement
-try-except blocks, so unexpected inputs could result in crashes.\
-Break down of our functions:\
-0) Exits the program\
-1) Want to throw some stones on a board quickly, this is the function.
-We recommend running this first to get an intuition of how the game
-works. It will open a pygame window, click on the board to play moves,
-close the window to end the game, see the python console for dialogue.
-It will save and open the game as a png, where you can see the scoring
-2) This option simulates one game of tree AI against a random guesser
-(you can specify the length of the game) 3) This option simulates n
-games of tree AI against a random guesser 4) This option simulates m
-trials of n games of tree AI against a random guesser and plots the data
-5) Outputs some useful/interesting data about our data sets in the
-python console, might take some time. 6) Shows a experimental sub menu,
-you can find some extra functions here for testing which are not
-intended for users to actually use, feel free to try it.
+beware to follow the instructions carefully, as we have not implemented
+try-except blocks, so unexpected inputs could result in crashes.
+Break down of our functions:
+   1) Exits the program
+   2) Want to throw some stones on a board quickly, this is the function.
+   We recommend running this first to get an intuition of how the game
+   works. It will open a pygame window, click on the board to play moves,
+   close the window to end the game, see the python console for dialogue.
+   It will save and open the game as a png, where you can see the scoring
+   3) This option simulates one game of tree AI against a random guesser
+   (you can specify the length of the game) 3) This option simulates n
+   games of tree AI against a random guesser 4) This option simulates m
+   trials of n games of tree AI against a random guesser and plots the data
+   4) Outputs some useful/interesting data about our data sets in the
+   python console, might take some time. 6) Shows a experimental sub menu,
+   you can find some extra functions here for testing which are not
+   intended for users to actually use, feel free to try it.
 
-NOTE: be careful of the images which are only for our latex document
+Note for TA: be careful of the images which are only for our latex document
 
 # Changes 
 
 While implementing our project, we realised that our functions could not
 only analyse a singular game, but also a large set of games. For
 instance, we could examine how long games typically take to be
-completed, or what is the overall likely hood of black winning or losing
+completed, or what is the overall likelihood of black winning or losing
 based on our data set. So, we implemented additional methods to collect
 this data.
 
 While implementing our functions, we began to realise the complexity of
-the task at hand. For instance, where a \"perfect\" score calculator
+the task at hand. For instance, where a "perfect" score calculator
 might have been what we initially set out to achieve, it quickly became
 clear that it was simply computationally infeasible - in fact, there's a
 paper exploring this problem (Muller). So, we implemented a simplified
@@ -193,7 +193,7 @@ check whether a given stone is dead, instead of having to look over the
 entire board, we can simply analyse the connected neighbours of the
 stone in our graph, which reduces the complexity. Moreover, using trees
 allows us to quickly follow a sequence of moves and generate
-corresponding \"win likely hoods\", and reduces the complexity when our
+corresponding "win likelihoods", and reduces the complexity when our
 AI is selecting a move as it simply needs to examine the children of
 whichever node it is currently at. Thus, our project has shown that
 trees and graphs can be used to model Go, and this form of model does
@@ -278,8 +278,8 @@ intensive, but could be another future improvement to our project.
 # Appendix 
 
 Here is some optional additional reading for extra useful and
-interesting details in our project.\
-[]{#sec:fn3 label="sec:fn3"} Rules of the game (\"How To Play\"):\
+interesting details in our project.
+#### Rules of the game (from "How To Play"):
 1) The board is empty at the onset of the game (unless players agree to
 place a handicap).\
 2) Black makes the first move, after which White and Black alternate.\
@@ -300,7 +300,7 @@ the opponent.\
 starting first, usually 6.5 points per Japanese rule set. Note that his
 also prevents ties.\
 10) The player with the most points wins!\
-[]{#sec:fn2 label="sec:fn2"} Inspiration of the project:\
+#### Inspiration of the project:
 The primary inspiration for this project is the Alpha Go AI developed by
 Deepmind and Google (\"AlphaGo\"). However, there has yet to be perfect
 Go AI which was demonstrated a few weeks ago when an amateur player was
@@ -308,7 +308,7 @@ able to beat the current generation of Go AIs by exploiting flaws in the
 algorithm (Xiang). So, we this project does not intend to develop a
 perfect AI, but to create one that is at least statistically more
 effective than random guessing.\
-[]{#sec:fn1 label="sec:fn1"} Smart Go Files:\
+#### Smart Go Files:\
 Each game is stored as a Smart Game File (.sgf), which stores 4 rows of
 information (Hollosi). The first few rows represent the header, which
 contains basic information of the game, such as:\
@@ -325,8 +325,7 @@ Next, the lines after the header contain key-value dictionaries, which
 represent the tree of move variations in the game. This will usually
 just be one dictionary, as a game is typically played sequentially with
 only one long branch of moves. See figure 3 for an example\
-Initial Work / Github:\
-We will be using Github to coordinate our work in the group.
+##### Diagrams:
 
 Figure 1: End state of game reached\
 ![image](Images/GoGameNoSquares.png)\
@@ -334,20 +333,22 @@ Figure 2: Example of scoring a game\
 ![image](Images/GoGameWithSquares.png)\
 Figure 3: Example of Smart Go file converted to text.\
 ![image](Images/Example_sgf.png)
-\
-\
+
 
 # Works Cited 
 
 "AlphaGo." *DeepMind*,
 <https://www.deepmind.com/research/highlighted-research/alphago>.
 Accessed 7 Mar.\
-.\
 Hollosi, Arno. "SGF User Guide." *Redbean*, 12 Dec. 1999,\
 <https://www.red-bean.com/sgf/user_guide/index.html>. Accessed 7 Mar.
 2023.\
 "How to Play." *British Go Association*,\
 <https://www.britgo.org/intro/intro2.html>. Accessed 7 Mar. 2023.\
+Muller, Martin. \"Counting the Score: Position Evaluation in Computer
+Go.\" *University of Alberta*,\
+<https://webdocs.cs.ualberta.ca/~mmueller/ps/goeval.pdf>. Accessed 4
+April. 2023.\
 Rahul, Roy. "ML: Monte Carlo Tree Search (MCTS)." *GeeksforGeeks*, 5
 July 2022,\
 <https://www.geeksforgeeks.org/ml-monte-carlo-tree-search-mcts/>.
@@ -360,7 +361,3 @@ Yamashita, Hiroshi. "Go Quest game records 9x9 and 13x13." *EugeneWeb*,
 28 Dec. 2015,\
 <https://www.eugeneweb.com/pipermail/computer-go/2015-December/008353.html>.
 Accessed 7 Mar. 2023.\
-Muller, Martin. \"Counting the Score: Position Evaluation in Computer
-Go.\" *University of Alberta*,\
-<https://webdocs.cs.ualberta.ca/~mmueller/ps/goeval.pdf>. Accessed 4
-April. 2023.\
