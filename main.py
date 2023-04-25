@@ -38,7 +38,7 @@ from runner import simulate_game, simulate_games, plot_win_rate_progress
 # from Pygame_go import draw_board
 # from game import Game
 
-MENU = 'Welcome! Below are possible actions you can perform using our program.' \
+MENU = '\n\nWelcome! Below are possible actions you can perform using our program.' \
        '\nTo SELECT an option, please enter the corresponding number as an integer.' \
        '\n0) Exit the program' \
        '\n1) Run a basic solo game' \
@@ -48,7 +48,8 @@ MENU = 'Welcome! Below are possible actions you can perform using our program.' 
        '\n5) Some misc. stats about our data set' \
        '\n6) Experimental options'
 
-EXPERIMENTAL_MENU = 'Welcome! Below are some EXPERIMENTAL options you can perform.' \
+EXPERIMENTAL_MENU = '\n\nBelow are some EXPERIMENTAL options you can perform.' \
+                    '\nThese are provided for you to try out, but they may not be fully implemented'\
                     '\nTo SELECT an option, please enter the corresponding number as an integer.' \
                     '\n0) Return to Main Menu' \
                     '\n1) Run a basic 9x9 solo game using keyboard input' \
@@ -91,7 +92,7 @@ def sub_menu() -> None:
     """sub menu containing so experimental functions"""
     user_choice = - 1
     while not user_choice == 0:
-        print(MENU)
+        print(EXPERIMENTAL_MENU)
         user_choice = int(input('Please enter your choice below!'))
 
         if user_choice == 0:
