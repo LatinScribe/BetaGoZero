@@ -104,7 +104,7 @@ purposes, but was eventually phased out for our own methods which better
 fit our needs.\
 - *pygame* for outputting visuals to the user:\
 Although pygame has been covered extensively in class, we have used some
-functions for getting active events (cursor position, mouse clicks, etc)
+functions for getting active events (cursor position, mouse clicks, etc./)
 which was less covered in class.\
 - *Pillow* for manipulating images:\
 Used for creating (image.paste, image.draw, etc) and saving (image.save)
@@ -119,7 +119,7 @@ records 9x9 and 13x13." - see works cited\
 2015-Go9: Contains a data set of which originally contained some 9000
 games (board size 9x9) selected from the top 50 players online up until
 2015. We have pre-filtered any invalid games (non-complete/no score,
-resigned games, etc) where we do not have a complete game with a final
+resigned games, etc.) where we do not have a complete game with a final
 score (so the actual number of games should be less).\
 2015-Go9-small: A subset of 2015-Go9, which contains a data set of a
 couple hundred games for faster running times during testing.\
@@ -127,17 +127,17 @@ couple hundred games for faster running times during testing.\
 just 5 games for faster running times during testing.\
 2019-1255games: A data set of some 1255 games (board size 9x9) selected
 up until 2019. We have pre-filtered any invalid games (non-complete/no
-score, resigned games, etc) where we do not have a complete game with a
+score, resigned games, etc.) where we do not have a complete game with a
 final score (so the actual number of games should be less).\
 We have pre-generated using our algorithms the following GameTrees:\
 completeScoreTree.txt: A pre-generated GameTree which contains the move
-variations from our dataset of games, and the resulting \"likely hood of
+variations from our dataset of games, and the resulting \"likelihood of
 winning\" for black based on how much black won or lost by.\
 completeWinRate.txt: A pre-generated GameTree which contains the move
-variations from our dataset of games, and the resulting \"likely hood of
+variations from our dataset of games, and the resulting \"likelihood of
 winning\" for black based purely on whether black won or lost the game.\
 recalcScoreTree.txt: A pre-generated GameTree which contains the move
-variations from our dataset of games, and the resulting \"likely hood of
+variations from our dataset of games, and the resulting \"likelihood of
 winning\" for black based on how much black won or lost by (we are
 updating this tree with simulations).
 
@@ -166,7 +166,7 @@ Break down of our functions:
    games of tree AI against a random guesser 4) This option simulates m
    trials of n games of tree AI against a random guesser and plots the data
    4) Outputs some useful/interesting data about our data sets in the
-   python console, might take some time. 6) Shows a experimental sub menu,
+   python console, might take some time. 6) Shows an experimental sub menu,
    you can find some extra functions here for testing which are not
    intended for users to actually use, feel free to try it.
 
@@ -227,7 +227,7 @@ less significant than the point boost for our AIs. This is especially
 prominent when both players are random guessing, which makes sense as
 playing first should have minimal impact if you have no strategy in the
 play style. We also find that our Tree based AI wins on average more
-often than a AI that plays randomly, showing that our tree
+often than an AI that plays randomly, showing that our tree
 implementation of AI does provide an advantage.
 
 Ultimately, the most challenging component to this project is simply the
@@ -307,7 +307,7 @@ intersection on the board.\
 and removed from the board when all the intersections directly adjacent
 to it are occupied by the enemy. (Capture of the enemy takes precedence
 over self-capture.)\
-6) No stone may be played so as to recreate a former board position.\
+6) No stone may be played to recreate a former board position.\
 7) Two consecutive passes end the game. This occurs when both players
 feel there is no possible beneficial moves remaining to be played.\
 8) Using the Japanese rule set, the player's points consists of all the
