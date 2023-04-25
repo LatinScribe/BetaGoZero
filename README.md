@@ -118,7 +118,7 @@ Go game datasets were optained from: Yamashita, Hiroshi. "Go Quest game
 records 9x9 and 13x13." - see works cited\
 2015-Go9: Contains a data set of which originally contained some 9000
 games (board size 9x9) selected from the top 50 players online up until
-2015. We have pre-filtered any invalid games (non-complete/no score,
+2015\. We have pre-filtered any invalid games (non-complete/no score,
 resigned games, etc.) where we do not have a complete game with a final
 score (so the actual number of games should be less).\
 2015-Go9-small: A subset of 2015-Go9, which contains a data set of a
