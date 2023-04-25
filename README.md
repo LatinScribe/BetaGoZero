@@ -281,6 +281,15 @@ fixed hard stopping moving. This would improve the accuracy of our game
 tree, and result in stronger Go AIs. Again, this is computationally
 intensive, but could be another future improvement to our project.
 
+### Authors:
+Henry "TJ" Chen\
+Dmittri Vlasov\
+Lam Ming Yau\
+Duain Chhabra\
+
+If you like what you see, or have any suggestions for future improvements,
+feel free to let us know!
+
 # Appendix 
 
 Here is some optional additional reading for extra useful and
