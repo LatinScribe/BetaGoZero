@@ -1,5 +1,11 @@
 # Beta Go AI
 
+#### A basic Go AI developed by first-year computer science students at the University of Toronto.
+
+Welcome to our project! This page provides a comprehesive overview of our project, but feel free 
+to simply skip down to the [instructions](#instructions) to try it out!
+
+
 # Problem Description and Research Question 
 
 Our project is centered around the domain of the game Go. Go is a two
@@ -13,7 +19,7 @@ stones, and from strategically surrounding spaces of territory. Once all
 possible moves have been played, the board is scored and the player with
 the greatest number of points wins.
 
-Although the [rules](#sec:fn3) of the game are fairly simple, the game
+Although the [rules](#rules-of-the-game--from--how-to-play---) of the game are fairly simple, the game
 itself is complex both for players and from a computational perspective.
 On a standard 19 by 19 board, there are in fact 10 to the power of 170
 unique possible board configurations, that's more than the number of
@@ -22,7 +28,7 @@ more complex than chess (AlphaGo).
 
 Henry has been playing Go for over a decade, and has represented Canada
 at the 2018 World Youth Go Championship in Germany. Henry often uses [Go
-AIs](#sec:fn2) to analyse his own games, but finds that they are often
+AIs](#inspiration-of-the-project-) to analyse his own games, but finds that they are often
 slow and require significant computational resources. So, Henry wonders
 if graphs and trees can be used to represent a game of Go and reduce the
 computational complexity of analysing the game by examining the
@@ -72,7 +78,7 @@ user.
 Furthermore, to give our AI a head start during its initial training
 phase, we are using multiple data sets of thousands of real world games,
 where each game is stored as an "sgf" file ([Smart Go
-Files](#sec:fn1)) - see Figure 3 for an example of the data (Yamashita).
+Files](#smart-go-files--)) - see Figure 3 for an example of the data (Yamashita).
 We have developed multiple algorithms to process the Smart Game Files,
 which are capable of isolating the data which we are concerned with,
 primarily the sequences of moves and the result of the game and board
