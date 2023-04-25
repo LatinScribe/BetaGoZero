@@ -147,7 +147,7 @@ updating this tree with simulations).
 level/folder in your directory\
  \
 It should look something like this:\
-![image](Images/Directory_example.png)\
+![image](Images/Directory_example.png)
 2) Open with the Python editor of your choice, install all stuff'n'things in
 requirements.txt
 
