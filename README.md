@@ -143,13 +143,15 @@ updating this tree with simulations).
 
 # Instructions 
 
-1) As outlined in the project handout, download all necessary files
-(PLEASE SEE THE COURSE EMAIL FOR THE DATASETS), install all things in
-the requirements. Make sure that all files and folders are in the same
+1) Download our source code, unzip the folder. Be doubly sure that all files and folders are in the same
 level/folder in your directory\
+ \
 It should look something like this:\
 ![image](Images/Directory_example.png)\
-2) Run our main.py, follow the prompts in the python console. Please
+2) Open with the Python editor of your choice, install all stuff'n'things in
+requirements.txt
+
+3) Run our main.py, follow the prompts in the python console. Please
 beware to follow the instructions carefully, as we have not implemented
 try-except blocks, so unexpected inputs could result in crashes.
 Break down of our functions:
