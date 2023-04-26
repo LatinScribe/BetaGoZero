@@ -25,14 +25,17 @@ intend to redistribute it or use it for your own work.
 
 import sys
 import random
-from typing import Tuple
+# from typing import Tuple
 
 import pygame
 from game import Game
-from Pygame_go import draw_board, retnr_row_col, update_display, intialise_pygame
+from Pygame_go import draw_board, retnr_row_col, update_display
+# from Pygame_go import intialise_pygame
 from GameTree import GameTree
-from sgf_reader import sgf_to_game, read_all_sgf_in_folder, load_tree_from_file, save_tree_to_file
-from GoPlayer import AbstractGoPlayer, RandomGoPlayer, SlightlyBetterBlackPlayer, Fully_random, ProbabilityBaseGoplayer
+from sgf_reader import load_tree_from_file, save_tree_to_file
+# from sgf_reader import sgf_to_game, read_all_sgf_in_folder
+from GoPlayer import FullyRandom, ProbabilityBaseGoplayer
+# from GoPlayer import AbstractGoPlayer, RandomGoPlayer, SlightlyBetterBlackPlayer
 import plotly.graph_objs as go
 
 
@@ -86,9 +89,9 @@ def simulate_game(max_moves: int, game_tree: GameTree) -> tuple[Game, float]:
 
     game = Game()
 
-    random_player = Fully_random(game_tree)
+    random_player = FullyRandom(game_tree)
     ai_player = ProbabilityBaseGoplayer(game_tree)
-    for i in range(max_moves):
+    for _ in range(max_moves):
         if game.game_end(max_moves):
             break
         guess = random_player.make_move(game)
@@ -114,12 +117,14 @@ def simulate_game(max_moves: int, game_tree: GameTree) -> tuple[Game, float]:
 
 def simulate_games(n: int) -> tuple[float, float]:
     """Run n AI games and print the results"""
-    wins = []
+    # wins = []
     tree = load_tree_from_file("expiremental.txt", "tree_saves/")
     white_win_rate = 0
     black_win_rate = 0
-    for i in range(n):
-        game, win = simulate_game(50, tree)
+    for _ in range(n):
+        # game, win = simulate_game(50, tree)
+        result = simulate_game(50, tree)
+        game = result[0]
         if game.iswinner("White"):
             white_win_rate += 1
         else:
@@ -134,10 +139,11 @@ def simulate_games(n: int) -> tuple[float, float]:
 
 
 def plot_win_rate_progress(n_games: int, n_simulations: int) -> None:
+    """plot the win rate (black vs white) for given number of games and simulations"""
     black_win_rates = []
     white_win_rates = []
 
-    for i in range(1, n_simulations + 1):
+    for _ in range(1, n_simulations + 1):
         black_win_rate, white_win_rate = simulate_games(n_games)
         black_win_rates.append(black_win_rate)
         white_win_rates.append(white_win_rate)
