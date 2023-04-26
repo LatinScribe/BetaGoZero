@@ -153,24 +153,26 @@ requirements.txt
 
 3) Run our main.py, follow the prompts in the python console. Please
 beware to follow the instructions carefully, as we have not implemented
-try-except blocks, so unexpected inputs could result in crashes.
+try-except blocks, so unexpected inputs could result in crashes. <br/> <br/>
 Break down of our functions:
-   1) Exits the program
+   1) Exits the program.
    2) Want to throw some stones on a board quickly, this is the function.
    We recommend running this first to get an intuition of how the game
    works. It will open a pygame window, click on the board to play moves,
    close the window to end the game, see the python console for dialogue.
-   It will save and open the game as a png, where you can see the scoring
+   It will save and open the game as a png, where you can see the scoring.
    3) This option simulates one game of tree AI against a random guesser
-   (you can specify the length of the game) 3) This option simulates n
-   games of tree AI against a random guesser 4) This option simulates m
-   trials of n games of tree AI against a random guesser and plots the data
-   4) Outputs some useful/interesting data about our data sets in the
-   python console, might take some time. 6) Shows an experimental sub menu,
-   you can find some extra functions here for testing which are not
-   intended for users to actually use, feel free to try it.
+   (you can specify the length of the game). 
+   4) This option simulates n games of tree AI against a random guesser.
+   5) This option simulates m trials of n games of tree AI against a random 
+   guesser and plots the data.
+   6) Outputs some useful/interesting data about our data sets in the
+   python console, might take some time. 
+   7) Shows an experimental sub menu, you can find some extra functions here 
+   for testing which are not intended for users to actually use, feel free to
+   try it if interested.
 
-Note for TA: be careful of the images which are only for our latex document
+Note for TA: be careful of the images which are only for our latex document (not for Github users).
 
 # Changes 
 
