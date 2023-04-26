@@ -127,7 +127,7 @@ class Game:
     def played_moves(self) -> list[tuple[int, int]]:
         """Return a list of the moves that have been played so far in the game"""
         new_moves = []
-        for i, x, y in self.moves:
+        for _, x, y in self.moves:
             new_moves.append((x, y))
         return new_moves
 
@@ -253,8 +253,8 @@ def run_game() -> Game:
     return new_game
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
     # game = Game()
     # moves = [(0, 0), (1, 1), (0, 1), (1, 0), (0, 2), (2, 2)]
     # game.run_example(moves)
-    import python_ta
+    # import python_ta

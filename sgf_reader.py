@@ -155,6 +155,8 @@ def sgf_to_game_sequence(file_name: str, file_directory: str) -> tuple[list[tupl
                 i += 1
             return move_seq, game_score
         else:
+            print('file: ', file_directory + file_name)
+            print('it seems this file has no result')
             raise ValueError
 
 
@@ -188,6 +190,7 @@ def sgf_to_game_sequence_absolute(file_name: str, file_directory: str) -> tuple[
                 i += 1
             return move_seq, game_score
         else:
+            print('it seems this file has no result')
             raise ValueError
 
 
@@ -319,13 +322,13 @@ def sd_length_of_game_in_folder(folder_directory: str, average: float) -> float:
 
 def print_misc_stats() -> None:
     """Output miscellanious stats about our data set and the resulting trees."""
-    games_folder_path = 'DataSet/2015-Go9/'
+    preset_games_folder_path = 'DataSet/2015-Go9-processed/'
     go9folder_game_tree_relative = load_tree_from_file("completeScoreTree.txt", "tree_saves/")
     go9folder_game_tree_absolute = load_tree_from_file("CompleteWinRateTree.txt", "tree_saves/")
     go9folder_game_tree_recalculated = load_tree_from_file("RecalcScoreTree.txt", "tree_saves/")
     z_score_80 = 0.842  # for 80th percentile
-    average_game_length = average_length_of_game_in_folder(games_folder_path)
-    sd = sd_length_of_game_in_folder(games_folder_path, average_game_length)
+    average_game_length = average_length_of_game_in_folder(preset_games_folder_path)
+    sd = sd_length_of_game_in_folder(preset_games_folder_path, average_game_length)
     print(f"Average game length of our 9x9 games is {average_game_length} with the standard deviation of {sd}")
     print(f"Hence, our 80th percentile cutoff will be {average_game_length + z_score_80 * sd}")
     print("(This was used to determine the cutoff at which the AI will finish the game and then score it)")
@@ -340,6 +343,6 @@ def print_misc_stats() -> None:
 if __name__ == '__main__':
     # All of this is for debugging
     # : prints multiple times, fix when it should and should not print
-    games_folder_path = 'DataSet/2015-Go9/'
+    games_folder_path = 'DataSet/2015-Go9-processed/'
     games_folder_path_small = 'DataSet/2015-Go9-small/'
     games_folder_path_super_small = 'DataSet/2015-Go9-super-small/'

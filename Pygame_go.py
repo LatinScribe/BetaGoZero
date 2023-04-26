@@ -23,15 +23,15 @@ This file was developed as part of the course project for CSC111 Winter 2023.
 Feel free to test it out, but please contact us to obtain permission if you
 intend to redistribute it or use it for your own work.
 """
-from typing import Tuple
+# from typing import Tuple
 
 import pygame
-import sys
+# import sys
 
 from pygame import Surface, SurfaceType
 from pygame.font import Font
 
-from board import Board
+# from board import Board
 from game import Game
 
 from PIL import Image, ImageDraw
@@ -65,7 +65,7 @@ def intialise_pygame() -> tuple[Surface | SurfaceType, Font]:
     pygame.display.set_caption("Go Board")
     font = pygame.font.Font(None, 24)
 
-    return screen , font
+    return screen, font
 
 
 def retnr_row_col(x, y) -> tuple[int, int]:

@@ -129,7 +129,7 @@ class GameTree:
 
     def _insert_move_sequence_helper(self, moves: list[tuple[int, int, int]], current_index: int,
                                      probability: float) -> None:
-        """helps, hopefully"""
+        """helps, hopefully - helper function for insert_move_sequence"""
         #  add parents to trees
         if current_index == len(moves):
             self.win_probability = probability

@@ -25,7 +25,8 @@ intend to redistribute it or use it for your own work.
 """
 
 from __future__ import annotations
-from typing import Dict, Optional, Tuple
+from typing import Optional
+# rom typing import Dict, Tuple
 
 
 class Board:
@@ -231,15 +232,15 @@ class Board:
             DFS is a recursive algorithm that checks if the territory is surrounded by one color. it does not include
             the current stone in the check and only checks territory on the board."""
 
-        def dfs(x: int, y: int, visited: set) -> set[str]:
+        def dfs(x_pos: int, y_pos: int, visited: set) -> set[str]:
             """
-            Using a smilara approach from A3
+            Using a similar approach from A3
             """
-            if (x, y) in visited:  # if we have already visited this stone, return an empty set
+            if (x_pos, y_pos) in visited:  # if we have already visited this stone, return an empty set
                 return set()
-            visited.add((x, y))
+            visited.add((x_pos, y_pos))
 
-            neighbors = self.get_stone(x, y).get_neighbours()  # get the neighbours of the stone
+            neighbors = self.get_stone(x_pos, y_pos).get_neighbours()  # get the neighbours of the stone
             result = set()
             for nx, ny in neighbors:
                 if self.is_valid_coord_do(nx, ny) and (nx, ny) not in visited:
@@ -250,15 +251,15 @@ class Board:
                         result.add(stone.color)
             return result
 
-        def flood_fill(x: int, y: int, visited: set) -> set[str]:
+        def flood_fill(x_pos: int, y_pos: int, visited: set) -> set[str]:
             """
             Flood fill algorithm to determine the territory owner
             """
-            if (x, y) in visited or not self.is_valid_coord_do(x, y):
+            if (x_pos, y_pos) in visited or not self.is_valid_coord_do(x_pos, y_pos):
                 return set()
 
-            visited.add((x, y))
-            stone = self.get_stone(x, y)
+            visited.add((x_pos, y_pos))
+            stone = self.get_stone(x_pos, y_pos)
             if stone.color != "Neither":
                 return {stone.color}
 
@@ -472,4 +473,4 @@ if __name__ == '__main__':
     # (In PyCharm, select the lines below and press Ctrl/Cmd + / to toggle comments.)
     # You can use "Run file in Python Console" to run PythonTA,
     # and then also test your methods manually in the console.
-    import python_ta
+    # import python_ta

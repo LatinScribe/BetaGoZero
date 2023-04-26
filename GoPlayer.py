@@ -24,7 +24,7 @@ Feel free to test it out, but please contact us to obtain permission if you
 intend to redistribute it or use it for your own work.
 """
 
-import board
+# import board
 
 from game import Game
 import GameTree
@@ -45,7 +45,7 @@ class AbstractGoPlayer:
         raise NotImplementedError
 
 
-class Fully_random:
+class FullyRandom:
     """A Go player that plays randomly by choosing its next move randomly"""
 
     def __init__(self, gt: GameTree) -> None:
@@ -75,7 +75,7 @@ class RandomGoPlayer(AbstractGoPlayer):
         """
         valid_moves = []
         move_sequence = game.moves
-        if move_sequence != []:
+        if move_sequence:
 
             last_move = game.get_move_info(move_sequence[-1][1], move_sequence[-1][2])
 
@@ -126,7 +126,7 @@ class SlightlyBetterBlackPlayer(AbstractGoPlayer):
         Does not work as of now
         """
         if self.gt is not None:
-            if game.moves != []:
+            if game.moves:
                 last_move = game.moves[-1]
             else:
                 return (random.randint(0, 8), random.randint(0, 8))
@@ -138,7 +138,7 @@ class SlightlyBetterBlackPlayer(AbstractGoPlayer):
             self.gt = None
 
             move_sequence = game.moves
-            if move_sequence != []:
+            if move_sequence:
 
                 last_move = game.get_move_info(move_sequence[-1][1], move_sequence[-1][2])
 
@@ -164,9 +164,11 @@ class SlightlyBetterBlackPlayer(AbstractGoPlayer):
             else:
                 return (random.randint(0, 8), random.randint(0, 8))
         else:
-
-            max_win_prob = -99999999
-            for subtree in self.gt.get_subtrees():
+            subtrees = self.gt.get_subtrees()
+            best_choice = subtrees[0]
+            max_win_prob = best_choice.win_probability
+            for i in range(1, len(subtrees)):
+                subtree = subtrees[i]
                 if subtree.win_probability > max_win_prob:
                     max_win_prob = subtree.win_probability
                     best_choice = subtree
@@ -222,7 +224,10 @@ class ProbabilityBaseGoplayer(AbstractGoPlayer):
 
 
 if __name__ == '__main__':
-    import sgf_reader
+    import doctest
+    doctest.testmod(verbose=True)
+
+    # import sgf_reader
 
     # gametree = None
     # game = Game()
@@ -232,7 +237,3 @@ if __name__ == '__main__':
     # game = Game(None, 'Black', test_seq)
     # ai = RandomGoPlayer(gametree, game)
     # print(ai.make_move())
-    if __name__ == '__main__':
-        import doctest
-
-        doctest.testmod(verbose=True)
