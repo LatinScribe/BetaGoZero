@@ -84,7 +84,11 @@ def run_game() -> None:
 
 def simulate_game(max_moves: int, game_tree: GameTree) -> tuple[Game, float]:
     """
-    Run the part of the project that calculates the score of a game
+    Similates a game of Go with the given max moves and pregenerated GameTree
+
+    Notes:
+        Black is a Random guessing AI
+        White is a tree based probability AI
     """
 
     game = Game()
@@ -116,7 +120,12 @@ def simulate_game(max_moves: int, game_tree: GameTree) -> tuple[Game, float]:
 
 
 def simulate_games(n: int) -> tuple[float, float]:
-    """Run n AI games and print the results"""
+    """Run n AI games and print the results
+
+    Notes:
+        Black is a Random guessing AI
+        White is a tree based probability AI
+    """
     # wins = []
     tree = load_tree_from_file("expiremental.txt", "tree_saves/")
     white_win_rate = 0
@@ -139,7 +148,12 @@ def simulate_games(n: int) -> tuple[float, float]:
 
 
 def plot_win_rate_progress(n_games: int, n_simulations: int) -> None:
-    """plot the win rate (black vs white) for given number of games and simulations"""
+    """plot the win rate (black vs white) for given number of games and simulations
+
+    Notes:
+        Black is a Random guessing AI
+        White is a tree based probability AI
+    """
     black_win_rates = []
     white_win_rates = []
 

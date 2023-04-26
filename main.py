@@ -42,9 +42,9 @@ MENU = '\n\nWelcome! Below are possible actions you can perform using our progra
        '\nTo SELECT an option, please enter the corresponding number as an integer.' \
        '\n0) Exit the program' \
        '\n1) Run a basic solo game' \
-       '\n2) Run a simulattion of one game of tree AI against a random guesse'\
-       '\n3) Simulate n games of tree AI against a random guesser ' \
-       '\n4) simulates m trials of n games of tree AI against a random guesser and plots the data ' \
+       '\n2) Run a simulation of one game of tree AI (white) against a random guesser (black)'\
+       '\n3) Simulate n games of tree AI (white) against a random guesser (black)' \
+       '\n4) simulates m trials of n games of tree AI (white) against a random guesser (black) and plots the data ' \
        '\n5) Some misc. stats about our data set' \
        '\n6) Experimental options'
 
@@ -89,7 +89,7 @@ def main_menu() -> None:
 
 
 def sub_menu() -> None:
-    """sub menu containing so experimental functions"""
+    """sub menu containing some experimental functions"""
     user_choice = - 1
     while not user_choice == 0:
         print(EXPERIMENTAL_MENU)
