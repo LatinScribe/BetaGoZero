@@ -287,7 +287,7 @@ intensive, but could be another future improvement to our project.
 Henry "TJ" Chen\
 Dmittri Vlasov\
 Lam Ming Yau\
-Duain Chhabra\
+Duain Chhabra
 
 If you like what you see, or have any suggestions for future improvements,
 feel free to let us know!
