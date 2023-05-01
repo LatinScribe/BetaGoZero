@@ -144,12 +144,12 @@ def update_display(game: Game, territory: bool = False, technique: str = "flood_
     pygame.display.flip()
 
 
-def draw_board(given_board: Board, save_path: str = "Game_result/example.jpg", open_in_browser: bool = False,
+def draw_board(given_board: Board, save_path: str = "Game_images/saved_board.jpg", open_in_browser: bool = False,
                territory: bool = False, technique: str = "flood_fill") -> None:
     """
     Generates a visualisation of the given board and saves it as a jpg file to the designated location.
 
-    Defaults to saving in the Game_results folder as example.jpg
+    Defaults to saving in the Game_images folder as saved_board.jpg
 
     The user can specify whether to open the image in their browser, default to not open it
     """
@@ -195,7 +195,7 @@ def draw_board(given_board: Board, save_path: str = "Game_result/example.jpg", o
             image.paste(rect, (padding + x * cell_size - square_size // 2, padding + y * cell_size - square_size // 2),
                         rect)
 
-    # save_path = "Game_result" + save_path
+    # save_path = "Game_images" + save_path
     image.save(save_path)
 
     if open_in_browser:
