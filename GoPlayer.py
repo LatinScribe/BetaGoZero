@@ -25,20 +25,22 @@ intend to redistribute it or use it for your own work.
 """
 
 # import board
-
+import sys
+import pygame
 from game import Game
 import GameTree
 import random
+from Pygame_go import draw_board, return_row_col, update_display
 
 
-class AbstractGoPlayer:
+class GoPlayer:
     """An abstract class for different algorithms to play Go"""
     gt: GameTree
 
     def __init__(self, gt: GameTree) -> None:
         self.gt = gt
 
-    def make_move(self, game) -> None:
+    def make_move(self, game) -> tuple[int, int]:
         """This function will determine how the algorithm chooses the
         next move to play
         """
@@ -51,22 +53,65 @@ class FullyRandom:
     def __init__(self, gt: GameTree) -> None:
         self.gt = gt
 
-    def make_move(self, game: Game) -> tuple:
+    def make_move(self, game: Game) -> tuple[int, int]:
         """This function determines how the next move should be made. It
         plays randomly by choosing its next move randomly from empty positions
         """
         return random.choice(game.available_moves())
 
 
-class RandomGoPlayer(AbstractGoPlayer):
+class UserGoPlayer(GoPlayer):
+    """A Go player that allows the user to play a move on the board by clicking"""
+
+    def __init__(self, gt: GameTree) -> None:
+        GoPlayer.__init__(self, gt)
+
+    def make_move(self, game) -> tuple[int, int]:
+        """makes move based on where the user clicks """
+        new_game = game
+
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:  # if the user clicks the close button
+                    print("Black captured:", new_game.black_captured)
+                    print("White captured:", new_game.white_captured)
+                    win = new_game.overall_score("dfs")
+                    if new_game.iswinner("White"):
+                        print("white wins by", win[0] - win[1])
+
+                    elif new_game.iswinner("Black"):
+                        print("black wins by", win[1] - win[0])
+                    else:
+                        print("tie")
+
+                    draw_board(new_game.board, "go2434.jpg", True, True)
+                    sys.exit()
+                elif event.type == pygame.MOUSEBUTTONDOWN:  # if the user clicks the mouse
+                    x, y = event.pos
+                    row, col = return_row_col(x, y)
+
+                    if len(new_game.moves) % 2 == 0:
+                        color = "Black"
+                    else:
+                        color = "White"
+
+                    if 0 <= row < 9 and 0 <= col < 9 and (row, col) and new_game.board.is_valid_move(row, col, color):
+                        print((len(new_game.moves) + 1, row, col))
+                        print("coordinates: ", row, col)
+                        return (row, col)
+                    else:
+                        print("Invalid move")
+
+
+class RandomGoPlayer(GoPlayer):
     """A Go player that plays randomly by choosing its next move randomly
     from empty positions in proximity the last move played"""
 
     def __init__(self, gt: GameTree) -> None:
         """Initialize this GoPlayer"""
-        AbstractGoPlayer.__init__(self, gt)
+        GoPlayer.__init__(self, gt)
 
-    def make_move(self, game: Game) -> tuple:
+    def make_move(self, game: Game) -> tuple[int, int]:
         """This function determines how the next move should be made. It
         plays randomly by choosing its next move randomly from empty positions
         in proximity the last move played
@@ -109,14 +154,14 @@ class RandomGoPlayer(AbstractGoPlayer):
             return (random.randint(0, 8), random.randint(0, 8))
 
 
-class SlightlyBetterBlackPlayer(AbstractGoPlayer):
+class SlightlyBetterBlackPlayer(GoPlayer):
     """A Go AI that makes the best move given in its subtree."""
 
     def __init__(self, gt: GameTree) -> None:
         """Initialize this GoPlayer"""
-        AbstractGoPlayer.__init__(self, gt)
+        GoPlayer.__init__(self, gt)
 
-    def make_move(self, game: Game) -> tuple:
+    def make_move(self, game: Game) -> tuple[int, int]:
         """This function determines how the next move should be made. It
         plays the best possible move among its given choices, or randomly by choosing its next move randomly from empty
         positions in proximity the last move played if the tree is None or if it is a leaf
@@ -176,14 +221,14 @@ class SlightlyBetterBlackPlayer(AbstractGoPlayer):
             return (best_choice.move[1], best_choice.move[2])  # will not be referenced before
 
 
-class ProbabilityBaseGoplayer(AbstractGoPlayer):
+class ProbabilityBaseGoplayer(GoPlayer):
     """A Go AI that makes the best move given in its subtree and its score probability."""
 
     def __init__(self, gt: GameTree) -> None:
         """Initialize this GoPlayer"""
-        AbstractGoPlayer.__init__(self, gt)
+        GoPlayer.__init__(self, gt)
 
-    def make_move(self, game: Game) -> tuple:
+    def make_move(self, game: Game) -> tuple[int, int]:
         """ This function determines how the next move should be made.
         It moves forward to the last move on the tree, then chooses a move based on the probability of that move,
         and follows the tree to make a random move."""
@@ -220,7 +265,7 @@ class ProbabilityBaseGoplayer(AbstractGoPlayer):
                 possible_moves = game.available_moves()
                 return random.choice(list(possible_moves))
 
-            return self.gt.move
+            return (self.gt.move[1], self.gt.move[2])
 
 
 if __name__ == '__main__':

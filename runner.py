@@ -27,15 +27,15 @@ import sys
 import random
 # from typing import Tuple
 
-import pygame
+# import pygame
 from game import Game
-from Pygame_go import draw_board, retnr_row_col, update_display
-# from Pygame_go import intialise_pygame
+from Pygame_go import draw_board, return_row_col, update_display
+from Pygame_go import initialise_display, update_display
 from GameTree import GameTree
 from sgf_reader import load_tree_from_file, save_tree_to_file
 # from sgf_reader import sgf_to_game, read_all_sgf_in_folder
 from GoPlayer import FullyRandom, ProbabilityBaseGoplayer
-# from GoPlayer import AbstractGoPlayer, RandomGoPlayer, SlightlyBetterBlackPlayer
+from GoPlayer import GoPlayer, RandomGoPlayer, SlightlyBetterBlackPlayer, UserGoPlayer
 import plotly.graph_objs as go
 
 
@@ -45,41 +45,80 @@ def run_game() -> None:
     prompts user to input the moves
     returns the newly created game
     """
-    new_game = Game()
+    print("Please wait for a moment...")
+    tree = load_tree_from_file("expiremental.txt", "tree_saves/")
 
-    update_display(new_game)
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:  # if the user clicks the close button
-                print("Black captured:", new_game.black_captured)
-                print("White captured:", new_game.white_captured)
-                win = new_game.overall_score("dfs")
-                if new_game.iswinner("White"):
-                    print("white wins by", win[0] - win[1])
+    size = int(input('Please select a board size! Enter 9, 13, or 19'))
 
-                elif new_game.iswinner("Black"):
-                    print("black wins by", win[1] - win[0])
-                else:
-                    print("tie")
+    if not (size == 9 or size == 13 or size == 19):
+        print('Defaulting to size 9')
+        size = 9
 
-                draw_board(new_game.board, "go2434.jpg", True, True)
-                sys.exit()
-            elif event.type == pygame.MOUSEBUTTONDOWN:  # if the user clicks the mouse
-                x, y = event.pos
-                row, col = retnr_row_col(x, y)
+    user_selection = input('\n\nNow, select a setting for the BLACK player'
+                           '\nTo SELECT an option, please enter the corresponding number as an integer.'
+                           '\n0) UserPlayer: YOU play as the player'
+                           '\n1) TreeAI: Play against our tree AI'
+                           '\n2) RandomAI: Play against an AI that guesses randomly'
+                           )
+    if user_selection == '0':
+        black_player = UserGoPlayer(tree)
+    elif user_selection == '1':
+        black_player = ProbabilityBaseGoplayer(tree)
+    elif user_selection == '2':
+        black_player = RandomGoPlayer
+    else:
+        print('This was not a valid choice. Defaulting to UserPlayer')
+        black_player = UserGoPlayer(tree)
 
-                if len(new_game.moves) % 2 == 0:
-                    color = "Black"
-                else:
-                    color = "White"
+    user_selection = input('\n\nNow, select a setting for the WHITE player'
+                           '\nTo SELECT an option, please enter the corresponding number as an integer.'
+                           '\n0) UserPlayer: YOU play as the player'
+                           '\n1) TreeAI: Play against our tree AI'
+                           '\n2) RandomAI: Play against an AI that guesses randomly'
+                           )
 
-                if 0 <= row < 9 and 0 <= col < 9 and (row, col) and new_game.board.is_valid_move(row, col, color):
-                    print((len(new_game.moves) + 1, row, col))
-                    print("coordinates: ", row, col)
-                    new_game.play_move(row, col)
-                    update_display(new_game)
-                else:
-                    print("Invalid move")
+    if user_selection == '0':
+        white_player = UserGoPlayer(tree)
+    elif user_selection == '1':
+        white_player = ProbabilityBaseGoplayer(tree)
+    elif user_selection == '2':
+        white_player = RandomGoPlayer
+    else:
+        print('This was not a valid choice. Defaulting to UserPlayer')
+        white_player = UserGoPlayer(tree)
+
+    run_game_players(black_player, white_player, size)
+
+
+def run_game_players(b_player: GoPlayer, w_player: GoPlayer, board_size: int = 9) -> None:
+    """Runs a game of Go using the selected players types and board_size"""
+    new_game = Game(size=board_size)
+    display = initialise_display(new_game)
+
+    if isinstance(b_player, UserGoPlayer) or isinstance(w_player, UserGoPlayer):
+        while True:
+            if len(new_game.moves) % 2 == 0:
+                x, y = b_player.make_move(new_game)
+                new_game.play_move(x, y)
+                update_display(display, new_game)
+            else:
+                x, y = w_player.make_move(new_game)
+                new_game.play_move(x, y)
+                update_display(display, new_game)
+
+    else:
+        while len(new_game.moves) <= 90:
+            if len(new_game.moves) % 2 == 0:
+                x, y = b_player.make_move(new_game)
+                new_game.play_move(x, y)
+
+                update_display(display, new_game, pause=True)
+            else:
+                x, y = w_player.make_move(new_game)
+                new_game.play_move(x, y)
+                update_display(display, new_game, pause=True)
+
+        update_display(display, new_game, territory=True, pause=True)
 
 
 def simulate_game(max_moves: int, game_tree: GameTree) -> tuple[Game, float]:
@@ -175,6 +214,51 @@ def plot_win_rate_progress(n_games: int, n_simulations: int) -> None:
     # pio.write_image(fig, 'win_rate_progression.png')
 
     fig.show()
+
+
+def old_run_game() -> None:
+    """Run a basic Go game
+
+        prompts user to input the moves
+        returns the newly created game
+
+        DEFUNCT: NO LONGER IN USE
+        """
+    new_game = Game()
+
+    # update_display(new_game)
+    # while True:
+    #     for event in pygame.event.get():
+    #         if event.type == pygame.QUIT:  # if the user clicks the close button
+    #             print("Black captured:", new_game.black_captured)
+    #             print("White captured:", new_game.white_captured)
+    #             win = new_game.overall_score("dfs")
+    #             if new_game.iswinner("White"):
+    #                 print("white wins by", win[0] - win[1])
+    #
+    #             elif new_game.iswinner("Black"):
+    #                 print("black wins by", win[1] - win[0])
+    #             else:
+    #                 print("tie")
+    #
+    #             draw_board(new_game.board, "go2434.jpg", True, True)
+    #             sys.exit()
+    #         elif event.type == pygame.MOUSEBUTTONDOWN:  # if the user clicks the mouse
+    #             x, y = event.pos
+    #             row, col = return_row_col(x, y)
+    #
+    #             if len(new_game.moves) % 2 == 0:
+    #                 color = "Black"
+    #             else:
+    #                 color = "White"
+    #
+    #             if 0 <= row < 9 and 0 <= col < 9 and (row, col) and new_game.board.is_valid_move(row, col, color):
+    #                 print((len(new_game.moves) + 1, row, col))
+    #                 print("coordinates: ", row, col)
+    #                 new_game.play_move(row, col)
+    #                 update_display(new_game)
+    #             else:
+    #                 print("Invalid move")
 
 
 if __name__ == "__main__":

@@ -41,7 +41,7 @@ from runner import simulate_game, simulate_games, plot_win_rate_progress
 MENU = '\n\nWelcome! Below are possible actions you can perform using our program.' \
        '\nTo SELECT an option, please enter the corresponding number as an integer.' \
        '\n0) Exit the program' \
-       '\n1) Run a basic solo game' \
+       '\n1) Run a game of Go - simply follow the instructions to set up the game' \
        '\n2) Run a simulation of one game of tree AI (white) against a random guesser (black)'\
        '\n3) Simulate n games of tree AI (white) against a random guesser (black)' \
        '\n4) simulates m trials of n games of tree AI (white) against a random guesser (black) and plots the data ' \

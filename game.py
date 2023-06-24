@@ -20,12 +20,13 @@ work.
 Copyright and Usage Information
 ===============================
 
-This file was developed as part of the course project for CSC111 Winter 2023.
+This file was developed as part of the course project for CSC11 1 Winter 2023.
 Feel free to test it out, but please contact us to obtain permission if you
 intend to redistribute it or use it for your own work.
 """
 from board import Board
 from typing import Optional
+
 
 
 class Game:
