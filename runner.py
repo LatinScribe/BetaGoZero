@@ -20,21 +20,11 @@ See README file for instructions, project details, and the relevant copyright an
 """
 
 import random
-<<<<<<< Updated upstream
-# from typing import Tuple
-
-import pygame
-from game import Game
-from Pygame_go import draw_board, retnr_row_col, update_display
-# from Pygame_go import intialise_pygame
-from GameTree import GameTree
-=======
 from game import Game
 from pygame_go import initialise_display, update_display
 from gametree import GameTree
->>>>>>> Stashed changes
 from sgf_reader import load_tree_from_file, save_tree_to_file
-from go_player import FullyRandom, ProbabilityBaseGoplayer, GoPlayer, BetterRandomGoPlayer, UserGoPlayer
+from go_player import FullyRandom, ProbabilityBaseGoplayer, GoPlayer, FullyRandom, UserGoPlayer
 import plotly.graph_objs as g_obj
 
 # import sys
@@ -42,72 +32,24 @@ import plotly.graph_objs as g_obj
 # import pygame
 # from Pygame_go import draw_board, return_row_col, update_display
 # from sgf_reader import sgf_to_game, read_all_sgf_in_folder
-<<<<<<< Updated upstream
-from GoPlayer import FullyRandom, ProbabilityBaseGoplayer
-# from GoPlayer import AbstractGoPlayer, RandomGoPlayer, SlightlyBetterBlackPlayer
-import plotly.graph_objs as go
-=======
 # from GoPlayer import SlightlyBetterBlackPlayer
->>>>>>> Stashed changes
 
 
 def run_game() -> None:
-    """Run a game of Go.
+    """Run a basic Go game
 
-    Prompts user to select the settings to set up the game.
-
-    Currently recommended settings: board size 9
+    prompts user to input the moves
+    returns the newly created game
     """
-<<<<<<< Updated upstream
-    new_game = Game()
-
-    update_display(new_game)
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:  # if the user clicks the close button
-                print("Black captured:", new_game.black_captured)
-                print("White captured:", new_game.white_captured)
-                win = new_game.overall_score("dfs")
-                if new_game.iswinner("White"):
-                    print("white wins by", win[0] - win[1])
-
-                elif new_game.iswinner("Black"):
-                    print("black wins by", win[1] - win[0])
-                else:
-                    print("tie")
-
-                draw_board(new_game.board, "go2434.jpg", True, True)
-                sys.exit()
-            elif event.type == pygame.MOUSEBUTTONDOWN:  # if the user clicks the mouse
-                x, y = event.pos
-                row, col = retnr_row_col(x, y)
-
-                if len(new_game.moves) % 2 == 0:
-                    color = "Black"
-                else:
-                    color = "White"
-
-                if 0 <= row < 9 and 0 <= col < 9 and (row, col) and new_game.board.is_valid_move(row, col, color):
-                    print((len(new_game.moves) + 1, row, col))
-                    print("coordinates: ", row, col)
-                    new_game.play_move(row, col)
-                    update_display(new_game)
-                else:
-                    print("Invalid move")
-=======
-    # load the pregenerated game tree from save file
     print("Please wait for a moment...")
     tree = load_tree_from_file("RecalcScoreTree.txt", "tree_saves/")
 
-    # get the users choice of board size
     size = int(input('Please select a board size! Enter 9, 13, or 19'))
 
-    # default to size 9 for other input
     if not (size == 9 or size == 13 or size == 19):
         print('Defaulting to size 9')
         size = 9
 
-    # get user selection for black player and set it accordingly
     user_selection = input('\n\nNow, select a setting for the BLACK player'
                            '\nTo SELECT an option, please enter the corresponding number as an integer.'
                            '\n0) UserPlayer: YOU play as the player'
@@ -124,7 +66,6 @@ def run_game() -> None:
         print('This was not a valid choice. Defaulting to UserPlayer')
         black_player = UserGoPlayer(tree)
 
-    # get user selection for white player and set it accordingly
     user_selection = input('\n\nNow, select a setting for the WHITE player'
                            '\nTo SELECT an option, please enter the corresponding number as an integer.'
                            '\n0) UserPlayer: YOU play as the player'
@@ -150,7 +91,6 @@ def run_game_players(b_player: GoPlayer, w_player: GoPlayer, board_size: int = 9
     new_game = Game(size=board_size)
     display = initialise_display(new_game)
 
-    # if at least one player is the user, run without a pause
     if isinstance(b_player, UserGoPlayer) or isinstance(w_player, UserGoPlayer):
         while True:
             if len(new_game.moves) % 2 == 0:
@@ -163,7 +103,6 @@ def run_game_players(b_player: GoPlayer, w_player: GoPlayer, board_size: int = 9
                 update_display(display, new_game)
 
     else:
-        # since both players are AI, run with a slight pause to prevent rapid flashing
         while len(new_game.moves) <= 65:
             if len(new_game.moves) % 2 == 0:
                 x, y = b_player.make_move(new_game)
@@ -176,7 +115,6 @@ def run_game_players(b_player: GoPlayer, w_player: GoPlayer, board_size: int = 9
                 update_display(display, new_game, pause=True)
 
         update_display(display, new_game, territory=True, pause=True)
->>>>>>> Stashed changes
 
 
 def simulate_game(max_moves: int, game_tree: GameTree) -> tuple[Game, float]:
@@ -276,8 +214,6 @@ def plot_win_rate_progress(n_games: int, n_simulations: int) -> None:
     fig.show()
 
 
-<<<<<<< Updated upstream
-=======
 def old_run_game() -> None:
     """Run a basic Go game
 
@@ -322,7 +258,6 @@ def old_run_game() -> None:
     #                 print("Invalid move")
 
 
->>>>>>> Stashed changes
 if __name__ == "__main__":
     # nwp = simulate_game(30)
     # draw_board(nwp.board, "go2434.jpg", True, True)

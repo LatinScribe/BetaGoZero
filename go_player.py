@@ -20,27 +20,13 @@ implementations of algorithms designed to play Go.
 See README file for instructions, project details, and the relevant copyright and usage information
 """
 
-<<<<<<< Updated upstream:GoPlayer.py
-# import board
-
-=======
 import sys
 import pygame
->>>>>>> Stashed changes:go_player.py
 from game import Game
 from gametree import GameTree
 import random
-<<<<<<< Updated upstream:GoPlayer.py
-
-
-class AbstractGoPlayer:
-    """An abstract class for different algorithms to play Go"""
-    gt: GameTree
-=======
 from pygame_go import draw_board, return_row_col
 from typing import Optional
-
-# import board
 
 
 class GoPlayer:
@@ -50,13 +36,12 @@ class GoPlayer:
         - gt: the gametree which the player uses
     """
     gt: Optional[GameTree]
->>>>>>> Stashed changes:go_player.py
 
     def __init__(self, gt: GameTree) -> None:
         """initialise this go player with the given game tree"""
         self.gt = gt
 
-    def make_move(self, game) -> None:
+    def make_move(self, game) -> tuple[int, int]:
         """This function will determine how the algorithm chooses the
         next move to play based on the current state of the game
         """
@@ -79,9 +64,6 @@ class FullyRandom(GoPlayer):
         return random.choice(game.available_moves())
 
 
-<<<<<<< Updated upstream:GoPlayer.py
-class RandomGoPlayer(AbstractGoPlayer):
-=======
 class UserGoPlayer(GoPlayer):
     """A Go player that allows the user to play a move on the board by clicking
 
@@ -130,18 +112,12 @@ class UserGoPlayer(GoPlayer):
 
 
 class BetterRandomGoPlayer(GoPlayer):
->>>>>>> Stashed changes:go_player.py
     """A Go player that plays randomly by choosing its next move randomly
     from empty positions in proximity the last move played"""
 
     def __init__(self, gt: GameTree) -> None:
-<<<<<<< Updated upstream:GoPlayer.py
-        """Initialize this GoPlayer"""
-        AbstractGoPlayer.__init__(self, gt)
-=======
         """Initialize this GoPlayer with the given game tree"""
         GoPlayer.__init__(self, gt)
->>>>>>> Stashed changes:go_player.py
 
     def make_move(self, game: Game) -> tuple:
         """This function determines how the next move should be made. It
@@ -186,12 +162,12 @@ class BetterRandomGoPlayer(GoPlayer):
             return (random.randint(0, 8), random.randint(0, 8))
 
 
-class SlightlyBetterBlackPlayer(AbstractGoPlayer):
+class SlightlyBetterBlackPlayer(GoPlayer):
     """A Go AI that makes the best move given in its subtree."""
 
     def __init__(self, gt: GameTree) -> None:
         """Initialize this GoPlayer"""
-        AbstractGoPlayer.__init__(self, gt)
+        GoPlayer.__init__(self, gt)
 
     def make_move(self, game: Game) -> tuple:
         """This function determines how the next move should be made. It
@@ -253,14 +229,14 @@ class SlightlyBetterBlackPlayer(AbstractGoPlayer):
             return (best_choice.move[1], best_choice.move[2])  # will not be referenced before
 
 
-class ProbabilityBaseGoplayer(AbstractGoPlayer):
+class ProbabilityBaseGoplayer(GoPlayer):
     """A Go AI that makes the best move given in its subtree and its score probability."""
 
     def __init__(self, gt: GameTree) -> None:
         """Initialize this GoPlayer"""
-        AbstractGoPlayer.__init__(self, gt)
+        GoPlayer.__init__(self, gt)
 
-    def make_move(self, game: Game) -> tuple:
+    def make_move(self, game: Game) -> tuple[int, int]:
         """ This function determines how the next move should be made.
         It moves forward to the last move on the tree, then chooses a move based on the probability of that move,
         and follows the tree to make a random move."""
@@ -297,7 +273,7 @@ class ProbabilityBaseGoplayer(AbstractGoPlayer):
                 possible_moves = game.available_moves()
                 return random.choice(list(possible_moves))
 
-            return self.gt.move
+            return (self.gt.move[1], self.gt.move[2])
 
 
 if __name__ == '__main__':
