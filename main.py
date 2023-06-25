@@ -73,7 +73,7 @@ def main_menu() -> None:
         elif user_choice == 2:
             max_game_len = int(
                 input('Please enter your choice of max number of moves per game (50-67 is recommended):'))
-            simulate_game(max_game_len, load_tree_from_file("completeScoreTree.txt", "tree_saves/"))
+            simulate_game(max_game_len, load_tree_from_file("completeWinRateTree.txt", "tree_saves/"))
         elif user_choice == 3:
             n = int(input('Please enter your choice of the number of games simulated:'))
             simulate_games(n)

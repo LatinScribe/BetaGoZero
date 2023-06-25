@@ -40,7 +40,7 @@ NUMBER_OFFSET = 20
 MARGIN = 50
 
 # edit this as nesscary for waiting when both players are AI
-WAIT_TIME = 800
+WAIT_TIME = 400
 
 # Colors
 WHITE = (255, 255, 255)

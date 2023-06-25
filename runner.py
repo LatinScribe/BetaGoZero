@@ -24,7 +24,7 @@ from game import Game
 from pygame_go import initialise_display, update_display
 from gametree import GameTree
 from sgf_reader import load_tree_from_file, save_tree_to_file
-from go_player import FullyRandom, ProbabilityBaseGoplayer, GoPlayer, FullyRandom, UserGoPlayer
+from go_player import ProbabilityBaseGoplayer, GoPlayer, FullyRandom, UserGoPlayer
 import plotly.graph_objs as g_obj
 
 # import sys
@@ -162,7 +162,7 @@ def simulate_games(n: int) -> tuple[float, float]:
         White is a tree based probability AI
     """
     # wins = []
-    tree = load_tree_from_file("expiremental.txt", "tree_saves/")
+    tree = load_tree_from_file("experimental.txt", "tree_saves/")
     white_win_rate = 0
     black_win_rate = 0
     for _ in range(n):
@@ -175,7 +175,7 @@ def simulate_games(n: int) -> tuple[float, float]:
             black_win_rate += 1
         tree.insert_game_into_tree_absolute(game)
 
-    save_tree_to_file(tree, "expiremental.txt", "tree_saves/")
+    save_tree_to_file(tree, "experimental.txt", "tree_saves/")
     print("black win rate:", black_win_rate / n)
     print("white win rate:", white_win_rate / n)
 

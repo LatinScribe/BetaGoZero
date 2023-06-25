@@ -346,3 +346,12 @@ if __name__ == '__main__':
     games_folder_path = 'DataSet/2015-Go9-processed/'
     games_folder_path_small = 'DataSet/2015-Go9-small/'
     games_folder_path_super_small = 'DataSet/2015-Go9-super-small/'
+
+    # resetting all the files:
+    # tree = sgf_folder_to_tree(games_folder_path)
+    # save_tree_to_file(tree, 'experimental.txt', 'tree_saves/')
+    # save_tree_to_file(tree, 'completeScoreTree.txt', 'tree_saves/')
+    # tree1 = sgf_folder_to_tree_recalc_win_score(games_folder_path)
+    # save_tree_to_file(tree, 'RecalcScoreTree.txt', 'tree_saves/')
+    # tree2 = sgf_folder_to_tree(games_folder_path, True)
+    # save_tree_to_file(tree2, 'CompleteWinRateTree.txt', 'tree_saves/')
