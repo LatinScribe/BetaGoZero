@@ -1,14 +1,15 @@
-"""Beta-Go: Course project for CSC111 Winter 2023
+"""Beta-Go-Zero: AI for playing Go built with python
 
-Authors:
+Author:
+Henry "TJ" Chen
+
+Original project by:
 Henry "TJ" Chen
 Dmitrii Vlasov
 Ming Yau (Oscar) Lam
 Duain Chhabra
 
-Date: April 3, 2023
-
-Version: pre-Alpha
+Version: 1.3
 
 Module Description
 ==================
@@ -17,15 +18,10 @@ This module contains python function to run a basic Go game on a 9x9 board game
 This is a solo mode, where the user places stones on the board, the finished game
 is saved as a png and outputted to the user
 
-Copyright and Usage Information
-===============================
-
-This file was developed as part of the course project for CSC111 Winter 2023.
-Feel free to test it out, but please contact us to obtain permission if you
-intend to redistribute it or use it for your own work.
+See README file for instructions, project details, and the relevant copyright and usage information
 """
 from game import Game
-from Pygame_go import draw_board
+from pygame_go import draw_board
 
 
 def run_game() -> Game:
@@ -58,3 +54,5 @@ def run_game() -> Game:
     draw_board(new_game.board, "Game_result/runner_example.jpg", True)
 
     return new_game
+
+# def run_ai_game

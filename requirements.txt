@@ -1,9 +1,9 @@
 
-hypothesis
-pytest
-python-ta~=2.4.2
+hypothesis>=6.79.2
+pytest>=7.4.0
+python-ta>=2.4.2
 
 # Graphics and data visualization
-plotly>=5.8,<5.9
+plotly>=5.8
 pygame
-Pillow
+Pillow>=9.5.0

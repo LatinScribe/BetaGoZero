@@ -1,14 +1,15 @@
-"""Beta-Go: Course project for CSC111 Winter 2023
+"""Beta-Go-Zero: AI for playing Go built with python
 
-Authors:
+Author:
+Henry "TJ" Chen
+
+Original project by:
 Henry "TJ" Chen
 Dmitrii Vlasov
 Ming Yau (Oscar) Lam
 Duain Chhabra
 
-Date: April 3, 2023
-
-Version: pre-Alpha
+Version: 1.3
 
 Module Description
 ==================
@@ -17,16 +18,10 @@ This module contains a python class that represents an entire game of go.
 It also contains additional runners which can be used to easily test our
 work.
 
-Copyright and Usage Information
-===============================
-
-This file was developed as part of the course project for CSC11 1 Winter 2023.
-Feel free to test it out, but please contact us to obtain permission if you
-intend to redistribute it or use it for your own work.
+See README file for instructions, project details, and the relevant copyright and usage information
 """
 from board import Board
 from typing import Optional
-
 
 
 class Game:
@@ -52,14 +47,18 @@ class Game:
     black_captured: int
     white_captured: int
 
-    def __init__(self, active_board: Optional[Board] = None, player_turn: Optional[str] = "Black",
-                 move_sequence: Optional[list[tuple[int, int, int]]] = None, size: Optional[int] = 9) -> None:
+    def __init__(self, active_board: Optional[Board] = None, player_turn: str = "Black",
+                 move_sequence: Optional[list[tuple[int, int, int]]] = None, size: int = 9) -> None:
         """
         Initialise a new Go game - defaults to a 9x9 empty board
 
-        Other board sizes are typically 13x13 or 19x19 (19x19 is by far the most common of them all)
+        Note: board sizes are typically 9x9, 13x13, or 19x19 (19x19 is by far the most common of them all)
 
-        Requires that the moves on the active board match those of the given move sequence
+        Preconditions:
+            - moves on the active board match those of the given move sequence
+            - all((move[1] <= size) and (move[2] <= size) for move in move_sequence)
+            - size >= 9
+            - player_turn in {'Black','White'}
         """
         if active_board is None:
             self.board = Board(size=size)  # initialise a new board with the give size
@@ -81,8 +80,8 @@ class Game:
 
         returns whether updating was sucessful or not
         Preconditions:
-            - x<self.board.size
-            - y<self.board.size
+            - x < self.board.size
+            - y < self.board.size
         """
         stone = self.board.get_stone(x, y)
         if stone.color == "Neither":
@@ -91,7 +90,9 @@ class Game:
             self.moves.append(new_move)
 
             for adjacent in stone.neighbours.values():
-                if adjacent.check_is_dead(set()):
+                if adjacent is stone:
+                    pass
+                elif adjacent.check_is_dead(set()):
                     color = adjacent.color
 
                     # remember that the attribute keeps track of amount captured BY player
@@ -109,6 +110,7 @@ class Game:
     def add_sequence(self, moves_sequence: list[tuple[int, int]]) -> None:
         """Function for testing the ouputting of a final board state
         Given a move sequence, it adds each move to the board
+
         Preconditions:
             - every move is a valid move
         """
@@ -119,9 +121,12 @@ class Game:
     def is_valid_move(self, x: int, y: int) -> bool:
         """
         Return True if the move at (x, y) is valid, False otherwise
+
+        NOTE: IMPORTANT - THIS IS AN OLD FUNCTION, USE THE NEWER FUNCTION UNDER BOARD
+
         Preconditions:
-            - x<self.board.size
-            - y<self.board.size
+            - x < self.board.size
+            - y < self.board.size
         """
         return self.board.get_stone(x, y).color == "Neither"
 
@@ -139,7 +144,7 @@ class Game:
         available_moves = []
         for x in range(self.board.size):
             for y in range(self.board.size):
-                if self.is_valid_move(x, y):
+                if self.board.is_valid_move(x, y, self.current_player):
                     available_moves.append((x, y))
         return available_moves
 

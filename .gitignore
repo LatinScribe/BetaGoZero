@@ -1,0 +1,11 @@
+
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/BetaGoZero.iml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/workspace.xml
+.idea/misc.xml
+__pycache__/board.cpython-311.pyc
+__pycache__/game.cpython-311.pyc
+*.pyc

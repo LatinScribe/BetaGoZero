@@ -1,42 +1,38 @@
-"""Beta-Go: Course project for CSC111 Winter 2023
+"""Beta-Go-Zero: AI for playing Go built with python
 
-Authors:
+Author:
+Henry "TJ" Chen
+
+Original project by:
 Henry "TJ" Chen
 Dmitrii Vlasov
 Ming Yau (Oscar) Lam
 Duain Chhabra
 
-Date: April 3, 2023
-
-Version: pre-Alpha
+Version: 1.3
 
 Module Description
 ==================
 
 This module contains a function for running a game using our pygame GUI
 
-Copyright and Usage Information
-===============================
-
-This file was developed as part of the course project for CSC111 Winter 2023.
-Feel free to test it out, but please contact us to obtain permission if you
-intend to redistribute it or use it for your own work.
+See README file for instructions, project details, and the relevant copyright and usage information
 """
 
-import sys
 import random
-# from typing import Tuple
-
-# import pygame
 from game import Game
-from Pygame_go import draw_board, return_row_col, update_display
-from Pygame_go import initialise_display, update_display
-from GameTree import GameTree
+from pygame_go import initialise_display, update_display
+from gametree import GameTree
 from sgf_reader import load_tree_from_file, save_tree_to_file
+from go_player import FullyRandom, ProbabilityBaseGoplayer, GoPlayer, FullyRandom, UserGoPlayer
+import plotly.graph_objs as g_obj
+
+# import sys
+# from typing import Tuple
+# import pygame
+# from Pygame_go import draw_board, return_row_col, update_display
 # from sgf_reader import sgf_to_game, read_all_sgf_in_folder
-from GoPlayer import FullyRandom, ProbabilityBaseGoplayer
-from GoPlayer import GoPlayer, RandomGoPlayer, SlightlyBetterBlackPlayer, UserGoPlayer
-import plotly.graph_objs as go
+# from GoPlayer import SlightlyBetterBlackPlayer
 
 
 def run_game() -> None:
@@ -46,7 +42,7 @@ def run_game() -> None:
     returns the newly created game
     """
     print("Please wait for a moment...")
-    tree = load_tree_from_file("expiremental.txt", "tree_saves/")
+    tree = load_tree_from_file("RecalcScoreTree.txt", "tree_saves/")
 
     size = int(input('Please select a board size! Enter 9, 13, or 19'))
 
@@ -65,7 +61,7 @@ def run_game() -> None:
     elif user_selection == '1':
         black_player = ProbabilityBaseGoplayer(tree)
     elif user_selection == '2':
-        black_player = RandomGoPlayer
+        black_player = FullyRandom(tree)
     else:
         print('This was not a valid choice. Defaulting to UserPlayer')
         black_player = UserGoPlayer(tree)
@@ -82,7 +78,7 @@ def run_game() -> None:
     elif user_selection == '1':
         white_player = ProbabilityBaseGoplayer(tree)
     elif user_selection == '2':
-        white_player = RandomGoPlayer
+        white_player = FullyRandom(tree)
     else:
         print('This was not a valid choice. Defaulting to UserPlayer')
         white_player = UserGoPlayer(tree)
@@ -107,7 +103,7 @@ def run_game_players(b_player: GoPlayer, w_player: GoPlayer, board_size: int = 9
                 update_display(display, new_game)
 
     else:
-        while len(new_game.moves) <= 90:
+        while len(new_game.moves) <= 65:
             if len(new_game.moves) % 2 == 0:
                 x, y = b_player.make_move(new_game)
                 new_game.play_move(x, y)
@@ -201,11 +197,13 @@ def plot_win_rate_progress(n_games: int, n_simulations: int) -> None:
         black_win_rates.append(black_win_rate)
         white_win_rates.append(white_win_rate)
 
-    fig = go.Figure()
+    fig = g_obj.Figure()
     fig.add_trace(
-        go.Scatter(x=list(range(1, n_simulations + 1)), y=black_win_rates, mode='lines+markers', name='Black Win Rate'))
+        g_obj.Scatter(x=list(range(1, n_simulations + 1)), y=black_win_rates, mode='lines+markers',
+                      name='Black Win Rate'))
     fig.add_trace(
-        go.Scatter(x=list(range(1, n_simulations + 1)), y=white_win_rates, mode='lines+markers', name='White Win Rate'))
+        g_obj.Scatter(x=list(range(1, n_simulations + 1)), y=white_win_rates, mode='lines+markers',
+                      name='White Win Rate'))
 
     fig.update_layout(title=f'Win Rate Progression over {n_simulations} Simulations', xaxis_title='Simulation',
                       yaxis_title='Win Rate', legend_title='Player')
@@ -219,12 +217,11 @@ def plot_win_rate_progress(n_games: int, n_simulations: int) -> None:
 def old_run_game() -> None:
     """Run a basic Go game
 
-        prompts user to input the moves
-        returns the newly created game
+    prompts user to input the moves and returns the newly created game
 
-        DEFUNCT: NO LONGER IN USE
-        """
-    new_game = Game()
+    DEFUNCT: NO LONGER IN USE
+    """
+    # new_game = Game()
 
     # update_display(new_game)
     # while True:

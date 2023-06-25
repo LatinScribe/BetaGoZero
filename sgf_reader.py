@@ -46,14 +46,14 @@ intend to redistribute it or use it for your own work.
 """
 
 from __future__ import annotations
-
 import os
-# from typing import Optional
 import pickle
-# import shutil
 import board as b
-import GameTree as Gt
+from gametree import GameTree
 from game import Game
+
+# import shutil
+# from typing import Optional
 
 
 def read_sgf(file_name: str, file_directory: str, do_deletion: bool) -> None | b.Board:
@@ -252,13 +252,13 @@ def sgf_to_game(file_name: str, file_directory: str) -> Game:
         return current_game
 
 
-def sgf_folder_to_tree(folder_directory: str, is_absolute: bool = False) -> Gt.GameTree:
+def sgf_folder_to_tree(folder_directory: str, is_absolute: bool = False) -> GameTree:
     """Returns a game tree by exctracting move sequences out of all sgf files in a given folder
 
     Preciditions:
     - all files have to be sgf
     """
-    tree = Gt.GameTree()
+    tree = GameTree()
     if is_absolute:
         method = sgf_to_game_sequence_absolute
     else:
@@ -269,13 +269,13 @@ def sgf_folder_to_tree(folder_directory: str, is_absolute: bool = False) -> Gt.G
     return tree
 
 
-def sgf_folder_to_tree_recalc_win_score(folder_directory: str) -> Gt.GameTree:
+def sgf_folder_to_tree_recalc_win_score(folder_directory: str) -> GameTree:
     """Returns a game tree by exctracting move sequences out of all sgf files in a given folder
 
     Preciditions:
     - all files have to be sgf
     """
-    tree = Gt.GameTree()
+    tree = GameTree()
     for file in os.listdir(folder_directory):
         game = sgf_to_game(file, folder_directory)
         tree.insert_game_into_tree(game)
@@ -292,13 +292,13 @@ def rotate_move_seq_by_90(moves: list[tuple[int, int, int]], board_size=9) -> li
     return rotated_sequence
 
 
-def save_tree_to_file(tree: Gt.GameTree, file_name: str, folder_directory: str) -> None:
+def save_tree_to_file(tree: GameTree, file_name: str, folder_directory: str) -> None:
     """Saves the given GameTree as a txt file"""
     with open(folder_directory + file_name, 'wb') as file:
         pickle.dump(tree, file)
 
 
-def load_tree_from_file(file_name: str, folder_directory: str) -> Gt.GameTree:
+def load_tree_from_file(file_name: str, folder_directory: str) -> GameTree:
     """Load the tree from the txt file"""
     with open(folder_directory + file_name, 'rb') as file:
         return pickle.load(file)

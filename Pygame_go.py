@@ -1,14 +1,15 @@
-"""Beta-Go: Course project for CSC111 Winter 2023
+"""Beta-Go-Zero: AI for playing Go built with python
 
-Authors:
+Author:
+Henry "TJ" Chen
+
+Original project by:
 Henry "TJ" Chen
 Dmitrii Vlasov
 Ming Yau (Oscar) Lam
 Duain Chhabra
 
-Date: April 3, 2023
-
-Version: pre-Alpha
+Version: 1.3
 
 Module Description
 ==================
@@ -16,28 +17,20 @@ Module Description
 This module contains a functions nesscary to display a GUI to the user using
 pygame
 
-Copyright and Usage Information
-===============================
-
-This file was developed as part of the course project for CSC111 Winter 2023.
-Feel free to test it out, but please contact us to obtain permission if you
-intend to redistribute it or use it for your own work.
+See README file for instructions, project details, and the relevant copyright and usage information
 """
-# from typing import Tuple
 
 import pygame
-# import sys
-
-from pygame import Surface, SurfaceType
-from pygame.font import Font
-
-# from board import Board
-from game import Game
-
-from PIL import Image, ImageDraw
-from board import Board
 import webbrowser
 import os
+from pygame import Surface, SurfaceType
+from pygame.font import Font
+from PIL import Image, ImageDraw
+from game import Game
+from board import Board
+
+# from typing import Tuple
+# import sys
 
 # Constants
 BOARD_SIZE = 9
@@ -45,6 +38,9 @@ CELL_SIZE = 50
 LETTER_OFFSET = 20
 NUMBER_OFFSET = 20
 MARGIN = 50
+
+# edit this as nesscary for waiting when both players are AI
+WAIT_TIME = 800
 
 # Colors
 WHITE = (255, 255, 255)
@@ -59,6 +55,9 @@ HEIGHT = BOARD_SIZE * CELL_SIZE + 2 * MARGIN
 def return_row_col(x, y) -> tuple[int, int]:
     """
     Return the row and column of the cell that was clicked on
+
+    Preconditions:
+            - x and y are valid coordinates on the pygame window board
     """
     row = (x - MARGIN + 15) // CELL_SIZE
     col = (y - MARGIN + 15) // CELL_SIZE
@@ -66,7 +65,14 @@ def return_row_col(x, y) -> tuple[int, int]:
 
 
 def initialise_display(game: Game) -> Surface:
-    """create the initial board visualisation state which will be updated as more moves are played"""
+    """Initialise a pygame surface (screen) to respresent the current state of the given game
+    returns the newly created screen
+
+    Preconditions:
+            - given game is a valid go game
+    """
+
+    # set up the pygame surface
     pygame.display.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Go Board")
@@ -91,7 +97,7 @@ def initialise_display(game: Game) -> Surface:
             screen.blit(label, (MARGIN + i * CELL_SIZE - LETTER_OFFSET + 5, MARGIN - 2 * LETTER_OFFSET))
             # screen.blit(label, (MARGIN + i * CELL_SIZE - LETTER_OFFSET + 5, HEIGHT - MARGIN + NUMBER_OFFSET - 50))
 
-    # Draw numbers
+    # Draw numbers on sides of board
     for i in range(BOARD_SIZE):
         label = font.render(str(i + 1), True, BLACK)
         screen.blit(label, (MARGIN - 2 * NUMBER_OFFSET, MARGIN + i * CELL_SIZE - NUMBER_OFFSET + 5))
@@ -117,17 +123,24 @@ def initialise_display(game: Game) -> Surface:
 
 def update_display(screen: Surface, game: Game, territory: bool = False, technique: str = "flood_fill",
                    pause: bool = False) -> Surface:
-    """ Generate and Update the display
-        We can use this function to update the display after each move
-        Also Change the display to show the number of stones captured by each player
-        Attributes can be changed later for better representation"""
+    """ Takes the given pygame surface (screen) and updates
+
+    We can use this function to update the display after each move
+    Also Change the display to show the number of stones captured by each player
+    Attributes can be changed later for better representation
+
+    Preconditions:
+            - given screen is a valid pygame surface
+            - given game is a valid go game
+            - given technique is a valid scoring technique
+    """
     pygame.event.clear()
 
     font = pygame.font.Font(None, 24)
 
     if pause:
         # pause nesscary for when both players are AI to prevent flickering
-        pygame.time.wait(300)
+        pygame.time.wait(WAIT_TIME)
 
     # Draw the last stone
     screen.fill(BACKGROUND)
@@ -202,12 +215,16 @@ def update_display(screen: Surface, game: Game, territory: bool = False, techniq
 
 def draw_board(given_board: Board, save_path: str = "Game_images/saved_board.jpg", open_in_browser: bool = False,
                territory: bool = False, technique: str = "flood_fill") -> None:
-    """
-    Generates a visualisation of the given board and saves it as a jpg file to the designated location.
+    """Generates a visualisation of the given board and saves it as a jpg file to the designated location.
 
     Defaults to saving in the Game_images folder as saved_board.jpg
 
     The user can specify whether to open the image in their browser, default to not open it
+
+    Preconditions:
+            - given board is a valid go board
+            - given technique is a valid scoring technique
+            - given save path is a valid save path
     """
     cell_size = 50
     board_size = given_board.size * cell_size
@@ -260,7 +277,7 @@ def draw_board(given_board: Board, save_path: str = "Game_images/saved_board.jpg
 
 def intialise_pygame() -> tuple[Surface | SurfaceType, Font]:
     """
-    Initialise pygame and create the screen
+    Initialise pygame and create a new pygame surface, which is returned along with a font
     """
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -276,7 +293,10 @@ def old_update_display(screen: Surface, game: Game, territory: bool = False, tec
     """ Generate and Update the display
         We can use this function to update the display after each move
         Also Change the display to show the number of stones captured by each player
-        Attributes can be changed later for better representation"""
+        Attributes can be changed later for better representation
+
+    CURRENTLY DEFUNCT
+    """
 
     if pause:
         pygame.time.wait(2000)
