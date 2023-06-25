@@ -4,10 +4,7 @@ Author:
 Henry "TJ" Chen
 
 Original project by:
-Henry "TJ" Chen
-Dmitrii Vlasov
-Ming Yau (Oscar) Lam
-Duain Chhabra
+Henry "TJ" Chen, Dmitrii Vlasov, Ming Yau (Oscar) Lam, Duain Chhabra
 
 Version: 1.3
 
@@ -29,14 +26,14 @@ PASS_MOVE = (-1, -1, -1)
 
 
 class GameTree:
-    """A decision tree for Beta-GO moves
+    """A decision tree that stores possible move variations and their resulting win_probability
 
     Each node in the tree stores a GO move.
 
     Instance Attributes:
         - move: the current move (spot on the board), or (0, -1, -1) if this tree represents the start of a game
         - _subtrees: the dictionary of the subtrees of the game trees, with keys corresponding to the moves
-        - win_probability: probability of going down this branch  (backpropagation)  #: assume win probability for black
+        - win_probability: the probability of winning relative to black  (backpropagation)
     Representation Invariants:
         - self.move[0]>=-1 and self.move[1]>=-1 and self.move[2]>=-1
         - all(self._subtrees[subtree].move==subtree for subtree in self._subtrees)
@@ -146,14 +143,16 @@ class GameTree:
 
     def insert_game_into_tree(self, game: Game) -> None:
         """Insert a game into a tree as a sequence,
-        with the leaf probability of territory score at the end of the game."""
+        with the leaf probability of territory score at the end of the game.
+        """
         #  fix the output of calculate_score and adjust this method accordingly
         victory_score = game.overall_score()[1] - game.overall_score()[0]
         self.insert_move_sequence(game.moves, victory_score)
 
     def insert_game_into_tree_absolute(self, game: Game) -> None:
         """Insert a game into a tree as a sequence,
-        with the leaf probability of territory score at the end of the game."""
+        with the leaf probability of territory score at the end of the game.
+        """
         #  fix the output of calculate_score and adjust this method accordingly
         if game.overall_score()[1] - game.overall_score()[0] > 0:
             victory_score = 1

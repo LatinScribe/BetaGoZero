@@ -4,10 +4,7 @@ Author:
 Henry "TJ" Chen
 
 Original project by:
-Henry "TJ" Chen
-Dmitrii Vlasov
-Ming Yau (Oscar) Lam
-Duain Chhabra
+Henry "TJ" Chen, Dmitrii Vlasov, Ming Yau (Oscar) Lam, Duain Chhabra
 
 Version: 1.3
 
@@ -212,50 +209,6 @@ def plot_win_rate_progress(n_games: int, n_simulations: int) -> None:
     # pio.write_image(fig, 'win_rate_progression.png')
 
     fig.show()
-
-
-def old_run_game() -> None:
-    """Run a basic Go game
-
-    prompts user to input the moves and returns the newly created game
-
-    DEFUNCT: NO LONGER IN USE
-    """
-    # new_game = Game()
-
-    # update_display(new_game)
-    # while True:
-    #     for event in pygame.event.get():
-    #         if event.type == pygame.QUIT:  # if the user clicks the close button
-    #             print("Black captured:", new_game.black_captured)
-    #             print("White captured:", new_game.white_captured)
-    #             win = new_game.overall_score("dfs")
-    #             if new_game.iswinner("White"):
-    #                 print("white wins by", win[0] - win[1])
-    #
-    #             elif new_game.iswinner("Black"):
-    #                 print("black wins by", win[1] - win[0])
-    #             else:
-    #                 print("tie")
-    #
-    #             draw_board(new_game.board, "go2434.jpg", True, True)
-    #             sys.exit()
-    #         elif event.type == pygame.MOUSEBUTTONDOWN:  # if the user clicks the mouse
-    #             x, y = event.pos
-    #             row, col = return_row_col(x, y)
-    #
-    #             if len(new_game.moves) % 2 == 0:
-    #                 color = "Black"
-    #             else:
-    #                 color = "White"
-    #
-    #             if 0 <= row < 9 and 0 <= col < 9 and (row, col) and new_game.board.is_valid_move(row, col, color):
-    #                 print((len(new_game.moves) + 1, row, col))
-    #                 print("coordinates: ", row, col)
-    #                 new_game.play_move(row, col)
-    #                 update_display(new_game)
-    #             else:
-    #                 print("Invalid move")
 
 
 if __name__ == "__main__":

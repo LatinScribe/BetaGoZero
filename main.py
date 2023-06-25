@@ -4,10 +4,7 @@ Author:
 Henry "TJ" Chen
 
 Original project by:
-Henry "TJ" Chen
-Dmitrii Vlasov
-Ming Yau (Oscar) Lam
-Duain Chhabra
+Henry "TJ" Chen, Dmitrii Vlasov, Ming Yau (Oscar) Lam, Duain Chhabra
 
 Version: 1.3
 

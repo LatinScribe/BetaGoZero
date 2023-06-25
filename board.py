@@ -4,10 +4,7 @@ Author:
 Henry "TJ" Chen
 
 Original project by:
-Henry "TJ" Chen
-Dmitrii Vlasov
-Ming Yau (Oscar) Lam
-Duain Chhabra
+Henry "TJ" Chen, Dmitrii Vlasov, Ming Yau (Oscar) Lam, Duain Chhabra
 
 Version: 1.3
 
@@ -21,7 +18,8 @@ See README file for instructions, project details, and the relevant copyright an
 """
 
 from __future__ import annotations
-from typing import Optional
+
+# from typing import Optional
 # rom typing import Dict, Tuple
 
 
@@ -29,14 +27,18 @@ class Board:
     """
     A class that represents the game board.
 
-    Attributes:
+    Instance Attributes:
         size (int): The size of the board (i.e. the number of rows and columns).
         grid (list): A 2D list representing the board, containing Stone objects.
+
+    Representation Invariants:
+        - self.size > 0
     """
     size: int
+    # note that the inner list is each column of the board
     grid: list[list[Stone]]
 
-    def __init__(self, size: Optional[int] = 9) -> None:
+    def __init__(self, size: int = 9) -> None:
         """
         Initializes a Board object. Populates all valid positions with "imaginary stones" of
         neither colour - in reality, these stones would not exist on the board - it is
@@ -45,6 +47,9 @@ class Board:
 
         Args:
             size (int): The size of the board. Defaults to 9.
+
+        Preconditions:
+            - size >= 9
         """
         self.size = size
         self.grid = [[Stone(x, y) for y in range(size)] for x in range(size)]
@@ -61,8 +66,7 @@ class Board:
                     stone.add_neighbour(self.get_stone(stone.x, stone.y - 1))
 
     def __getitem__(self, position: tuple[int, int]) -> Stone:
-        """
-        Returns the Stone object at the specified position.
+        """Returns the Stone object at the specified position.
 
         Args:
             position (tuple): A tuple containing the x and y coordinates of the Stone object.
@@ -87,79 +91,11 @@ class Board:
         self.grid[x][y].color = color
 
     def get_stone(self, x: int, y: int) -> Stone:
-        """Return the stone situated at the given coordinates"""
+        """Return the stone situated at the given coordinates
+
+        Note for fixing: seems redundant to getitem
+        """
         return self.grid[x][y]
-
-    # pretty useless methods
-    def remove_stones(self, stones: list[Stone]) -> None:
-        """
-        Removes the specified Stone objects from the board.
-
-        Args:
-            stones (list): A list of Stone objects to remove.
-        Preconditions:
-            - all((stone in self.grid) for stone in stones)
-        """
-        for stone in stones:
-            self.grid[stone.x][stone.y].die()
-
-    def get_dead_stones(self) -> list[Stone]:
-        """
-        Returns a list of Stone objects that should be removed from the board.
-
-        Returns:
-            list: A list of Stone objects that should be removed.
-        """
-        dead_stones = []
-        for x in range(self.size):
-            for y in range(self.size):
-                stone = self.grid[x][y]
-                if stone.color != "Neither" and stone.count_neighbours() >= stone.max_num_neighbours:
-                    dead_stones.append(stone)
-        return dead_stones
-
-    def __str__(self) -> str:
-        """Print a visual representation of the board."""
-        ans = "-" * (self.size * 2 + 1) + '\n'
-        for y in range(self.size):
-            row = "|"
-            for x in range(self.size):
-                stone = self.get_stone(x, y)
-                if stone.color == "Black":
-                    row += "○"
-                elif stone.color == "White":
-                    row += "●"
-                else:
-                    row += " "
-                row += "|"
-            ans += row + '\n'
-            ans += "-" * (self.size * 2 + 1) + '\n'
-        return ans
-
-    def print_max_neighbours(self) -> str:
-        """for debugging"""
-        ans = "-" * (self.size * 2 + 1) + '\n'
-        for y in range(self.size):
-            row = "|"
-            for x in range(self.size):
-                stone = self.get_stone(x, y)
-                row += str(stone.max_num_neighbours)
-                row += "|"
-            ans += row + '\n'
-            ans += "-" * (self.size * 2 + 1) + '\n'
-        return ans
-
-    def board_to_move_sequence(self) -> list[tuple[int, int, int]]:
-        """Convert a board state into a sequence of moves, store as a list of tuples
-        NOTE: This does not store the sequence that the moves were actually played in
-        """
-        sequence = []
-        i = 0
-        for row in self.grid:
-            for stone in row:
-                sequence.append((i, stone.x, stone.y))
-                i += 1
-        return sequence
 
     def is_valid_move(self, x: int, y: int, color: str) -> bool:
         """Check if a coordinate is valid for the board. It does not overwrite any stone, is not placed in a location
@@ -225,9 +161,9 @@ class Board:
         white_score += white_territory
         return [black_territory_cord, white_territory_cord]
 
-    def is_valid_coord_do(self, x: int, y: int) -> bool:
-        """Check if a coordinate is valid for the board."""
-        return 0 <= x < self.size and 0 <= y < self.size
+    # def is_valid_coord_do(self, x: int, y: int) -> bool:
+    #     """Check if a coordinate is valid for the board."""
+    #     return 0 <= x < self.size and 0 <= y < self.size
 
     def get_territory_owner(self: Board, x: int, y: int, technique: str = "flood_fill") -> str:
         """Determines the owner of the territory at the given coordinates.
@@ -247,7 +183,7 @@ class Board:
             neighbors = self.get_stone(x_pos, y_pos).get_neighbours()  # get the neighbours of the stone
             result = set()
             for nx, ny in neighbors:
-                if self.is_valid_coord_do(nx, ny) and (nx, ny) not in visited:
+                if self.is_valid_coord(nx, ny) and (nx, ny) not in visited:
                     stone = self.get_stone(nx, ny)
                     if stone.color == "Neither":
                         result = result.union(dfs(nx, ny, visited))
@@ -259,7 +195,7 @@ class Board:
             """
             Flood fill algorithm to determine the territory owner
             """
-            if (x_pos, y_pos) in visited or not self.is_valid_coord_do(x_pos, y_pos):
+            if (x_pos, y_pos) in visited or not self.is_valid_coord(x_pos, y_pos):
                 return set()
 
             visited.add((x_pos, y_pos))
@@ -287,7 +223,11 @@ class Board:
 
     def get_dead_cells(self, color: str) -> list[tuple[int, int]]:
         """Function to get dead cells for a given color on a board.
-           WIP and it does not work yet. or capture stones."""
+       WIP and it does not work yet. or capture stones.
+
+       YET TO BE IMPLEMENTED
+       """
+        raise NotImplementedError
 
     def capture_stones(self, stone: Stone) -> int:
         """turns all same color stones connected to the given stone into Neither
@@ -306,22 +246,108 @@ class Board:
                     captured_so_far += self.capture_stones(neighbour)
             return captured_so_far
 
+    ################################################################################
+    # functions for testing purposes (some redundancy, not to be used)
+    ################################################################################
+    def get_dead_stones(self) -> list[Stone]:
+        """
+        Returns a list of Stone objects that should be removed from the board.
+
+        USE check_is_dead function from stone class on individual stones instead
+
+        Returns:
+            list: A list of Stone objects that should be removed.
+        """
+        dead_stones = []
+        for x in range(self.size):
+            for y in range(self.size):
+                stone = self.grid[x][y]
+                if stone.color != "Neither" and stone.count_neighbours() >= stone.max_num_neighbours:
+                    dead_stones.append(stone)
+        return dead_stones
+
+    def remove_stones(self, stones: list[Stone]) -> None:
+        """
+        Removes the specified Stone objects from the board.
+
+        RECOMMENDED: USE capture stones instead for real play
+
+        Args:
+            stones (list): A list of Stone objects to remove.
+        Preconditions:
+            - all((stone in self.grid) for stone in stones)
+        """
+        for stone in stones:
+            self.grid[stone.x][stone.y].delete_stone()
+
+    def __str__(self) -> str:
+        """Print a visual representation of the board."""
+        ans = "-" * (self.size * 2 + 1) + '\n'
+        for y in range(self.size):
+            row = "|"
+            for x in range(self.size):
+                stone = self.get_stone(x, y)
+                if stone.color == "Black":
+                    row += "○"
+                elif stone.color == "White":
+                    row += "●"
+                else:
+                    row += " "
+                row += "|"
+            ans += row + '\n'
+            ans += "-" * (self.size * 2 + 1) + '\n'
+        return ans
+
+    def print_max_neighbours(self) -> str:
+        """prints the max number of neighbours
+
+        NOT TO BE USED - for debuging only
+        """
+        ans = "-" * (self.size * 2 + 1) + '\n'
+        for y in range(self.size):
+            row = "|"
+            for x in range(self.size):
+                stone = self.get_stone(x, y)
+                row += str(stone.max_num_neighbours)
+                row += "|"
+            ans += row + '\n'
+            ans += "-" * (self.size * 2 + 1) + '\n'
+        return ans
+
+    def board_to_move_sequence(self) -> list[tuple[int, int, int]]:
+        """Convert a board state into a sequence of moves, store as a list of tuples
+
+        CAREFUL: This does not store the actual sequence/order that the moves were played-in
+        """
+        sequence = []
+        i = 0
+        for row in self.grid:
+            for stone in row:
+                sequence.append((i, stone.x, stone.y))
+                i += 1
+        return sequence
+
 
 class Stone:
     """
     A class representing a stone on a game board.
 
-    Attributes:
+    Instance Attributes:
         color (str): The color of the stone ("Black", "White", or "Neither").
         x (int): The x position of the stone on the board.
         y (int): The y position of the stone on the board.
         neighbours (dict): A dict of neighbouring Stone objects with (x, y) as keys.
 
+    Representation Invariants:
+        - self.color in {'White', 'Black'}
+        - self.x >= 0
+        - self.y >= 0
+
     Methods:
         add_neighbour(neighbor): Adds a neighbour to the stone.
         remove_neighbour(neighbor): Removes a neighbour from the stone.
         count_neighbours(): Returns the number of neighbours the stone has.
-        die(): Removes the stone and its connections from the board.
+        check_is_dead(): Returns whether the stone is currently dead
     """
 
     color: str
@@ -351,9 +377,6 @@ class Stone:
         if (x == 0 and y == 0) or (x == 0 and y == 8) or (x == 8 and y == 0) or (x == 8 and y == 8):
             max_neighbours = 2  # stone is in a corner
         self.max_num_neighbours = max_neighbours
-
-    def __str__(self) -> str:
-        return f'Stone on coordinates {self.x}, {self.y} is {self.color} and has {self.count_neighbours()} neighbours.'
 
     def add_neighbour(self, neighbour: Stone) -> None:
         """
@@ -399,7 +422,6 @@ class Stone:
         """
         return self.neighbours
 
-    #  potentially move to Stone
     def update_neighbours(self) -> None:
         """
         Updates the neighboring Stone objects for each Stone object on the board.
@@ -411,19 +433,12 @@ class Stone:
             else:
                 self.remove_neighbour(neighbour)
 
-    # check this, probably not nesscary - don't need to delete the connections
-    def die(self) -> None:
-        """
-        Removes the stone and its connections from the board.
-        """
-        for neighbour in self.neighbours.values():
-            neighbour.remove_neighbour(self)
-        self.color = "Neither"
-        self.neighbours = {}
-
     def check_is_dead(self, visited: set[Stone]) -> bool:
-        """this function checks if the stone is dead
-        visited should be an empty set"""
+        """This function checks if the stone is dead and returns the status
+
+        This is a recusive function!
+        On first use, visisted should be an empty set
+        """
         if self.color == "Neither":
             return False
         elif len([neighbour for neighbour in self.neighbours.values() if
@@ -450,6 +465,22 @@ class Stone:
             elif neighbour.color != color:
                 liberties += 1
         return liberties
+
+    ################################################################################
+    # functions for testing purposes (some redundancy, not to be used)
+    ################################################################################
+    def delete_stone(self) -> None:
+        """Removes the stone and its connections from the board.
+
+        DO NOT USE: For debugging only - deletes connections
+        """
+        for neighbour in self.neighbours.values():
+            neighbour.remove_neighbour(self)
+        self.color = "Neither"
+        self.neighbours = {}
+
+    def __str__(self) -> str:
+        return f'Stone on coordinates {self.x}, {self.y} is {self.color} and has {self.count_neighbours()} neighbours.'
 
 
 if __name__ == '__main__':

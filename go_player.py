@@ -4,10 +4,7 @@ Author:
 Henry "TJ" Chen
 
 Original project by:
-Henry "TJ" Chen
-Dmitrii Vlasov
-Ming Yau (Oscar) Lam
-Duain Chhabra
+Henry "TJ" Chen, Dmitrii Vlasov, Ming Yau (Oscar) Lam, Duain Chhabra
 
 Version: 1.3
 
@@ -215,7 +212,12 @@ class SlightlyBetterBlackPlayer(GoPlayer):
 
                 return (coord[0], coord[1])
             else:
-                return (random.randint(0, 8), random.randint(0, 8))
+                valid_moves = game.available_moves()
+                # for x in range(0, game.board.size):
+                #     for y in range(0, game.board.size):
+                #         if game.board.is_valid_move(x, y, last_move[1]):
+                #             valid_moves.append((x, y))
+                return random.choice(valid_moves)
         else:
             subtrees = self.gt.get_subtrees()
             best_choice = subtrees[0]

@@ -4,10 +4,7 @@ Author:
 Henry "TJ" Chen
 
 Original project by:
-Henry "TJ" Chen
-Dmitrii Vlasov
-Ming Yau (Oscar) Lam
-Duain Chhabra
+Henry "TJ" Chen, Dmitrii Vlasov, Ming Yau (Oscar) Lam, Duain Chhabra
 
 Version: 1.3
 
@@ -286,85 +283,6 @@ def intialise_pygame() -> tuple[Surface | SurfaceType, Font]:
     screen.fill(BACKGROUND)
 
     return screen, font
-
-
-def old_update_display(screen: Surface, game: Game, territory: bool = False, technique: str = "flood_fill",
-                       pause: bool = False) -> Surface:
-    """ Generate and Update the display
-        We can use this function to update the display after each move
-        Also Change the display to show the number of stones captured by each player
-        Attributes can be changed later for better representation
-
-    CURRENTLY DEFUNCT
-    """
-
-    if pause:
-        pygame.time.wait(2000)
-
-    # screen, font = intialise_pygame()
-    _, font = intialise_pygame()
-    screen.fill(BACKGROUND)
-
-    # Draw grid lines
-    for i in range(BOARD_SIZE):
-        pygame.draw.line(screen, BLACK, (MARGIN + i * CELL_SIZE, MARGIN),
-                         (MARGIN + i * CELL_SIZE, HEIGHT - MARGIN - 50), 1)
-        pygame.draw.line(screen, BLACK, (MARGIN, MARGIN + i * CELL_SIZE),
-                         (WIDTH - MARGIN - 50, MARGIN + i * CELL_SIZE),
-                         1)
-
-    # Draw letters
-    for i, letter in enumerate("ABCDEFGHIJKLMNOP"):
-        if i < BOARD_SIZE:
-            label = font.render(letter, True, BLACK)
-            screen.blit(label, (MARGIN + i * CELL_SIZE - LETTER_OFFSET + 5, MARGIN - 2 * LETTER_OFFSET))
-            # screen.blit(label, (MARGIN + i * CELL_SIZE - LETTER_OFFSET + 5, HEIGHT - MARGIN + NUMBER_OFFSET - 50))
-
-    # Draw numbers
-    for i in range(BOARD_SIZE):
-        label = font.render(str(i + 1), True, BLACK)
-        screen.blit(label, (MARGIN - 2 * NUMBER_OFFSET, MARGIN + i * CELL_SIZE - NUMBER_OFFSET + 5))
-        # screen.blit(label, (WIDTH - MARGIN + NUMBER_OFFSET - 50, MARGIN + i * CELL_SIZE - NUMBER_OFFSET + 5))
-
-    # Draw stones
-    for move in game.moves:
-        # if (-1, -1) == move[1:]:
-        #     break
-
-        color = (game.board.get_stone(move[1], move[2])).color
-        if color != "Neither":
-            if color == "White":
-                color = WHITE
-            else:
-                color = BLACK
-            pygame.draw.circle(screen, color, (MARGIN + move[1] * CELL_SIZE, MARGIN + move[2] * CELL_SIZE),
-                               CELL_SIZE // 2 - 2)
-    for i, x, y in game.moves:
-        if i % 2 == 0:
-            color = BLACK
-        else:
-            color = WHITE
-        pygame.draw.circle(screen, color, (MARGIN + x * CELL_SIZE, MARGIN + y * CELL_SIZE), CELL_SIZE // 2 - 2)
-
-    # Draw territory
-    if territory:
-        territories = game.board.calculate_score(technique)
-        square_size = 16
-        for x, y in territories[0]:  # black territory
-            rect_color = BLACK
-            rect = pygame.Surface((square_size, square_size))
-            rect.fill(rect_color)
-            screen.blit(rect, (MARGIN + x * CELL_SIZE - square_size // 2, MARGIN + y * CELL_SIZE - square_size // 2))
-
-        for x, y in territories[1]:  # white territory
-            rect_color = WHITE
-            rect = pygame.Surface((square_size, square_size))
-            rect.fill(rect_color)
-            screen.blit(rect, (MARGIN + x * CELL_SIZE - square_size // 2, MARGIN + y * CELL_SIZE - square_size // 2))
-
-    pygame.display.flip()
-
-    return screen
 
 
 def wait_for_quit() -> None:

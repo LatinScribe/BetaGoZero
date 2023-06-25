@@ -51,8 +51,6 @@ def run_game() -> Game:
             y = int(coords[1])
 
             new_game.play_move(x, y)
-    draw_board(new_game.board, "Game_result/runner_example.jpg", True)
+    draw_board(new_game.board, "Game_images/runner_example.jpg", True)
 
     return new_game
-
-# def run_ai_game
