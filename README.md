@@ -5,6 +5,12 @@
 Welcome to our project! This page provides a comprehesive overview of our project, but feel free 
 to simply skip down to the [instructions](#instructions) to try it out!
 
+Author: Henry "TJ" Chen
+
+Original project by: Henry "TJ" Chen, Dmitrii Vlasov, Ming Yau (Oscar) Lam, Duain Chhabra
+
+Contact: henryt(dot)chen(at)mail(dot)utoronto(dot)ca
+
 
 # Problem Description and Research Question 
 
@@ -285,15 +291,20 @@ fixed hard stopping moving. This would improve the accuracy of our game
 tree, and result in stronger Go AIs. Again, this is computationally
 intensive, but could be another future improvement to our project.
 
-### Authors:
-Henry "TJ" Chen\
-Dmittri Vlasov\
-Lam Ming Yau\
-Duain Chhabra
+### Author:
+Henry "TJ" Chen
 
 If you like what you see, or have any suggestions for future improvements,
 feel free to let us know!
 
+## Copyright and Usage Information 
+This project was originaly developed as part of the CSC111 course at the University of Toronto.
+Feel free to try out the project for yourself and to share it with others. However, please be sure
+to include the author information. If you would like to make changes to it and distribute it yourself, please 
+contact us to let us know (contact information at the top). Doing so without our permission is expressly
+prohibited.
+
+This project and its accompanying files are Copyright (c) 2023 Henry Chen.
 # Appendix 
 
 Here is some optional additional reading for extra useful and
