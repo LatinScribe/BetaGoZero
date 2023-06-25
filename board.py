@@ -1,14 +1,15 @@
-"""Beta-Go: Course project for CSC111 Winter 2023
+"""Beta-Go-Zero: AI for playing Go built with python
 
-Authors:
+Author:
+Henry "TJ" Chen
+
+Original project by:
 Henry "TJ" Chen
 Dmitrii Vlasov
 Ming Yau (Oscar) Lam
 Duain Chhabra
 
-Date: April 3, 2023
-
-Version: pre-Alpha
+Version: 1.3
 
 Module Description
 ==================
@@ -16,12 +17,7 @@ Module Description
 This module contains python classes which represent the actual components to
 a game of Go - the board and the stones.
 
-Copyright and Usage Information
-===============================
-
-This file was developed as part of the course project for CSC111 Winter 2023.
-Feel free to test it out, but please contact us to obtain permission if you
-intend to redistribute it or use it for your own work.
+See README file for instructions, project details, and the relevant copyright and usage information
 """
 
 from __future__ import annotations
@@ -167,10 +163,14 @@ class Board:
 
     def is_valid_move(self, x: int, y: int, color: str) -> bool:
         """Check if a coordinate is valid for the board. It does not overwrite any stone, is not placed in a location
-        that leads to instant death, and within boundaries of the board. It does not mutate the board
+        that leads to instant death, and within boundaries of the board.
+
+        NOTE: It does not (and should not) mutate the board
+
         Preconditions:
             - color in {'Black' , 'White'}
         """
+        stone = self.get_stone(x, y)
         if color not in {'Black', 'White'}:
             raise ValueError
         elif x < 0 or x > 8 or y < 0 or y > 8:
@@ -179,12 +179,16 @@ class Board:
             return False
 
         else:
-            self.get_stone(x, y).color = color
-            if self.get_stone(x, y).check_is_dead(set()):
-                self.get_stone(x, y).color = 'Neither'
+            stone.color = color
+            if any(neighbour.check_is_dead(set()) for neighbour in stone.neighbours.values()):
+                stone.color = 'Neither'
+                return True
+
+            elif stone.check_is_dead(set()):
+                stone.color = 'Neither'
                 return False
             else:
-                self.get_stone(x, y).color = 'Neither'
+                stone.color = 'Neither'
         return True
 
     def is_valid_coord(self, x: int, y: int) -> bool:

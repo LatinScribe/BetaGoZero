@@ -1,14 +1,15 @@
-"""Beta-Go: Course project for CSC111 Winter 2023
+"""Beta-Go-Zero: AI for playing Go built with python
 
-Authors:
+Author:
+Henry "TJ" Chen
+
+Original project by:
 Henry "TJ" Chen
 Dmitrii Vlasov
 Ming Yau (Oscar) Lam
 Duain Chhabra
 
-Date: April 3, 2023
-
-Version: pre-Alpha
+Version: 1.3
 
 Module Description
 ==================
@@ -19,16 +20,17 @@ console, and follow the instructions.
 Warning: Read the prompts carefully to ensure that you are inputting values in the
 expected format
 
+For full instructions, please see the README file
+
 Copyright and Usage Information
 ===============================
 
-This file was developed as part of the course project for CSC111 Winter 2023.
-Feel free to test it out, but please contact us to obtain permission if you
-intend to redistribute it or use it for your own work.
+This project was originaly developed by students as part of CSC111 at the University of Toronto
+See README file for full details
 """
 import sys
 
-import Runner_solo
+import runner_solo
 from sgf_reader import print_misc_stats, load_tree_from_file
 from runner import run_game
 from runner import simulate_game, simulate_games, plot_win_rate_progress
@@ -98,7 +100,7 @@ def sub_menu() -> None:
         if user_choice == 0:
             main_menu()
         elif user_choice == 1:
-            Runner_solo.run_game()
+            runner_solo.run_game()
             print("Ran solo game sucessfully!")
         else:
             print("ERROR: That number was not one of our options, please try again!\n")
