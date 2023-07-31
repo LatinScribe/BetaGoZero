@@ -1,11 +1,39 @@
-# Beta Go AI
+# BetaGo Zero 
 
-#### A basic Go AI developed by first-year computer science students at the University of Toronto.
+#### A Python-based Go AI developed by first-year computer science students at the University of Toronto.
 
-Welcome to our project! This page provides a comprehesive overview of our project, but feel free 
-to simply skip down to the [instructions](#instructions) to try it out!
+This page provides a comprehensive overview of our project, but feel free to simply 
+skip to the [instructions](#instructions-) to try it out!
+
+Note that this 'Zero' version is developed by Henry Chen based on the 
+[original](https://github.com/HansYolo43/Beta-GO-AI) 
+collaborative project by Henry Chen, Dmittri Vlasov, Lam Ming Yau, and Duain Chhabra.
+
+### Key features:
+
+- Decision-tree based AI which plays Go.
+- User-interface to play Go built using pygame.
+- Basic automatic game scorer functionality.
+- Pregenerated game-tree (AI weightings) generated on a database of
+thousands of real games (mutable after download by the user).
+- Ability for user to run simulations of our AI to test its effectiveness.
 
 
+### Features under developement:
+
+- Support for increased board sizes (currently only 9x9 is fully supported).
+- Neural network based game scorer using TensorFlow.
+- Further improvements to UI.
+- Support for proper ko fighting and other edge cases.
+
+### Improvements over the [original](https://github.com/HansYolo43/Beta-GO-AI) project:
+
+- Major Bug fixes.
+- Rebuilt User-Interface.
+- Behind the scenes reformatting of code for increased readability.
+- Improvements to automatic game scorer.
+
+------
 # Problem Description and Research Question 
 
 Our project is centered around the domain of the game Go. Go is a two
@@ -19,7 +47,7 @@ stones, and from strategically surrounding spaces of territory. Once all
 possible moves have been played, the board is scored and the player with
 the greatest number of points wins.
 
-Although the [rules](#rules-of-the-game--from--how-to-play---) of the game are fairly simple, the game
+Although the [rules](#rules-of-the-game-from-how-to-play) of the game are fairly simple, the game
 itself is complex both for players and from a computational perspective.
 On a standard 19 by 19 board, there are in fact 10 to the power of 170
 unique possible board configurations, that's more than the number of
@@ -28,7 +56,7 @@ more complex than chess (AlphaGo).
 
 Henry has been playing Go for over a decade, and has represented Canada
 at the 2018 World Youth Go Championship in Germany. Henry often uses [Go
-AIs](#inspiration-of-the-project-) to analyse his own games, but finds that they are often
+AIs](#inspiration-of-the-project) to analyse his own games, but finds that they are often
 slow and require significant computational resources. So, Henry wonders
 if graphs and trees can be used to represent a game of Go and reduce the
 computational complexity of analysing the game by examining the
@@ -77,8 +105,8 @@ user.
 
 Furthermore, to give our AI a head start during its initial training
 phase, we are using multiple data sets of thousands of real world games,
-where each game is stored as an "sgf" file ([Smart Go
-Files](#smart-go-files--)) - see Figure 3 for an example of the data (Yamashita).
+where each game is stored as a "sgf" file ([Smart Go
+Files](#smart-go-files)) - see Figure 3 for an example of the data (Yamashita).
 We have developed multiple algorithms to process the Smart Game Files,
 which are capable of isolating the data which we are concerned with,
 primarily the sequences of moves and the result of the game and board
@@ -99,7 +127,7 @@ datasets.\
 Usage of this library is not strictly necessary for the user. But we
 would like to acknowledge that we leaned on this library initially for
 its plethora of pre-implemented functions for process sgf files, such as
-sgfmill.sgf_moves.set_initial_position()). It was helpful for testing
+sgfmill.sgf_moves.set_initial_position(). It was helpful for testing
 purposes, but was eventually phased out for our own methods which better
 fit our needs.\
 - *pygame* for outputting visuals to the user:\
@@ -107,39 +135,54 @@ Although pygame has been covered extensively in class, we have used some
 functions for getting active events (cursor position, mouse clicks, etc./)
 which was less covered in class.\
 - *Pillow* for manipulating images:\
-Used for creating (image.paste, image.draw, etc) and saving (image.save)
+Used for creating (image.paste, image.draw, etc.) and saving (image.save)
 .jpg pictures.
 
 # Dataset 
 
-Note: All go games are stored as .sgf files, see appendix for more info
+Note: All go games are stored as _.sgf_ files, see the [Appendix](#appendix-) for more info
 
-Go game datasets were optained from: Yamashita, Hiroshi. "Go Quest game
-records 9x9 and 13x13." - see works cited\
-2015-Go9: Contains a data set of which originally contained some 9000
+- _2015-Go9_: Contains a data set of which originally contained some 9000 
 games (board size 9x9) selected from the top 50 players online up until
 2015\. We have pre-filtered any invalid games (non-complete/no score,
 resigned games, etc.) where we do not have a complete game with a final
-score (so the actual number of games should be less).\
-2015-Go9-small: A subset of 2015-Go9, which contains a data set of a
-couple hundred games for faster running times during testing.\
-2015-Go-super-small: A subset of 2015-Go9, which contains a data set of
+score (so the actual number of games should be less).
+
+
+- _2015-Go9-small_: A subset of 2015-Go9, which contains a data set of a
+couple of hundred games for faster running times during testing.\
+
+
+- _2015-Go-super-small_: A subset of 2015-Go9, which contains a data set of
 just 5 games for faster running times during testing.\
-2019-1255games: A data set of some 1255 games (board size 9x9) selected
+
+
+- _2019-1255games_: A data set of some 1255 games (board size 9x9) selected
 up until 2019. We have pre-filtered any invalid games (non-complete/no
 score, resigned games, etc.) where we do not have a complete game with a
 final score (so the actual number of games should be less).\
 We have pre-generated using our algorithms the following GameTrees:\
-completeScoreTree.txt: A pre-generated GameTree which contains the move
+
+
+- _completeScoreTree.txt_: A pre-generated GameTree which contains the move
 variations from our dataset of games, and the resulting \"likelihood of
 winning\" for black based on how much black won or lost by.\
-completeWinRate.txt: A pre-generated GameTree which contains the move
+
+
+- _completeWinRate.txt_: A pre-generated GameTree which contains the move
 variations from our dataset of games, and the resulting \"likelihood of
 winning\" for black based purely on whether black won or lost the game.\
-recalcScoreTree.txt: A pre-generated GameTree which contains the move
+
+
+- _recalcScoreTree.txt_: A pre-generated GameTree which contains the move
 variations from our dataset of games, and the resulting \"likelihood of
 winning\" for black based on how much black won or lost by (we are
 updating this tree with simulations).
+
+Go game datasets were optained from: Yamashita, Hiroshi. "Go Quest game
+records 9x9 and 13x13." - see Works Cited.
+
+----
 
 # Instructions 
 
@@ -172,7 +215,9 @@ Break down of our functions:
    for testing which are not intended for users to actually use, feel free to
    try it if interested.
 
-Note for TA: be careful of the images which are only for our latex document (not for Github users).
+Note for TA: be careful of the images which are only for our latex document (not for GitHub users).
+
+----
 
 # Changes 
 
@@ -291,8 +336,14 @@ Dmittri Vlasov\
 Lam Ming Yau\
 Duain Chhabra
 
-If you like what you see, or have any suggestions for future improvements,
-feel free to let us know!
+### Contact Us
+If you like what you see? Have any suggestions for future improvements? Want to play 
+a game of Go?
+Feel free to reach out to us and let us know!
+
+Email: [henryt.chen@mail.utoronto.ca](mailto:henryt.chen@mail.utoronto.ca)
+
+-----
 
 # Appendix 
 
@@ -343,16 +394,24 @@ PB: the player playing with the black stones\
 Next, the lines after the header contain key-value dictionaries, which
 represent the tree of move variations in the game. This will usually
 just be one dictionary, as a game is typically played sequentially with
-only one long branch of moves. See figure 3 for an example\
-##### Diagrams:
+only one long branch of moves. See figure 3 for an example
 
-Figure 1: End state of game reached\
-![image](Images/GoGameNoSquares.png)\
-Figure 2: Example of scoring a game\
-![image](Images/GoGameWithSquares.png)\
-Figure 3: Example of Smart Go file converted to text.\
+-------
+
+#### Diagrams:
+
+Figure 1: End state of game reached
+![image](Images/GoGameNoSquares.png)
+
+
+Figure 2: Example of scoring a game
+![image](Images/GoGameWithSquares.png)
+
+
+Figure 3: Example of Smart Go file converted to text.
 ![image](Images/Example_sgf.png)
 
+---
 
 # Works Cited 
 
