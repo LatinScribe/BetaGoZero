@@ -351,50 +351,56 @@ Here is some optional additional reading for extra useful and
 interesting details in our project.
 #### Rules of the game (from "How To Play"):
 1) The board is empty at the onset of the game (unless players agree to
-place a handicap).\
-2) Black makes the first move, after which White and Black alternate.\
+place a handicap).
+2) Black makes the first move, after which White and Black alternate.
 3) A move consists of placing one stone of one's own color on an empty
-intersection on the board.\
-4) A player may pass their turn at any time.\
+intersection on the board.
+4) A player may pass their turn at any time.
 5) A stone or solidly connected group of stones of one color is captured
 and removed from the board when all the intersections directly adjacent
 to it are occupied by the enemy. (Capture of the enemy takes precedence
-over self-capture.)\
-6) No stone may be played to recreate a former board position.\
+over self-capture.)
+6) No stone may be played to recreate a former board position.
 7) Two consecutive passes end the game. This occurs when both players
-feel there is no possible beneficial moves remaining to be played.\
+feel there is no possible beneficial moves remaining to be played.
 8) Using the Japanese rule set, the player's points consists of all the
 area the player has surrounded and a point for each stone captured from
-the opponent.\
+the opponent.
 9) Black was give white a \"komi\", which is a point penalty for
 starting first, usually 6.5 points per Japanese rule set. Note that his
-also prevents ties.\
-10) The player with the most points wins!\
+also prevents ties.
+10) The player with the most points wins!
+
 #### Inspiration of the project:
+
 The primary inspiration for this project is the Alpha Go AI developed by
 Deepmind and Google (\"AlphaGo\"). However, there has yet to be perfect
 Go AI which was demonstrated a few weeks ago when an amateur player was
 able to beat the current generation of Go AIs by exploiting flaws in the
 algorithm (Xiang). So, we this project does not intend to develop a
 perfect AI, but to create one that is at least statistically more
-effective than random guessing.\
-#### Smart Go Files:\
+effective than random guessing.
+
+#### Smart Go Files:
+
 Each game is stored as a Smart Game File (.sgf), which stores 4 rows of
 information (Hollosi). The first few rows represent the header, which
 contains basic information of the game, such as:\
-GM: the game identification number\
-SZ: the size of the board\
-RE: the result of the game, which colour won and by how much\
-KM: the komi of the game, the point penalty for black since they start
+- GM: the game identification number\
+- SZ: the size of the board\
+- RE: the result of the game, which colour won and by how much\
+- KM: the komi of the game, the point penalty for black since they start
 first\
-RU: the rule set used, which has a minor influence on how the game is
+- RU: the rule set used, which has a minor influence on how the game is
 scored (Chinese, Japanese, AGA)\
-PW: the player playing with the white stones\
-PB: the player playing with the black stones\
+- PW: the player playing with the white stones\
+- PB: the player playing with the black stones\
 Next, the lines after the header contain key-value dictionaries, which
 represent the tree of move variations in the game. This will usually
 just be one dictionary, as a game is typically played sequentially with
-only one long branch of moves. See figure 3 for an example
+only one long branch of moves. 
+
+See figure 3 for an example
 
 -------
 
