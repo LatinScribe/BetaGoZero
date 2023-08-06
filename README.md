@@ -18,13 +18,6 @@ collaborative project by Henry Chen, Dmittri Vlasov, Lam Ming Yau, and Duain Chh
 thousands of real games (mutable after download by the user).
 - Ability for user to run simulations of our AI to test its effectiveness.
 
-Author: Henry "TJ" Chen
-
-Original project by: Henry "TJ" Chen, Dmitrii Vlasov, Ming Yau (Oscar) Lam, Duain Chhabra
-
-Contact: henryt(dot)chen(at)mail(dot)utoronto(dot)ca
-
-
 ### Features under developement:
 
 - Support for increased board sizes (currently only 9x9 is fully supported).
@@ -339,14 +332,17 @@ intensive, but could be another future improvement to our project.
 ### Author:
 Henry "TJ" Chen
 
+Original project by: Henry "TJ" Chen, Dmittri Vlasov, Lam Ming Yau, and Duain Chhabra
+
 ### Contact Us
 If you like what you see? Have any suggestions for future improvements? Want to play 
 a game of Go?
 Feel free to reach out to us and let us know!
 
+
 Email: [henryt.chen@mail.utoronto.ca](mailto:henryt.chen@mail.utoronto.ca)
 
------
+---
 
 ## Copyright and Usage Information 
 This project was originaly developed as part of the CSC111 course at the University of Toronto.
@@ -426,6 +422,7 @@ Figure 2: Example of scoring a game
 
 
 Figure 3: Example of Smart Go file converted to text.
+
 ![image](Images/Example_sgf.png)
 
 ---
